@@ -1,78 +1,91 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Container, Form, Button, Row, Col } from "react-bootstrap";
+
 export default function Information() {
-  const navigate = useNavigate();
-  const handleSubmit = () => {
-    navigate("/login");
-  };
   return (
-    <div className="flex justify-center items-center py-32">
-      <div className="bg-bg_form flex flex-col w-[30%] px-10 py-6 rounded-[40px] ">
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Input information
-        </h2>
-        <form onSubmit={handleSubmit} >
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-gray-700 mb-1">First Name:</label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 mb-1">Last Name:</label>
-              <input
-                type="text"
-                className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
-              />
-            </div>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-1">Date of birth:</label>
-            <input
+    <Container   style={{paddingTop:'10%',paddingBottom:'10%'}} className="d-flex justify-content-center align-items-center  py-32">
+      <div className=" p-4  " style={{ width: "30%" ,backgroundColor:'rgba(217, 217, 217, 0.7)',borderRadius:20 }}>
+        <h2 className="text-center mb-4">Input information</h2>
+        <Form>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group>
+                <Form.Label>First Name:</Form.Label>
+                <Form.Control
+                  type="text"
+                  className="border-2 "
+                   style={{ borderColor: "#000", borderRadius: 10, }}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Last Name:</Form.Label>
+                <Form.Control
+                  type="text"
+                  className="border-2 "
+                   style={{ borderColor: "#000", borderRadius: 10, }}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Form.Group className="mb-3">
+            <Form.Label>Date of birth:</Form.Label>
+            <Form.Control
               type="date"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
+              className="border-2 "
+               style={{ borderColor: "#000", borderRadius: 10, }}
             />
-          </div>
-          <div className="mb-4 flex flex-row items-center gap-10">
-            <label className=" text-gray-700 mb-1">Gender:</label>
-            <div className="flex items-center">
-              <input type="radio" name="gender" value="male" className="mr-2" />
-              <label className="mr-4">Male</label>
-              <input
+          </Form.Group>
+          <Form.Group className=" d-flex flex-row align-items-center justify-items-center ">
+            <Form.Label>Gender:</Form.Label>
+            <div className="d-flex align-items-center">
+              <Form.Check
                 type="radio"
+                label="Male"
+                name="gender"
+                value="male"
+                className="me-3"
+              />
+              <Form.Check
+                type="radio"
+                label="Female"
                 name="gender"
                 value="female"
-                className="mr-2"
               />
-              <label>Female</label>
             </div>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-1">Phone:</label>
-            <input
+          </Form.Group>
+          <Form.Group className="mb-3 mt-3">
+            <Form.Label>Phone:</Form.Label>
+            <Form.Control
               type="tel"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
+              className="border-2 "
+               style={{ borderColor: "#000", borderRadius: 10, }}
             />
-          </div>
-          <div className="mb-8">
-            <label className="block text-gray-700 mb-1">Address:</label>
-            <input
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Address:</Form.Label>
+            <Form.Control
               type="text"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
+              className="border-2 "
+               style={{ borderColor: "#000", borderRadius: 10, }}
             />
-          </div>
-          <div className="flex justify-center mb-4">
-            <button
+          </Form.Group>
+          <div className="d-flex justify-content-center">
+            <Button
               type="submit"
-              className="w-[70%] py-2 px-4 bg-bg_button text-black font-semibold rounded-xl hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-75 border-2 "
+              style={{
+                backgroundColor: "#ccc",
+                borderColor: "#000",
+                color: "#000",
+              }}
             >
               Next
-            </button>
+            </Button>
           </div>
-        </form>
+        </Form>
       </div>
-    </div>
+    </Container>
   );
 }

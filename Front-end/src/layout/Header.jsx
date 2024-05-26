@@ -1,9 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  const goToHomePage = () => {
+    navigate('/');
+  };
+
   return (
-    <div className="w-full shadow-shadow_header flex items-center px-24 h-20 ">
-      <h1 className="text-3xl">宝石店</h1>
+    <div style={{boxShadow:'0 4px 4px 0 rgba(0, 0, 0, 0.25)'}} className="w-100 d-flex align-items-center px-5 py-2 h-20">
+      <button onClick={goToHomePage} className="text-3xl bg-transparent border-0 p-0" style={{backgroundColor: 'transparent', cursor: 'pointer',fontSize: '2rem'}}>
+        宝石店
+      </button>
     </div>
   );
 }

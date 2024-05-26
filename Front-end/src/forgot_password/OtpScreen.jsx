@@ -1,46 +1,53 @@
-import React from 'react'
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RiArrowLeftLine, RiArrowRightLine } from "react-icons/ri";
-export default function OtpScreen() {
-    const navigate = useNavigate();
+import { Container, Form, Button } from 'react-bootstrap';
 
-    const handleBack = () => {
-      navigate("/reset_password");
-    };
-  
-    const handleNext = () => {
-      navigate("/new_password");
-    };
+export default function OtpScreen() {
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate("/reset_password");
+  };
+
+  const handleNext = () => {
+    navigate("/new_password");
+  };
+
   return (
-    <div className="flex justify-center items-center py-32">
-      <div className="bg-bg_form flex flex-col  w-[30%] px-10 py-6 rounded-[40px] ">
-        <h2 className="text-2xl font-bold mb-6 text-center">Enter OTP</h2>
-        <form>
-          <div className="mb-8">
-            <input
-              type="number"
+    <Container   style={{paddingTop:'10%',paddingBottom:'10%'}} className="d-flex justify-content-center  align-items-center py-32">
+      <div className=" p-4" style={{ width: "30%" ,backgroundColor:'rgba(217, 217, 217, 0.7)',borderRadius:20 }}>
+        <h2 className="text-center mb-4">Enter OTP</h2>
+        <Form>
+          <Form.Group className="mb-4">
+            <Form.Control
+              type="test"
+              pattern="[0-9]*"
               placeholder="Enter OTP"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
+              className="border-2 "
+              style={{ borderColor: "#000", borderRadius: 10, }}
             />
-          </div>
-          <div className="grid grid-cols-2 gap-4 mb-4 mx-10">
-            <button
+          </Form.Group>
+          <div className="d-flex flex-row justify-content-center  gap-4  ">
+            <Button
               type="button"
               onClick={handleBack}
-              className="bg-bg_button flex flex-row items-center justify-center  border-2 border-black rounded-xl   py-2 px-4"
+              className="d-flex align-items-center border-2 "
+              style={{ backgroundColor: "rgba(201, 201, 201, 1)", borderColor: "#000", borderRadius: 10,  color: "#000" }}
             >
-              <RiArrowLeftLine size={20} /> <p>Back</p>
-            </button>
-            <button
+              <RiArrowLeftLine size={20} /> <span className="ms-2">Back</span>
+            </Button>
+            <Button
               type="button"
               onClick={handleNext}
-              className="bg-bg_button flex flex-row items-center justify-center  border-2 border-black rounded-xl   py-2 px-4"
+              className="d-flex align-items-center border-2 "
+              style={{ backgroundColor: "rgba(201, 201, 201, 1)", borderColor: "#000", borderRadius: 10,  color: "#000" }}
             >
-              <p>Next</p> <RiArrowRightLine size={20} />
-            </button>
+              <span className="me-2">Next</span> <RiArrowRightLine size={20} />
+            </Button>
           </div>
-        </form>
+        </Form>
       </div>
-    </div>
-  )
+    </Container>
+  );
 }

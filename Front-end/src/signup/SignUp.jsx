@@ -1,54 +1,78 @@
 import React from "react";
-
 import { RiArrowLeftLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
+import { Container, Form, Button } from "react-bootstrap";
+
 export default function SignUp() {
   const navigate = useNavigate();
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     navigate("/info");
   };
+
   return (
-    <div className="flex justify-center items-center py-32">
-      <div className="relative bg-bg_form flex flex-col  w-[30%] px-10 py-6 rounded-[40px]">
-        <Link className="absolute" to="/login">
-          <RiArrowLeftLine size={30} />
+    <Container
+      style={{ paddingTop: "10%", paddingBottom: "10%" }}
+      className="d-flex justify-content-center align-items-center "
+    >
+      <div
+        className="position-relative  p-4 "
+        style={{
+          width: "30%",
+          backgroundColor: "rgba(217, 217, 217, 0.7)",
+          borderRadius: 20,
+        }}
+      >
+        <Link
+          to="/login"
+          className="position-absolute"
+          style={{ top: "7%", left: "7%" }}
+        >
+          <RiArrowLeftLine size={30} color="black" />
         </Link>
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign up</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-1">Email:</label>
-            <input
+        <h2 className="text-center mb-4">Sign up</h2>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Email:</Form.Label>
+            <Form.Control
               type="email"
               placeholder="Email"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
+              className="border-2 "
+              style={{ borderColor: "#000", borderRadius: 10 }}
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-1">Password:</label>
-            <input
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Password:</Form.Label>
+            <Form.Control
               type="password"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
+              className="border-2 "
+              style={{ borderColor: "#000", borderRadius: 10 }}
             />
-          </div>
-          <div className="mb-8">
-            <label className="block text-gray-700 mb-1">
-              Confirm Password:
-            </label>
-            <input
+          </Form.Group>
+          <Form.Group className="mb-4">
+            <Form.Label>Confirm Password:</Form.Label>
+            <Form.Control
               type="password"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
+              className="border-2 "
+              style={{ borderColor: "#000", borderRadius: 10 }}
             />
-          </div>
-          <div className="mb-4 flex justify-center">
-            <button
+          </Form.Group>
+          <div className="d-flex justify-content-center mb-3">
+            <Button
               type="submit"
-              className="w-[70%]  border-2 border-black rounded-xl  items-center py-2 px-4 bg-bg_button text-black   hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-75 border-2 "
+              style={{
+                backgroundColor: "rgba(201, 201, 201, 1)",
+                borderColor: "#000",
+                color: "#000",
+                borderRadius: 10,
+              }}
             >
               Sign up
-            </button>
+            </Button>
           </div>
-        </form>
+        </Form>
       </div>
-    </div>
+    </Container>
   );
 }

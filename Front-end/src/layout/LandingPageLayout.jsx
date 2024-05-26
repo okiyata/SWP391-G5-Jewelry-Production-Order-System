@@ -3,12 +3,15 @@ import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 
+
 export default function LandingPageLayout() {
   return (
-    <div className="flex justify-between w-full  flex-col">
+    <div className="d-flex flex-column ">
       <Header />
 
-      <Outlet />
+      <div className="flex-grow-1">
+        <Outlet />
+      </div>
 
       <Footer />
     </div>

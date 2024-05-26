@@ -1,48 +1,60 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Container, Form, Button, Row, Col } from "react-bootstrap";
 
 export default function Login() {
   return (
-    <div className="flex justify-center items-center py-32">
-      <div className="bg-bg_form flex flex-col  w-[30%] px-10 py-6 rounded-[40px] ">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign in</h2>
-        <form>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-1">Username:</label>
-            <input
+    <Container
+    style={{paddingTop:'10%',paddingBottom:'10%'}}
+      className="d-flex justify-content-center align-items-center "
+    >
+      <div className=" p-4  " style={{ width: "30%",backgroundColor:'rgba(217, 217, 217, 0.7)',borderRadius:20 }}>
+        <h2 className="text-center mb-4">Sign in</h2>
+        <Form>
+          <Form.Group className="mb-3">
+            <Form.Label>Username:</Form.Label>
+            <Form.Control
               type="email"
               placeholder="Email"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl focus:outline-none focus:border-blue-500"
+              className="border-2 "
+              style={{ borderColor: "#000", borderRadius: 10 }}
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-1">Password:</label>
-            <input
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Password:</Form.Label>
+            <Form.Control
               type="password"
-              className="w-full px-3 py-2 border-2 border-black rounded-xl  focus:outline-none focus:border-blue-500"
+              className="border-2 "
+              style={{ borderColor: "#000", borderRadius: 10 }}
             />
-            <div className="text-right mt-1">
-              <Link to="/reset_password" className="text-sm text-gray-600 hover:underline">
+            <div className="text-end mt-2 ">
+              <Link to="/reset_password" className="text-muted text-decoration-none">
                 Forget password
               </Link>
             </div>
-          </div>
-          <div className="mb-4 flex justify-center">
-            <button
+          </Form.Group>
+          <div className="d-flex justify-content-center mb-3">
+            <Button
               type="submit"
-              className="w-[70%]  border-2 border-black rounded-xl  items-center py-2 px-4 bg-bg_button text-black   hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-75 border-2 "
+              style={{
+                backgroundColor: "rgba(201, 201, 201, 1)",
+                borderColor: "#000",
+                color: "#000",
+                borderRadius: 10,
+              }}
             >
               Sign in
-            </button>
+            </Button>
           </div>
-        </form>
-        <p className="text-center text-gray-700">
+        </Form>
+        <p className="text-center text-muted">
           Don’t have an account?{" "}
-          <Link to="/signup" className="underline">
+          <Link to="/signup" className="text-decoration-underline text-muted">
             Sign up
           </Link>
         </p>
       </div>
-    </div>
+    </Container>
   );
 }
