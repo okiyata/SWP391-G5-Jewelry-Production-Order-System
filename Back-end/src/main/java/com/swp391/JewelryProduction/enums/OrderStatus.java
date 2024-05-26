@@ -1,0 +1,16 @@
+package com.swp391.JewelryProduction.enums;
+
+public enum OrderStatus {
+    REQUESTING,
+    IN_EXCHANGING,
+    QUO_AWAIT_APPROVAL,
+    QUO_APPROVED,
+    AWAIT_TRANSACTION,
+    IN_DESIGNING,
+    DES_AWAIT_APPROVAL,
+    DES_APPROVED,
+    IN_PRODUCTION,
+    FINISHED,
+    AWAIT_TRANSPORT,
+    TRANSPORT_APPROVED
+}

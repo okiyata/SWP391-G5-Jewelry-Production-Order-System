@@ -1,7 +1,7 @@
-package com.swp391.JewleryProduction.dto;
+package com.swp391.JewelryProduction.dto;
 
-import com.swp391.JewleryProduction.enums.Gender;
-import com.swp391.JewleryProduction.pojos.Account;
+import com.swp391.JewelryProduction.enums.Gender;
+import com.swp391.JewelryProduction.pojos.Account;
 import jakarta.persistence.Column;
 import jakarta.persistence.OneToOne;
 import lombok.Builder;

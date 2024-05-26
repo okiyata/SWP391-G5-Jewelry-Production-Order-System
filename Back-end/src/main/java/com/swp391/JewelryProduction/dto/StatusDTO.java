@@ -1,7 +1,6 @@
-package com.swp391.JewleryProduction.dto;
+package com.swp391.JewelryProduction.dto;
 
-import com.swp391.JewleryProduction.enums.StatusType;
-import com.swp391.JewleryProduction.pojos.Account;
+import com.swp391.JewelryProduction.pojos.Account;
 import lombok.Builder;
 import lombok.Data;
 

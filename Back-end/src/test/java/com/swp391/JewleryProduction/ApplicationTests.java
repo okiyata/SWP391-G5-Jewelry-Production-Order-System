@@ -1,4 +1,4 @@
-package com.swp391.JewleryProduction;
+package com.swp391.JewelryProduction;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

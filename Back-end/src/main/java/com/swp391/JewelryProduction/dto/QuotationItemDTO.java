@@ -1,6 +1,6 @@
-package com.swp391.JewleryProduction.dto;
+package com.swp391.JewelryProduction.dto;
 
-import com.swp391.JewleryProduction.pojos.FinalQuotation;
+import com.swp391.JewelryProduction.pojos.FinalQuotation;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

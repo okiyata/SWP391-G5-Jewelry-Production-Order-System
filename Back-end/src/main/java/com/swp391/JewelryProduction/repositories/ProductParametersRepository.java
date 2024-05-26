@@ -1,6 +1,6 @@
-package com.swp391.JewleryProduction.repositories;
+package com.swp391.JewelryProduction.repositories;
 
-import com.swp391.JewleryProduction.pojos.ProductParameters;
+import com.swp391.JewelryProduction.pojos.ProductParameters;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductParametersRepository extends JpaRepository<ProductParameters, Integer> {

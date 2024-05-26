@@ -1,6 +1,6 @@
-package com.swp391.JewleryProduction.dto;
+package com.swp391.JewelryProduction.dto;
 
-import com.swp391.JewleryProduction.pojos.ProductSpecification;
+import  com.swp391.JewelryProduction.pojos.ProductSpecification;
 import lombok.Builder;
 import lombok.Data;
 

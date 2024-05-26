@@ -1,6 +1,5 @@
-package com.swp391.JewleryProduction.dto;
+package com.swp391.JewelryProduction.dto;
 
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 

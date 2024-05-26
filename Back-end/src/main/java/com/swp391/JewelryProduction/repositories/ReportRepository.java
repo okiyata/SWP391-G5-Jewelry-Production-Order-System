@@ -1,6 +1,7 @@
-package com.swp391.JewleryProduction.repositories;
+package com.swp391.JewelryProduction.repositories;
 
+import com.swp391.JewelryProduction.pojos.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ReportRepository extends JpaRepository<ReportRepository, Integer> {
+public interface ReportRepository extends JpaRepository<Report, Integer> {
 }

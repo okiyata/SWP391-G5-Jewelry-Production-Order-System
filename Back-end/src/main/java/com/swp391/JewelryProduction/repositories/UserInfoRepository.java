@@ -1,6 +1,6 @@
-package com.swp391.JewleryProduction.repositories;
+package com.swp391.JewelryProduction.repositories;
 
-import com.swp391.JewleryProduction.pojos.UserInfo;
+import com.swp391.JewelryProduction.pojos.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {

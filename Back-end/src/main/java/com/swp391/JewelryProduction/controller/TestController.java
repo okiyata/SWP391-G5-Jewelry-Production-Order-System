@@ -23,4 +23,9 @@ public class TestController{
     public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
         return Collections.singletonMap("name", principal.getAttribute("name"));
     }
+
+    @GetMapping("/sample")
+    public String showForm() {
+        return "sample";
+    }
 }

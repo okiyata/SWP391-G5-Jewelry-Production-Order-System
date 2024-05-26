@@ -8,7 +8,7 @@ spring:
         password: 1234
     jpa:
         hibernate:
-            ddl-auto: create-drop
+            ddl-auto: update
 ***REMOVED***
             hibernate:
                 dialect: org.hibernate.dialect.SQLServerDialect
@@ -16,10 +16,10 @@ spring:
                     time_zone: Asia/Ho_Chi_Minh
         show-sql: true
 
-    security:
-        oauth2:
-          client:
-              registration:
-                github:
-                    client-id: Iv23licuS2tt7ELgah2s
-                    client-secret: 2eb334d75f6781a5a96619eb92081500d0e974ed
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***

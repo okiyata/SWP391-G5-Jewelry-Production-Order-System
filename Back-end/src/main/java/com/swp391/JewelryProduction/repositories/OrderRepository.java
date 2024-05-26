@@ -1,6 +1,6 @@
-package com.swp391.JewleryProduction.repositories;
+package com.swp391.JewelryProduction.repositories;
 
-import com.swp391.JewleryProduction.pojos.Order;
+import com.swp391.JewelryProduction.pojos.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, String> {

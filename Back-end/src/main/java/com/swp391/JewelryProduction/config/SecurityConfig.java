@@ -1,5 +1,7 @@
 package com.swp391.JewelryProduction.config;
 
+import com.swp391.JewelryProduction.util.CustomAuthenticationFailureHandler;
+import com.swp391.JewelryProduction.util.CustomLogoutSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,11 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+    @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
         UserDetails user1 = User.withUsername("user1")
                 .password(passwordEncoder().encode("12345"))
@@ -32,6 +37,7 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(user1, user2, admin);
     }
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -39,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/anonymous").anonymous()
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login", "/api").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
@@ -57,6 +63,15 @@ public class SecurityConfig {
         ;
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
+    }
+
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new CustomLogoutSuccessHandler();
     }
 
     @Bean

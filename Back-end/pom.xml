@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.swp391</groupId>
-	<artifactId>JewleryProduction</artifactId>
+	<artifactId>JewelryProduction</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>JewleryProduction</name>
+	<name>JewelryProduction</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>
@@ -74,6 +74,7 @@
 			<artifactId>jquery</artifactId>
 			<version>3.4.1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
@@ -92,6 +93,11 @@
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
 			<version>6.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
 		</dependency>
 	</dependencies>
 

@@ -1,4 +1,4 @@
-package com.swp391.JewleryProduction.dto;
+package com.swp391.JewelryProduction.dto;
 
 import lombok.Builder;
 import lombok.Data;
