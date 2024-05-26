@@ -1,8 +1,9 @@
-package com.swp391.JewelryProduction.services.account;
+package com.swp391.JewleryProduction.services.account;
 
-import com.swp391.JewelryProduction.dto.AccountDTO;
-import com.swp391.JewelryProduction.pojos.Account;
-import com.swp391.JewelryProduction.repositories.AccountRepository;
+import com.swp391.JewleryProduction.dto.AccountDTO;
+import com.swp391.JewleryProduction.enums.Role;
+import com.swp391.JewleryProduction.pojos.Account;
+import com.swp391.JewleryProduction.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,11 @@ public class AccountService implements IAccountService{
     public List<AccountDTO> findAllAccounts() {
         return accountRepository.findAll().stream().map(account -> mapToAccountDTO(account)).collect(Collectors.toList());
     }
+
     @Override
-    public Account saveAccount(Account account) {
-        return accountRepository.save(account);
+    public void saveAccount(AccountDTO accountDTO) {
+        accountDTO.setRole(Role.CUSTOMER);
+        accountRepository.save(mapToAccount(accountDTO));
     }
 
     @Override
@@ -34,7 +37,23 @@ public class AccountService implements IAccountService{
     }
 
     @Override
+    public AccountDTO findAccountByEmailAndPassword(String email, String password) {
+        return mapToAccountDTO(accountRepository.findAccountByEmailAndPassword(email, password));
+    }
+
+    @Override
     public void updateAccount(AccountDTO accountDTO) {
+        accountRepository.save(mapToAccount(accountDTO));
+    }
+
+    @Override
+    public boolean findAccountByEmail(String email) {
+        return accountRepository.findAccountByEmail(email);
+    }
+
+    @Override
+    public void saveAccountPassword(AccountDTO accountDTO, String newPassword) {
+        accountDTO.setPassword(newPassword);
         accountRepository.save(mapToAccount(accountDTO));
     }
 
