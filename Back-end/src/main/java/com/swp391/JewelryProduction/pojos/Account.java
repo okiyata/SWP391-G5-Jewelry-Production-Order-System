@@ -45,7 +45,6 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id")
-    private Status status;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
 }

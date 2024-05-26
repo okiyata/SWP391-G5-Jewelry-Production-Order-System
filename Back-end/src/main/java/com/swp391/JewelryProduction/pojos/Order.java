@@ -1,5 +1,6 @@
 package com.swp391.JewelryProduction.pojos;
 
+import com.swp391.JewelryProduction.enums.OrderStatus;
 import com.swp391.JewelryProduction.util.IdGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,9 @@ public class Order {
     private String name;
     private double budget;
     private LocalDateTime createdDate;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @OneToOne
     @JoinColumn(name = "quotation_id")

@@ -1,7 +1,8 @@
-package com.swp391.JewleryProduction.dto;
+package com.swp391.JewelryProduction.dto;
 
-import com.swp391.JewleryProduction.pojos.Design;
-import com.swp391.JewleryProduction.pojos.FinalQuotation;
+import com.swp391.JewelryProduction.enums.OrderStatus;
+import com.swp391.JewelryProduction.pojos.Design;
+import com.swp391.JewelryProduction.pojos.FinalQuotation;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,4 +17,5 @@ public class OrderDTO {
     private LocalDateTime createdDate;
     private FinalQuotation quotation;
     private Design design;
+    private OrderStatus status;
 }
