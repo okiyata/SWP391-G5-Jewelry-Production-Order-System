@@ -1,8 +1,8 @@
-package com.swp391.JewleryProduction.controller;
+package com.swp391.JewelryProduction.controller;
 
-import com.swp391.JewleryProduction.dto.AccountDTO;
-import com.swp391.JewleryProduction.pojos.Account;
-import com.swp391.JewleryProduction.services.account.AccountService;
+import com.swp391.JewelryProduction.dto.AccountDTO;
+import com.swp391.JewelryProduction.pojos.Account;
+import com.swp391.JewelryProduction.services.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
