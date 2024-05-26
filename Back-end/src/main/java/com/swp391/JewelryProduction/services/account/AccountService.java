@@ -23,6 +23,31 @@ public class AccountService implements IAccountService{
     public List<AccountDTO> findAllAccounts() {
         return accountRepository.findAll().stream().map(account -> mapToAccountDTO(account)).collect(Collectors.toList());
     }
+    @Override
+    public Account saveAccount(Account account) {
+        return accountRepository.save(account);
+    }
+
+    @Override
+    public AccountDTO findAccountById(String accountId) {
+        return mapToAccountDTO(accountRepository.findById(accountId).get());
+    }
+
+    @Override
+    public void updateAccount(AccountDTO accountDTO) {
+        accountRepository.save(mapToAccount(accountDTO));
+    }
+
+    private Account mapToAccount(AccountDTO accountDTO) {
+        return Account.builder()
+                .id(accountDTO.getId())
+                .email(accountDTO.getEmail())
+                .password(accountDTO.getPassword())
+                .dateCreated(accountDTO.getDateCreated())
+                .role(accountDTO.getRole())
+                .status(accountDTO.getStatus())
+                .build();
+    }
 
     private AccountDTO mapToAccountDTO(Account account) {
         return AccountDTO.builder()
