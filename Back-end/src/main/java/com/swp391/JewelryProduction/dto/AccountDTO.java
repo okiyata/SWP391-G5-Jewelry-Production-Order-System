@@ -11,10 +11,13 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+<<<<<<< Updated upstream
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.lang.NonNull;
+=======
+>>>>>>> Stashed changes
 
 import javax.annotation.MatchesPattern;
 import java.time.LocalDate;
@@ -24,7 +27,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+<<<<<<< Updated upstream
 public class AccountDTO {
+=======
+public class AccountDTO{
+>>>>>>> Stashed changes
     private String id;
     @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Email is invalid")
     @NotEmpty(message = "Email cannot be empty")
@@ -34,5 +41,9 @@ public class AccountDTO {
     private String password;
     private LocalDateTime dateCreated;
     private Role role;
+<<<<<<< Updated upstream
     private Status status;
+=======
+    private AccountStatus status;
+>>>>>>> Stashed changes
 }
