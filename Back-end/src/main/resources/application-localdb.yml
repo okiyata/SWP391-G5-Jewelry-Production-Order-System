@@ -8,13 +8,24 @@ spring:
         password: 1234
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: create
 ***REMOVED***
             hibernate:
                 dialect: org.hibernate.dialect.SQLServerDialect
                 jdbc:
                     time_zone: Asia/Ho_Chi_Minh
         show-sql: true
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+        ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
 ***REMOVED***
 ***REMOVED***
