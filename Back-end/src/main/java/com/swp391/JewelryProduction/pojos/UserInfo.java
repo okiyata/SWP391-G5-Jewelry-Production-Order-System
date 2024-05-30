@@ -17,19 +17,25 @@ import java.time.LocalDate;
 @Table(name = "User_Info")
 public class UserInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     @Column(nullable = false, name = "first_name", columnDefinition = "nvarchar(200)")
     private String firstName;
+
     @Column(name = "last_name", columnDefinition = "nvarchar(200)")
     private String lastName;
+
     @Column(columnDefinition = "date")
     private LocalDate birthDate;
+
     private Gender gender;
+
     private long phoneNumber;
+
     private String address;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "id", columnDefinition = "nvarchar(8)")
     private Account account;
 }
