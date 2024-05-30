@@ -1,17 +1,18 @@
-package com.swp391.JewleryProduction.services.account;
+package com.swp391.JewelryProduction.services.account;
 
-import com.swp391.JewleryProduction.dto.AccountDTO;
-import com.swp391.JewleryProduction.pojos.Account;
+import com.swp391.JewelryProduction.dto.AccountDTO;
+import com.swp391.JewelryProduction.pojos.Account;
 
 import java.util.List;
 
 public interface IAccountService {
     List<AccountDTO> findAllAccounts();
-    void saveAccount(AccountDTO accountDTO);
+    AccountDTO saveAccount(AccountDTO accountDTO);
     AccountDTO findAccountById(String accountId);
     AccountDTO findAccountByEmailAndPassword(String email, String password);
     void updateAccount(AccountDTO accountDTO);
-    boolean findAccountByEmail(String email);
+    AccountDTO findAccountByEmail(String email);
+    AccountDTO updateAccountStatusActive (String email);
 
     void saveAccountPassword(AccountDTO accountDTO, String newPassword);
 }
