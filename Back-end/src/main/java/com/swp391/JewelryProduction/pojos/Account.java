@@ -22,11 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@NamedQueries({
-        @NamedQuery(name = "GetAll", query = "from Account"),
-        @NamedQuery(name = "GetMaxID", query = "from Account order by id desc")
-})
-public class Account implements UserDetails {
+public class Account{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
     @GenericGenerator(
@@ -53,33 +49,7 @@ public class Account implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    private UserInfo userInfo;
 }
