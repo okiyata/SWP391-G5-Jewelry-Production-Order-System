@@ -1,24 +1,27 @@
-package com.swp391.JewleryProduction.services.account;
+package com.swp391.JewelryProduction.services.account;
 
-import com.swp391.JewleryProduction.dto.AccountDTO;
-import com.swp391.JewleryProduction.enums.Role;
-import com.swp391.JewleryProduction.pojos.Account;
-import com.swp391.JewleryProduction.repositories.AccountRepository;
+import com.swp391.JewelryProduction.dto.AccountDTO;
+import com.swp391.JewelryProduction.enums.AccountStatus;
+import com.swp391.JewelryProduction.enums.Role;
+import com.swp391.JewelryProduction.pojos.Account;
+import com.swp391.JewelryProduction.repositories.AccountRepository;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AccountService implements IAccountService{
 
-    private AccountRepository accountRepository;
-
-    @Autowired
-    public AccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    private final AccountRepository accountRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public List<AccountDTO> findAllAccounts() {
@@ -26,9 +29,13 @@ public class AccountService implements IAccountService{
     }
 
     @Override
-    public void saveAccount(AccountDTO accountDTO) {
+    public AccountDTO saveAccount(AccountDTO accountDTO) {
         accountDTO.setRole(Role.CUSTOMER);
-        accountRepository.save(mapToAccount(accountDTO));
+        accountDTO.setStatus(AccountStatus.LOCKED);
+        accountDTO.setDateCreated(LocalDateTime.now());
+        Account accModel = modelMapper.map(accountDTO, Account.class);
+        accountRepository.save(accModel);
+        return accountDTO;
     }
 
     @Override
@@ -38,7 +45,8 @@ public class AccountService implements IAccountService{
 
     @Override
     public AccountDTO findAccountByEmailAndPassword(String email, String password) {
-        return mapToAccountDTO(accountRepository.findAccountByEmailAndPassword(email, password));
+//        return mapToAccountDTO(accountRepository.findAccountByEmailAndPassword(email, password))
+        return null;
     }
 
     @Override
@@ -47,8 +55,16 @@ public class AccountService implements IAccountService{
     }
 
     @Override
-    public boolean findAccountByEmail(String email) {
-        return accountRepository.findAccountByEmail(email);
+    public AccountDTO findAccountByEmail(String email) {
+        return modelMapper.map(accountRepository.findByEmail(email), AccountDTO.class);
+    }
+
+    @Override
+    public AccountDTO updateAccountStatusActive(String email) {
+        Account acc = accountRepository.findByEmail(email).orElse(null);
+        if (acc == null) return null;
+        acc.setStatus(AccountStatus.ACTIVE);
+        return modelMapper.map(accountRepository.save(acc), AccountDTO.class);
     }
 
     @Override
