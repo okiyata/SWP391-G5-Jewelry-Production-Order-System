@@ -1,8 +1,7 @@
-package com.swp391.JewelryProduction.services.security;
+package com.swp391.JewelryProduction.security.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +15,7 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
-    private static final String SECRET_KEY = "zkh5)#zop=v_6gz*)4f-+xf@33p*oyks^z#hzev1&@=n81vjoh";
+    private static final String SECRET_KEY = "XVHnwgzyeMRa1dN5m1jGJLHU09rqICnRLF4ne7dzDM8=";
 
     public String extractUsername(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
