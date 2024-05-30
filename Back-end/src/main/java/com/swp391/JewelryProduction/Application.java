@@ -12,12 +12,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
 @SpringBootApplication
 @ComponentScan({"com.swp391.JewelryProduction.security", "com.swp391.JewelryProduction"})
+@EnableScheduling
 public class Application   {
 
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -37,11 +39,11 @@ public class Application   {
 //			FirebaseApp.initializeApp(options);
 //		}
 		SpringApplication.run(Application.class, args);
-//		ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
+//		ConfigurableApplicationContext context = Spring/Application.run(Application.class, args);
 //
 //		CrawDataService crawDataService = context.getBean(CrawDataService.class);
 //		crawDataService.crawData();
-	}
+//	}
 
 
 //	CommandLineRunner commandLineRunner (AccountRepository accountRepository) {
