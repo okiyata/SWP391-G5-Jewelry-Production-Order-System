@@ -30,15 +30,11 @@ public class UserRepositoryImpl implements UserRepository {
         try {
             foundUser = accRepo.findByEmail(email).orElseThrow(() -> new NullPointerException("No account found"));
             user.setAccount(foundUser);
-            userInfo = userInfoRepo.findById(foundUser.getId()).orElse(null);
+            userInfo = userInfoRepo.findById(foundUser.getId()).orElse(new UserInfo());
             user.setUserInfo(userInfo);
         } catch (NullPointerException e) {
             logger.warn(e.getMessage());
         }
-
-        logger.info(foundUser != null ? foundUser.toString() : "null");
-        logger.info(userInfo != null ? userInfo.toString() : "null");
-        logger.info(user.toString());
 
         return Optional.of(user);
     }

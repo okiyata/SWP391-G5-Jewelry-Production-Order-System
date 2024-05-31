@@ -24,7 +24,6 @@ public class UserInfoService implements IUserInfoService{
     private UserInfoDTO mapToUserInfoDTO(UserInfo userInfo) {
         return UserInfoDTO.builder()
                 .id(userInfo.getId())
-                .account(userInfo.getAccount())
                 .address(userInfo.getAddress())
                 .gender(userInfo.getGender())
                 .firstName(userInfo.getFirstName())
