@@ -7,3 +7,22 @@ This is a project GitHub for the course SWP391 of FPT University Ho Chi Minh Cit
   - Nguyễn Viết Thái     -  SE180218  -  [thainvse180218@fpt.edu.vn](mailto:thainvse180218@fpt.edu.vn)
   - Bùi Khánh Duy        -  SE173484  -  [duybkse173484@fpt.edu.vn](mailto:duybkse173484@fpt.edu.vn)
 </br></br></br>
+
+## Firebase Configuration
+
+To set up Firebase in your local development environment, you need to set the `FIREBASE_CONFIG_PATH` environment variable to point to your Firebase service account key file.
+
+### Windows
+
+Set the environment variable through the System Properties or using the command prompt:
+
+```sh
+export FIREBASE_CONFIG_PATH=/path/to/your/firebase-service-account.json
+```
+
+### Unix-based Systems (Linux, macOS)
+
+Add the following line to your shell configuration file (e.g., `.bashrc`, `.zshrc`):
+```sh
+set FIREBASE_CONFIG_PATH=C:\path\to\your\firebase-service-account.json
+```

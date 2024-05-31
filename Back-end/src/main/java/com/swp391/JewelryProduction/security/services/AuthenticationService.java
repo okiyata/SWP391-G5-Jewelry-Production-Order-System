@@ -5,7 +5,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.swp391.JewelryProduction.dto.AccountDTO;
 import com.swp391.JewelryProduction.pojos.Account;
-import com.swp391.JewelryProduction.pojos.UserInfo;
 import com.swp391.JewelryProduction.security.model.User;
 import com.swp391.JewelryProduction.security.model.UserRepository;
 import lombok.RequiredArgsConstructor;
