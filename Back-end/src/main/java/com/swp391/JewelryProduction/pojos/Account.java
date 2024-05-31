@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,8 +21,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "is_staff", columnDefinition = "bit")
+@DiscriminatorValue("0")
 public class Account{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")

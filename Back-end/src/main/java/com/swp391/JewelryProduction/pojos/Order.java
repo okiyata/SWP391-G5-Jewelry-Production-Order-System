@@ -1,6 +1,7 @@
 package com.swp391.JewelryProduction.pojos;
 
 import com.swp391.JewelryProduction.enums.OrderStatus;
+import com.swp391.JewelryProduction.enums.Role;
 import com.swp391.JewelryProduction.util.IdGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,7 +28,7 @@ public class Order {
             type = IdGenerator.class,
             parameters = {
                     @Parameter(name = IdGenerator.INCREMENT_PARAM, value = "1"),
-                    @Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "DES"),
+                    @Parameter(name = IdGenerator.VALUE_PREFIX_PARAMETER, value = "ORD"),
                     @Parameter(name = IdGenerator.NUMBER_FORMAT_PARAMETER, value = "%05d")
             }
     )
@@ -34,6 +36,7 @@ public class Order {
     private String id;
     private String name;
     private double budget;
+    @Column(name = "date_created", nullable = false, columnDefinition = "datetime")
     private LocalDateTime createdDate;
 
     @Enumerated(EnumType.STRING)
@@ -46,4 +49,35 @@ public class Order {
     @OneToOne
     @JoinColumn(name = "design_id")
     private Design design;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<StaffOrderHistory> staffOrderHistory;
+
+    @Transient
+    private Staff saleStaff;
+    @Transient
+    private Staff designStaff;
+    @Transient
+    private Staff productionStaff;
+
+    public Staff getSaleStaff() {
+        return getStaffByRole(Role.SALE_STAFF);
+    }
+
+    public Staff getDesignStaff() {
+        return getStaffByRole(Role.DESIGN_STAFF);
+    }
+
+    public Staff getProductionStaff() {
+        return getStaffByRole(Role.PRODUCTION_STAFF);
+    }
+
+    private Staff getStaffByRole(Role role) {
+        for (StaffOrderHistory history : staffOrderHistory) {
+            if (history.getStaff().getRole() == role) {
+                return history.getStaff();
+            }
+        }
+        return null;
+    }
 }

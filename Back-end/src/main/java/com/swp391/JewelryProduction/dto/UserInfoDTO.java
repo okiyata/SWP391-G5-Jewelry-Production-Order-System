@@ -19,5 +19,4 @@ public class UserInfoDTO {
     private Gender gender;
     private long phoneNumber;
     private String address;
-    private Account account;
 }
