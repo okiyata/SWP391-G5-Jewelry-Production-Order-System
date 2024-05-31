@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,10 @@ public class Response {
             if (responseList == null) responseList = new HashMap<>();
             responseList.put(key, value);
             return this;
+        }
+
+        public ResponseEntity<Response> buildEntity() {
+            return new ResponseEntity<>(new Response(status, message, responseList), status);
         }
     }
 }
