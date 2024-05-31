@@ -21,19 +21,6 @@ public class Application   {
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
 	public static void main(String[] args) throws IOException {
-//		ClassLoader classLoader = Application.class.getClassLoader();
-//
-//		Resource resource = new ClassPathResource("serviceKey.json");
-//
-//		FileInputStream serviceAccount = new FileInputStream(
-//				resource.getFile().getAbsolutePath()
-//		);
-//		FirebaseOptions options = FirebaseOptions.builder()
-//				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//				.build();
-//		if (FirebaseApp.getApps().isEmpty()) {
-//			FirebaseApp.initializeApp(options);
-//		}
 		SpringApplication.run(Application.class, args);
 	}
 
