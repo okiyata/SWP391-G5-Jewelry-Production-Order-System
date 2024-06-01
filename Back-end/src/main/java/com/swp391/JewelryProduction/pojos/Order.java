@@ -53,6 +53,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<StaffOrderHistory> staffOrderHistory;
 
+    @OneToMany(mappedBy = "order_id" , cascade = CascadeType.ALL)
+    private List<Report> reports;
+
     @Transient
     private Staff saleStaff;
     @Transient
