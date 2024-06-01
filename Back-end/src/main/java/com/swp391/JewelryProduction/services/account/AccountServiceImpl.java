@@ -3,7 +3,9 @@ package com.swp391.JewelryProduction.services.account;
 import com.swp391.JewelryProduction.dto.AccountDTO;
 import com.swp391.JewelryProduction.enums.AccountStatus;
 import com.swp391.JewelryProduction.enums.Role;
+import com.swp391.JewelryProduction.enums.WorkStatus;
 import com.swp391.JewelryProduction.pojos.Account;
+import com.swp391.JewelryProduction.pojos.Staff;
 import com.swp391.JewelryProduction.pojos.UserInfo;
 import com.swp391.JewelryProduction.repositories.AccountRepository;
 import com.swp391.JewelryProduction.repositories.UserInfoRepository;
@@ -84,6 +86,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Staff findStaffByRoleAndWorkStatus(Role role, WorkStatus workStatus) {
+        return accountRepository.findStaffByRoleAndWorkStatus(role, workStatus).isPresent() ? accountRepository.findStaffByRoleAndWorkStatus(role, workStatus).get() : null;
+    }
+
+    @Override
     public UserInfo findInfoById(String id) {
         return infoRepository.findById(id).orElse(null);
     }
@@ -93,6 +100,11 @@ public class AccountServiceImpl implements AccountService {
         Account acc = accountRepository.findByEmail(email).orElse(null);
         if (acc == null) return null;
         return infoRepository.findById(acc.getId()).orElse(null);
+    }
+
+    @Override
+    public Account findAccountByRole(Role role) {
+        return accountRepository.findAccountByRole(role).isPresent() ?  accountRepository.findAccountByRole(role).get() : null;
     }
 
     private Account mapToAccount(AccountDTO accountDTO) {
