@@ -18,8 +18,8 @@ public class Blog {
     private String id;
     private String title;
     private Staff author;
-    private List<ContentBlock> content = new ArrayList<>();
-    private List<String> tags = new ArrayList<>();
+    private List<ContentBlock> contents;
+    private List<String> tags;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -33,5 +33,21 @@ public class Blog {
         private String url;
         private String caption;
         private String altText;
+    }
+
+    public static class BlogBuilder {
+        public BlogBuilder content(ContentBlock content) {
+            if (this.contents == null) contents = new ArrayList<>();
+            if (content != null)
+                this.contents.add(content);
+            return this;
+        }
+
+        public BlogBuilder tag(String tag) {
+            if (this.contents == null) contents = new ArrayList<>();
+            if (tag != null && !tag.isEmpty())
+                this.tags.add(tag);
+            return this;
+        }
     }
 }
