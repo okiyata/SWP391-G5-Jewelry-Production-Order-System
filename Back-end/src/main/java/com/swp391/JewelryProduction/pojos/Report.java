@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class Report {
-
     @Id
     @GeneratedValue
     private Integer id;
@@ -28,11 +27,11 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportType type;
 
-
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sender_id")
     private Account sender;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "receiver_id")
     private Account receiver;
 }

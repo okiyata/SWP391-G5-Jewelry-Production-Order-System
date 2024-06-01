@@ -57,7 +57,9 @@ public class Account{
     @PrimaryKeyJoinColumn
     private UserInfo userInfo;
 
-
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Report> sendingReports;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Report> receivingReports;
 }
