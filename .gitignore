@@ -59,4 +59,5 @@ build/
 ### VS Code ###
 .vscode/
 
+.env
 serviceKey.json
