@@ -1,8 +1,8 @@
 package com.swp391.JewelryProduction.controller;
 
 import com.swp391.JewelryProduction.dto.DataDTO;
-import com.swp391.JewelryProduction.dto.MaterialDTO;
-import com.swp391.JewelryProduction.services.crawl.ICrawDataService;
+import com.swp391.JewelryProduction.pojos.Material;
+import com.swp391.JewelryProduction.services.crawl.ICrawlDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("api/v1")
 public class CrawlController {
 
-    private final ICrawDataService CrawDataService;
+    private final ICrawlDataService CrawDataService;
 
     @PostMapping("crawls")
     public ResponseEntity<DataDTO> crawlingData() {
@@ -36,7 +36,7 @@ public class CrawlController {
     }
 
     @GetMapping("crawls")
-    public ResponseEntity<List<MaterialDTO>> readData() throws IOException {
+    public ResponseEntity<List<Material>> readData() throws IOException {
         return ResponseEntity.ok(CrawDataService.getAll());
     }
 

@@ -1,7 +1,7 @@
 package com.swp391.JewelryProduction.services.crawl;
 
-import com.swp391.JewelryProduction.dto.MaterialDTO;
-import com.swp391.JewelryProduction.repositories.ComponentRepository;
+import com.swp391.JewelryProduction.pojos.Material;
+import com.swp391.JewelryProduction.repositories.MaterialRepository;
 import com.swp391.JewelryProduction.services.connection.ConnectionPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,13 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CrawlDataService implements ICrawDataService {
+public class CrawlDataService implements ICrawlDataService {
 
-    private final ComponentRepository componentRepository;
+    private final MaterialRepository materialRepository;
     private final ConnectionPage connection;
+
+    @Value("${exchange.url}")
+    private String urlExchange;
 
     @Value("${page.url}")
     private String urlPage;
@@ -29,7 +32,7 @@ public class CrawlDataService implements ICrawDataService {
     @Override
     public void crawData() {
         log.info("Starting to crawl data ...");
-        List<MaterialDTO> materials = new ArrayList<>();
+        List<Material> materials = new ArrayList<>();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -37,8 +40,8 @@ public class CrawlDataService implements ICrawDataService {
             CrawlThread crawlThread = CrawlThread.builder()
                     .materials(materials)
                     .connection(connection)
+                    .urlExchange(urlExchange)
                     .urlPage(urlPage)
-                    .index(1)
                     .build();
 
             executorService.execute(crawlThread);
@@ -50,7 +53,7 @@ public class CrawlDataService implements ICrawDataService {
                 log.warn("Executor was abruptly shut down. " + droppedTasks.size() + " tasks will not be executed.");
             }
 
-            componentRepository.saveAll(materials);
+            materialRepository.saveAll(materials);
             log.info("Finished crawling data!");
 
         } catch (InterruptedException e) {
@@ -75,9 +78,9 @@ public class CrawlDataService implements ICrawDataService {
         }
     }
 
-    public List<MaterialDTO> getAll() {
+    public List<Material> getAll() {
         try {
-            return componentRepository.findAll();
+            return materialRepository.findAll();
         } catch (Exception e) {
             log.error("Error fetching components", e);
             return new ArrayList<>();

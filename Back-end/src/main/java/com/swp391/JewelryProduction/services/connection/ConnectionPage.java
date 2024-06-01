@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface ConnectionPage {
 
-    Document getConnection(String url, int page) throws IOException;
+    Document getConnection(String url) throws IOException;
 
 }
