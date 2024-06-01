@@ -22,9 +22,9 @@ import java.util.List;
 @Table(name = "[Order]")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "design_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq")
     @GenericGenerator(
-            name = "design_seq",
+            name = "order_seq",
             type = IdGenerator.class,
             parameters = {
                     @Parameter(name = IdGenerator.INCREMENT_PARAM, value = "1"),
