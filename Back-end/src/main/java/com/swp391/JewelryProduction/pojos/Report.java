@@ -26,8 +26,9 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportType type;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Account sender;
 
-
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Account receiver;
 }
