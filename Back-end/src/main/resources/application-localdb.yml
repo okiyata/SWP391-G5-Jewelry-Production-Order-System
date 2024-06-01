@@ -1,11 +1,18 @@
+#website url to crawl
+page:
+    url: ${URL:https://www.goldrate24.com/gold-prices/}
+
+firebase:
+    url: ${CONFIG_PATH}
+
 spring:
     application:
         name: JewelryProduction
     datasource:
         driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-        url: jdbc:sqlserver://localhost:1433;database=Jewelry_Production_Order;encrypt=true;trustServerCertificate=true
-        username: sa
-        password: 1234
+        url: ${DB_URL}
+        username: ${DB_USERNAME}
+        password: ${DB_PASSWORD}
     jpa:
         hibernate:
             ddl-auto: create
@@ -15,30 +22,3 @@ spring:
                 jdbc:
                     time_zone: Asia/Ho_Chi_Minh
         show-sql: true
-    mail:
-        host: smtp.gmail.com
-        port: 587
-        username: dungnhse180163@fpt.edu.vn
-        password: rbfj jisl ekpp gnpg
-        properties:
-            mail:
-                smtp:
-                    auth: true
-                    starttls:
-                        enable: true
-
-#Test constants store in .properties file (or .yml)
-#jwt:
-#    token:
-#        validity: 18000
-#        prefix: bearer
-#    header:
-#        string: Authorization
-
-#    security:
-#        oauth2:
-#          client:
-#              registration:
-#                github:
-#                    client-id: Iv23licuS2tt7ELgah2s
-#                    client-secret: 2eb334d75f6781a5a96619eb92081500d0e974ed

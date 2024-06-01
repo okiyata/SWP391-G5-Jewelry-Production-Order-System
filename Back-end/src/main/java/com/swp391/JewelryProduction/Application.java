@@ -30,7 +30,7 @@ public class Application   {
 //
 //		CrawDataService crawDataService = context.getBean(CrawDataService.class);
 //		crawDataService.crawData();
-//	}
+	}
 
 
 //	CommandLineRunner commandLineRunner (AccountRepository accountRepository) {
