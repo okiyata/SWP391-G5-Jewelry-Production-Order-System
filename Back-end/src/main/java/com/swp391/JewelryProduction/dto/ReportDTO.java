@@ -2,10 +2,6 @@ package com.swp391.JewelryProduction.dto;
 
 import com.swp391.JewelryProduction.enums.ReportType;
 import com.swp391.JewelryProduction.pojos.Account;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,4 +16,5 @@ public class ReportDTO {
     private LocalDateTime createdDate;
     private ReportType type;
     private Account sender;
+    private Account receiver;
 }
