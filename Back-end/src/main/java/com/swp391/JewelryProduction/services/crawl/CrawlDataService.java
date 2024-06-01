@@ -1,4 +1,4 @@
-package com.swp391.JewelryProduction.services.craw;
+package com.swp391.JewelryProduction.services.crawl;
 
 import com.swp391.JewelryProduction.dto.MaterialDTO;
 import com.swp391.JewelryProduction.repositories.ComponentRepository;
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CrawDataService implements ICrawDataService {
+public class CrawlDataService implements ICrawDataService {
 
     private final ComponentRepository componentRepository;
     private final ConnectionPage connection;

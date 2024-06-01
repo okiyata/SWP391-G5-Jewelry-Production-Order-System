@@ -2,7 +2,7 @@ package com.swp391.JewelryProduction.controller;
 
 import com.swp391.JewelryProduction.dto.DataDTO;
 import com.swp391.JewelryProduction.dto.MaterialDTO;
-import com.swp391.JewelryProduction.services.craw.ICrawDataService;
+import com.swp391.JewelryProduction.services.crawl.ICrawDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
