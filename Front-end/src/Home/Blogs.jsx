@@ -1,6 +1,6 @@
 import React from "react";
 import BlogMain from "../reusable/BlogMain";
-import becomeTeacherImage from "../assets/images/becomeTeacher.jpg";
+import becomeTeacherImage from "../assets/becomeTeacher.jpg";
 import { Link } from "react-router-dom";
 
 export default function Blogs() {
