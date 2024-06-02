@@ -1,4 +1,5 @@
 import React from "react";
+<<<<<<< Updated upstream
 import { Link } from "react-router-dom";
 import { IoSearchCircle } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
@@ -59,6 +60,24 @@ export default function Header() {
           Make jewelry
         </Button>
       </div>
+=======
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+export default function Header(role) {
+  const navigate = useNavigate();
+  const [state, setState] = useState('guest');
+  
+  const goToHomePage = () => {
+    navigate('/');
+  };
+
+  return (
+    <div style={{boxShadow:'0 4px 4px 0 rgba(0, 0, 0, 0.25)'}} className="w-100 d-flex align-items-center px-5 py-2 h-20">
+      <button onClick={goToHomePage} className="text-3xl bg-transparent border-0 p-0 fw-semibold" style={{backgroundColor: 'transparent', cursor: 'pointer',fontSize: '2rem'}}>
+        宝石店
+      </button>
+>>>>>>> Stashed changes
     </div>
   );
 }
