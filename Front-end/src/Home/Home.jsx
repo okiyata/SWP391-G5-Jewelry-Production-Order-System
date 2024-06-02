@@ -1,6 +1,7 @@
 import { Col, Container, Nav, Row } from "react-bootstrap";
 import Carousel from "../components/Carousel";
 import { Link } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
 import ImageRotator from "../components/ImageRotator";
 
 function Home() {
@@ -71,15 +72,218 @@ function Home() {
         </Row>
       </section>
       {/*Feedback section*/}
+      <div className="d-flex justify-content-center mb-5">
+        <div
+          className="d-flex content-align-center justify-content-center"
+          style={{ borderBottom: "2px solid black", width: "80%" }}
+        >
+          <h2 className="fw-bold p-2">FEEDBACKS</h2>
+        </div>
+      </div>
+
       <section className="feedback-section mb-2">
-        <div className="d-flex justify-content-center">
+        <div className="customers-feedbakcs d-flex justify-content-center mb-3">
           <div
-            className="d-flex content-align-center justify-content-center"
-            style={{ borderBottom: "2px solid black", width: "70%" }}
+            className="d-inline-flex justify-content-between"
+            style={{ width: "80%" }}
           >
-            <h2 className="fw-bold p-2">FEEDBACKS</h2>
-            
+            <div style={{ width: "49%" }}>
+              <div style={{ borderBottom: "2px solid black" }}>
+                <div
+                  className="d-flex justify-content-between"
+                  style={{ lineHeight: "10px" }}
+                >
+                  <div>
+                    <p className="fw-bold" style={{ fontSize: "20px" }}>
+                      Name
+                    </p>
+                  </div>
+                  <div className="rate">
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                  </div>
+                </div>
+                <div
+                  className="d-flex justify-content-between"
+                  style={{ lineHeight: "1px" }}
+                >
+                  <div>
+                    <p style={{ fontSize: "16px" }}>Placeholder</p>
+                  </div>
+                  <div>
+                    <p style={{ color: "#939393" }}>6/2/2024</p>
+                  </div>
+                </div>
+                <div className="customer-comment">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                  </p>
+                </div>
+                <div
+                  className="d-flex justify-content-end"
+                  style={{ color: "#939393", lineHeight: "1px" }}
+                >
+                  <p>Read more</p>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ width: "49%" }}>
+              <div style={{ borderBottom: "2px solid black" }}>
+                <div
+                  className="d-flex justify-content-between"
+                  style={{ lineHeight: "10px" }}
+                >
+                  <div>
+                    <p className="fw-bold" style={{ fontSize: "20px" }}>
+                      Name
+                    </p>
+                  </div>
+                  <div className="rate">
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                  </div>
+                </div>
+                <div
+                  className="d-flex justify-content-between"
+                  style={{ lineHeight: "1px" }}
+                >
+                  <div>
+                    <p>Placeholder</p>
+                  </div>
+                  <div>
+                    <p style={{ color: "#939393" }}>6/2/2024</p>
+                  </div>
+                </div>
+                <div className="customer-comment">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                  </p>
+                </div>
+                <div
+                  className="d-flex justify-content-end"
+                  style={{ color: "#939393", lineHeight: "1px" }}
+                >
+                  <p>Read more</p>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div className="customers-feedbakcs d-flex justify-content-center mb-3">
+          <div
+            className="d-inline-flex justify-content-between"
+            style={{ width: "80%" }}
+          >
+            <div style={{ width: "49%" }}>
+              <div style={{ borderBottom: "2px solid black" }}>
+                <div
+                  className="d-flex justify-content-between"
+                  style={{ lineHeight: "10px" }}
+                >
+                  <div>
+                    <p className="fw-bold" style={{ fontSize: "20px" }}>
+                      Name
+                    </p>
+                  </div>
+                  <div className="rate">
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                  </div>
+                </div>
+                <div
+                  className="d-flex justify-content-between"
+                  style={{ lineHeight: "1px" }}
+                >
+                  <div>
+                    <p style={{ fontSize: "16px" }}>Placeholder</p>
+                  </div>
+                  <div>
+                    <p style={{ color: "#939393" }}>6/2/2024</p>
+                  </div>
+                </div>
+                <div className="customer-comment">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                  </p>
+                </div>
+                <div
+                  className="d-flex justify-content-end"
+                  style={{ color: "#939393", lineHeight: "1px" }}
+                >
+                  <p>Read more</p>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ width: "49%" }}>
+              <div style={{ borderBottom: "2px solid black" }}>
+                <div
+                  className="d-flex justify-content-between"
+                  style={{ lineHeight: "10px" }}
+                >
+                  <div>
+                    <p className="fw-bold" style={{ fontSize: "20px" }}>
+                      Name
+                    </p>
+                  </div>
+                  <div className="rate">
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                    <FaStar color="#FFD600" />
+                  </div>
+                </div>
+                <div
+                  className="d-flex justify-content-between"
+                  style={{ lineHeight: "1px" }}
+                >
+                  <div>
+                    <p>Placeholder</p>
+                  </div>
+                  <div>
+                    <p style={{ color: "#939393" }}>6/2/2024</p>
+                  </div>
+                </div>
+                <div className="customer-comment">
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                  </p>
+                </div>
+                <div
+                  className="d-flex justify-content-end"
+                  style={{ color: "#939393", lineHeight: "1px" }}
+                >
+                  <p>Read more</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="d-flex justify-content-center p-3">
+          <button className="btn btn-outline-dark" style={{borderRadius:"20px"}}>
+            More FeedBacks
+          </button>
         </div>
       </section>
     </>
