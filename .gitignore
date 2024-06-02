@@ -62,3 +62,4 @@ build/
 keys.env
 serviceKey.json
 !/src/main/resources/keys.env
+Back-end/src/main/resources/keys.env
