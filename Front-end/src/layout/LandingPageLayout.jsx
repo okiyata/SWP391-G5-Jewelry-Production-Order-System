@@ -2,7 +2,6 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
-import Home from "../Home/Home";
 
 
 export default function LandingPageLayout() {
@@ -12,8 +11,9 @@ export default function LandingPageLayout() {
 
       <div className="flex-grow-1">
         <Outlet />
+      
       </div>
-
+      
       <Footer />
     </div>
   );

@@ -10,9 +10,9 @@ import java.io.IOException;
 public class ConnectionPageService implements ConnectionPage{
 
     @Override
-    public Document getConnection(String url, int page) throws IOException {
+    public Document getConnection(String url) throws IOException {
         return Jsoup
-                .connect(url+page)
+                .connect(url)
                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
                 .header("Accept-Language", "*")
                 .get();
