@@ -59,5 +59,6 @@ build/
 ### VS Code ###
 .vscode/
 
-.env
+keys.env
 serviceKey.json
+!/src/main/resources/keys.env

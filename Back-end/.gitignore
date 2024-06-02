@@ -33,4 +33,7 @@ build/
 .vscode/
 
 serviceKey.json
-.env
+keys.env
+resources/keys.env
+!/src/main/resources/keys.env
+
