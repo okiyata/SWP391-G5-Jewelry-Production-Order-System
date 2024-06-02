@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import React from "react";
 import BlogMain from "../reusable/BlogMain";
 import becomeTeacherImage from "../assets/becomeTeacher.jpg";
@@ -231,6 +230,3 @@ className="text-decoration-none"
         </div>
     );
 }
-=======
-
->>>>>>> Stashed changes

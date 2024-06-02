@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import React from "react";
 import imgTesla from "../assets/imgTesla.png";
 import Oppenheimer from "../assets/Oppenheimer.png";
@@ -186,5 +185,3 @@ export default function About() {
     </div>
   );
 }
-=======
->>>>>>> Stashed changes

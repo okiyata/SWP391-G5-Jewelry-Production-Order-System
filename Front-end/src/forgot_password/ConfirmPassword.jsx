@@ -51,7 +51,6 @@ export default function ConfirmPassword() {
           </Form.Group>
           <Form.Group className="mb-4">
             <Form.Control
-<<<<<<< Updated upstream
               required
               type="password"
               placeholder="Confirm Password"
@@ -67,16 +66,6 @@ export default function ConfirmPassword() {
           </Form.Group>
           <div className="d-flex flex-row justify-content-center gap-4">
             <Button
-=======
-              type="password"
-              placeholder="Confirm Password"
-              className="border-2 "
-              style={{ borderColor: "#000", borderRadius: 10, }}
-            />
-          </Form.Group>
-          <div className="d-flex flex-row justify-content-center  gap-4  ">
-         <Button
->>>>>>> Stashed changes
               type="button"
               onClick={handleBack}
               className="d-flex align-items-center border-2"
