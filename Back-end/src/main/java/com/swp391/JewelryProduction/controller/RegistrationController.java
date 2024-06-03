@@ -91,7 +91,7 @@ public class RegistrationController {
 
     private ResponseEntity<Response> getResponseError(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            Map<String, String> errorMsg= new HashMap<>();
+            Map<String, Object> errorMsg= new HashMap<>();
             for(FieldError err: bindingResult.getFieldErrors()){
                 errorMsg.put(err.getField(), err.getDefaultMessage());
             }
