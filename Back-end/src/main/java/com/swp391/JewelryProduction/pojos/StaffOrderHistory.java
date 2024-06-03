@@ -1,6 +1,6 @@
 package com.swp391.JewelryProduction.pojos;
 
-import com.swp391.JewelryProduction.util.StaffOrderID;
+import com.swp391.JewelryProduction.util.embeddedID.StaffOrderID;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
