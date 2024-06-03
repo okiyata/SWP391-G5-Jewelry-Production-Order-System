@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,7 +32,11 @@ public class Product {
     private String name;
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "specification_id")
-    private ProductSpecification specification;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "product_specification",
+            joinColumns = { @JoinColumn(name = "product_id") },
+            inverseJoinColumns = { @JoinColumn(name = "value_id")}
+    )
+    private List<ParameterValue> productValues;
 }

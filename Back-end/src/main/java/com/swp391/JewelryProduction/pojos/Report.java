@@ -34,4 +34,8 @@ public class Report {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "receiver_id")
     private Account receiver;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private Order reportingOrder;
 }

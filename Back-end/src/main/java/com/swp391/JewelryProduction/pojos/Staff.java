@@ -21,7 +21,7 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("1")
 public class Staff extends Account{
-    private WorkStatus wStatus;
+    private WorkStatus workStatus;
 
     @OneToMany(mappedBy = "staff", cascade = CascadeType.REMOVE)
     private List<StaffOrderHistory> history;

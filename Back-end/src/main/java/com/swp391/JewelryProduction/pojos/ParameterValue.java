@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,11 +27,17 @@ public class ParameterValue {
     @JoinColumn(name = "parameter_id")
     private ProductParameters parameter;
 
-    @OneToOne
-    @JoinColumn(name = "detail_id")
-    private ValueDetails details;
+    @ManyToMany
+    @JoinTable(
+            name = "parent_child_value",
+            joinColumns = { @JoinColumn(name = "parent_id") },
+            inverseJoinColumns = { @JoinColumn(name = "child_id")}
+    )
+    private List<ParameterValue> parentValues;
 
-    @ManyToOne
-    @JoinColumn(name = "specification_id")
-    private ProductSpecification specification;
+    @ManyToMany(mappedBy = "parentValues")
+    private List<ParameterValue> childrenValues;
+
+    @ManyToMany(mappedBy = "productValues")
+    private List<Product> products;
 }
