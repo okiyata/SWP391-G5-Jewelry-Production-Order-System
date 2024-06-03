@@ -17,10 +17,10 @@ import java.util.Map;
 public class Response {
     private HttpStatus status;
     private String message;
-    private Map<String, String> responseList;
+    private Map<String, Object> responseList;
 
     public static class ResponseBuilder {
-        public ResponseBuilder response(String key, String value) {
+        public ResponseBuilder response(String key, Object value) {
             if (responseList == null) responseList = new HashMap<>();
             responseList.put(key, value);
             return this;
