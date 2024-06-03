@@ -90,7 +90,11 @@ export default function SignUp() {
             <Form.Control.Feedback type="invalid">
               Please confirm your password.
             </Form.Control.Feedback>
-            {error && <Alert variant="danger" className="mt-2">{error}</Alert>}
+            {error && (
+              <Alert variant="danger" className="mt-2">
+                {error}
+              </Alert>
+            )}
           </Form.Group>
           <div className="d-flex justify-content-center mb-3">
             <Button

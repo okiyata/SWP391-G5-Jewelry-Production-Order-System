@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 
-function useFetch({ baseUrl, method }) {
+function useFetch({ baseUrl, method, options = {} }) {
   const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch(baseUrl, {
-      method: { method },
+      method: method,
       headers: {
         "Content-Type": "application/json",
+        ...options.headers,
       },
-      body: JSON.stringify(data),
+      body: options.body ? JSON.stringify(options.body) : null,
+      ...options,
     })
       .then((res) => res.json())
       .then((data) => setData(data))
-      .catch((error) => alert(error));
-  }, [baseUrl]);
+      .catch((error) => setError(error));
+  }, [baseUrl, method, options]);
 
-  return data;
+  return { data, error };
 }
 
 export default useFetch;
