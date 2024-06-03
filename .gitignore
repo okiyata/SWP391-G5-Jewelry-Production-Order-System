@@ -65,4 +65,4 @@ serviceKey.json
 Back-end/src/main/resources/keys.env
 
 
-!/node_modules/
+/Front-end/node_modules
