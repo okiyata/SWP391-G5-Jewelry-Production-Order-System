@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ReportService implements IReportService {
+public class ReportServiceImpl implements ReportService {
     private ReportRepository reportRepository;
     private AccountRepository accountRepository;
 
     @Autowired
-    public ReportService(ReportRepository reportRepository, AccountRepository accountRepository) {
+    public ReportServiceImpl(ReportRepository reportRepository, AccountRepository accountRepository) {
         this.reportRepository = reportRepository;
         this.accountRepository = accountRepository;
     }
@@ -53,5 +53,9 @@ public class ReportService implements IReportService {
                 .description(report.getDescription())
                 .sender(report.getSender())
                 .build();
+    }
+
+    public void saveReport(Report report) {
+        reportRepository.save(report);
     }
 }
