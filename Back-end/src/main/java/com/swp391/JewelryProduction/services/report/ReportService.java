@@ -5,10 +5,11 @@ import com.swp391.JewelryProduction.pojos.Report;
 
 import java.util.List;
 
-public interface IReportService {
+public interface ReportService {
 
     List<ReportDTO> findAllReports();
 
     ReportDTO createReport(ReportDTO reportDTO);
+    void saveReport(Report report);
 
 }
