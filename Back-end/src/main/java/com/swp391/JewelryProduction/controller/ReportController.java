@@ -28,7 +28,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 public class ReportController {
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
     private NotificationService notificationService;
     private ReportServiceImpl reportService;
     private AccountService accountService;
