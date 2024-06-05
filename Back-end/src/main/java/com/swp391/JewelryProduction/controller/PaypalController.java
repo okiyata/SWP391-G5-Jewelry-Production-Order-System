@@ -1,8 +1,9 @@
-package com.example.demo.paypal;
+package com.swp391.JewelryProduction.controller;
 
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
+import com.swp391.JewelryProduction.services.PaypalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,7 @@ public class PaypalController {
         try {
             String cancelUrl = "http://localhost:8080/payment/cancel";
             String successUrl = "http://localhost:8080/payment/success";
-            Payment payment = paypalService.createPayment(
+            Payment payment = paypalService.makePayment(
                     Double.valueOf(amount),
                     currency,
                     method,
