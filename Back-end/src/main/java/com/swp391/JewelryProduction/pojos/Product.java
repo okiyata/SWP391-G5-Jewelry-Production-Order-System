@@ -39,4 +39,7 @@ public class Product {
             inverseJoinColumns = { @JoinColumn(name = "value_id")}
     )
     private List<ParameterValue> productValues;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Order order;
 }

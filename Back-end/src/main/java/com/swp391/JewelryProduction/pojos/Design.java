@@ -32,4 +32,7 @@ public class Design {
     private String id;
     private LocalDateTime lastUpdated;
     private String designLink;
+
+    @OneToOne(mappedBy = "design")
+    private Order order;
 }

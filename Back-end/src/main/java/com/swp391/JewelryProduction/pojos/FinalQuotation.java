@@ -38,7 +38,9 @@ public class FinalQuotation {
     @Column(name = "expired_date", nullable = false, columnDefinition = "datetime")
     private LocalDate expiredDate;
 
-    @OneToMany(mappedBy = "quotation")
+    @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<QuotationItem> quotationItems;
 
+    @OneToOne(mappedBy = "quotation")
+    private Order order;
 }
