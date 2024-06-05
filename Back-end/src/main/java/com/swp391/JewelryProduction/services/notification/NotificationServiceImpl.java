@@ -5,6 +5,7 @@ import com.swp391.JewelryProduction.pojos.Account;
 import com.swp391.JewelryProduction.pojos.Notification;
 import com.swp391.JewelryProduction.pojos.Order;
 import com.swp391.JewelryProduction.pojos.Report;
+import com.swp391.JewelryProduction.repositories.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
+    private final NotificationRepository notificationRepository;
 //
 //    private final ModelMapper modelMapper;
 //    private final Flux<ServerSentEvent<Notification>> notificationFlux = Flux.push(this::generateNotifications);
@@ -67,4 +69,8 @@ public class NotificationServiceImpl implements NotificationService {
 //                        notification.data().getAccount().getId().equals(id)),
 //                id);
 //    }
+    @Override
+    public void saveNotification(Notification notification) {
+    notificationRepository.save(notification);
+}
 }
