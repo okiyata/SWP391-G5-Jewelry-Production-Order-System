@@ -7,9 +7,5 @@ import java.util.List;
 
 public interface ReportService {
 
-    List<ReportDTO> findAllReports();
-
-    ReportDTO createReport(ReportDTO reportDTO);
     void saveReport(Report report);
-
 }

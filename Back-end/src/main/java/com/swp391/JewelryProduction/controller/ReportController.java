@@ -3,20 +3,16 @@ package com.swp391.JewelryProduction.controller;
 import com.swp391.JewelryProduction.enums.OrderStatus;
 import com.swp391.JewelryProduction.enums.ReportType;
 import com.swp391.JewelryProduction.enums.Role;
-import com.swp391.JewelryProduction.enums.WorkStatus;
 import com.swp391.JewelryProduction.pojos.Notification;
 import com.swp391.JewelryProduction.pojos.Order;
 import com.swp391.JewelryProduction.pojos.Report;
 import com.swp391.JewelryProduction.services.account.AccountService;
-import com.swp391.JewelryProduction.services.notification.NotificationService;
+import com.swp391.JewelryProduction.services.nofitcation.NotificationService;
 import com.swp391.JewelryProduction.services.order.OrderServiceImpl;
 import com.swp391.JewelryProduction.services.report.ReportServiceImpl;
 import com.swp391.JewelryProduction.util.Response;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +24,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 public class ReportController {
-    private final OrderService orderService;
+    private final OrderServiceImpl orderService;
     private NotificationService notificationService;
     private ReportServiceImpl reportService;
     private AccountService accountService;
@@ -55,7 +51,7 @@ public class ReportController {
         reportService.saveReport(report);
         orderService.findAllOrders().stream().filter(ord -> {
             return ord.getId().equals(report.getReportingOrder().getId());
-        }).findFirst().get().getReports().add(report);
+        }).findFirst().get().getRelatedReports().add(report);
         return Response.builder()
                 .status(HttpStatus.OK)
                 .message("Quotation send successfully.")
@@ -69,7 +65,7 @@ public class ReportController {
         reportService.saveReport(report);
         orderService.findAllOrders().stream().filter(ord -> {
             return ord.getId().equals(report.getReportingOrder().getId());
-        }).findFirst().get().getReports().add(report);
+        }).findFirst().get().getRelatedReports().add(report);
         return Response.builder()
                 .status(HttpStatus.OK)
                 .message("Quotation send successfully.")
