@@ -24,54 +24,54 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 public class ReportController {
-    private final OrderServiceImpl orderService;
-    private NotificationService notificationService;
-    private ReportServiceImpl reportService;
-    private AccountService accountService;
-
-    @PostMapping
-    public ResponseEntity<Response> postCustomerRequest(@Valid @RequestBody Report report) {
-        report.setType(ReportType.REQUEST);
-        Order order = new Order();
-        order.setStatus(OrderStatus.REQUESTING);
-        Notification notification = new Notification(UUID.randomUUID(), report, order, accountService.findAccountByRole(Role.MANAGER));
-        reportService.saveReport(report);
-        orderService.saveOrder(order);
-        notificationService.saveNotification(notification);
-        return Response.builder()
-                .status(HttpStatus.OK)
-                .message("Request send successfully.")
-                .response("request", report)
-                .buildEntity();
-    }
-
-    @PostMapping
-    public ResponseEntity<Response> postStaffQuotation(@Valid @RequestBody Report report) {
-        report.setType(ReportType.QUOTATION);
-        reportService.saveReport(report);
-        orderService.findAllOrders().stream().filter(ord -> {
-            return ord.getId().equals(report.getReportingOrder().getId());
-        }).findFirst().get().getRelatedReports().add(report);
-        return Response.builder()
-                .status(HttpStatus.OK)
-                .message("Quotation send successfully.")
-                .response("quotation", report)
-                .buildEntity();
-    }
-
-    @PostMapping
-    public ResponseEntity<Response> postCustomerOrder(@Valid @RequestBody Report report) {
-        report.setType(ReportType.ORDER);
-        reportService.saveReport(report);
-        orderService.findAllOrders().stream().filter(ord -> {
-            return ord.getId().equals(report.getReportingOrder().getId());
-        }).findFirst().get().getRelatedReports().add(report);
-        return Response.builder()
-                .status(HttpStatus.OK)
-                .message("Quotation send successfully.")
-                .response("quotation", report)
-                .buildEntity();
-    }
-
-    
+//    private final OrderServiceImpl orderService;
+//    private NotificationService notificationService;
+//    private ReportServiceImpl reportService;
+//    private AccountService accountService;
+//
+//    @PostMapping
+//    public ResponseEntity<Response> postCustomerRequest(@Valid @RequestBody Report report) {
+//        report.setType(ReportType.REQUEST);
+//        Order order = new Order();
+//        order.setStatus(OrderStatus.REQUESTING);
+//        Notification notification = new Notification(UUID.randomUUID(), report, order, accountService.findAccountByRole(Role.MANAGER));
+//        reportService.saveReport(report);
+//        orderService.saveOrder(order);
+//        notificationService.saveNotification(notification);
+//        return Response.builder()
+//                .status(HttpStatus.OK)
+//                .message("Request send successfully.")
+//                .response("request", report)
+//                .buildEntity();
+//    }
+//
+//    @PostMapping
+//    public ResponseEntity<Response> postStaffQuotation(@Valid @RequestBody Report report) {
+//        report.setType(ReportType.QUOTATION);
+//        reportService.saveReport(report);
+//        orderService.findAllOrders().stream().filter(ord -> {
+//            return ord.getId().equals(report.getReportingOrder().getId());
+//        }).findFirst().get().getRelatedReports().add(report);
+//        return Response.builder()
+//                .status(HttpStatus.OK)
+//                .message("Quotation send successfully.")
+//                .response("quotation", report)
+//                .buildEntity();
+//    }
+//
+//    @PostMapping
+//    public ResponseEntity<Response> postCustomerOrder(@Valid @RequestBody Report report) {
+//        report.setType(ReportType.ORDER);
+//        reportService.saveReport(report);
+//        orderService.findAllOrders().stream().filter(ord -> {
+//            return ord.getId().equals(report.getReportingOrder().getId());
+//        }).findFirst().get().getRelatedReports().add(report);
+//        return Response.builder()
+//                .status(HttpStatus.OK)
+//                .message("Quotation send successfully.")
+//                .response("quotation", report)
+//                .buildEntity();
+//    }
+//
+//
 }
