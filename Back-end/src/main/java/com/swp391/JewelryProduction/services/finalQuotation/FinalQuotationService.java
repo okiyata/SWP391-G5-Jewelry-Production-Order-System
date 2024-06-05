@@ -20,16 +20,8 @@ public class FinalQuotationService implements IFinalQuotationService{
 
     @Override
     public List<FinalQuotationDTO> findAllFinalQuotations() {
-        return finalQuotationRepository.findAll().stream().map(finalQuotation -> mapToFinalQuotationDTO(finalQuotation)).collect(Collectors.toList());
+//        return finalQuotationRepository.findAll().stream().map(finalQuotation -> mapToFinalQuotationDTO(finalQuotation)).collect(Collectors.toList());
+        return null;
     }
 
-    private FinalQuotationDTO mapToFinalQuotationDTO(FinalQuotation finalQuotation) {
-        return FinalQuotationDTO.builder()
-                .quotationItems(finalQuotation.getQuotationItems())
-                .id(finalQuotation.getId())
-                .title(finalQuotation.getTitle())
-                .expiredDate(finalQuotation.getExpiredDate())
-                .createdDate(finalQuotation.getCreatedDate())
-                .build();
-    }
 }

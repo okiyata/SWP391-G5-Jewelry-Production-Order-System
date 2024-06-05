@@ -20,15 +20,7 @@ public class ProductService implements IProductService{
 
     @Override
     public List<ProductDTO> findAllProducts() {
-        return productRepository.findAll().stream().map(product -> mapToProductDTO(product)).collect(Collectors.toList());
-    }
-
-    private ProductDTO mapToProductDTO(Product product) {
-        return ProductDTO.builder()
-                .id(product.getId())
-                .description(product.getDescription())
-                .name(product.getName())
-                .specification(product.getSpecification())
-                .build();
+//        return productRepository.findAll().stream().map(product -> mapToProductDTO(product)).collect(Collectors.toList());
+        return null;
     }
 }

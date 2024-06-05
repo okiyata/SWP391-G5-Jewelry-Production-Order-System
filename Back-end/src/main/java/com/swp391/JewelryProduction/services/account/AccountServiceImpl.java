@@ -27,9 +27,35 @@ public class AccountServiceImpl implements AccountService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
+    //<editor-fold desc="GET METHODS" defaultstate="collapsed">
     @Override
     public List<AccountDTO> findAllAccounts() {
-        return accountRepository.findAll().stream().map(account -> mapToAccountDTO(account)).collect(Collectors.toList());
+        return accountRepository
+                .findAll()
+                .stream()
+                .map(account -> modelMapper.map(account, AccountDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public AccountDTO findAccountByEmail(String email) {
+        return modelMapper.map(accountRepository.findByEmail(email), AccountDTO.class);
+    }
+
+    @Override
+    public AccountDTO findAccountById(String accountId) {
+        Account accModel = accountRepository.findById(accountId).orElse(null);
+        if (accModel == null) return null;
+        return modelMapper.map(accModel, AccountDTO.class);
+    }
+
+    @Override
+    public AccountDTO findAccountByEmailAndPassword(String email, String password) {
+        Account acc = accountRepository.findByEmail(email).orElse(null);
+        if (acc == null || !passwordEncoder.matches(password, acc.getPassword()))
+            return null;
+
+        return this.modelMapper.map(acc, AccountDTO.class);
     }
 
     @Override
@@ -45,49 +71,6 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepository.save(accModel);
         return accountDTO;
-    }
-
-    @Override
-    public AccountDTO findAccountById(String accountId) {
-        return mapToAccountDTO(accountRepository.findById(accountId).get());
-    }
-
-    @Override
-    public AccountDTO findAccountByEmailAndPassword(String email, String password) {
-        Account acc = accountRepository.findByEmail(email).orElse(null);
-        if (acc == null || !passwordEncoder.matches(password, acc.getPassword()))
-            return null;
-
-        return this.modelMapper.map(acc, AccountDTO.class);
-    }
-
-    @Override
-    public void updateAccount(AccountDTO accountDTO) {
-        accountRepository.save(mapToAccount(accountDTO));
-    }
-
-    @Override
-    public AccountDTO findAccountByEmail(String email) {
-        return modelMapper.map(accountRepository.findByEmail(email), AccountDTO.class);
-    }
-
-    @Override
-    public AccountDTO updateAccountStatusActive(String email) {
-        Account acc = accountRepository.findByEmail(email).orElse(null);
-        if (acc == null) return null;
-        acc.setStatus(AccountStatus.ACTIVE);
-        return modelMapper.map(accountRepository.save(acc), AccountDTO.class);
-    }
-
-    @Override
-    public void saveAccountPassword(AccountDTO accountDTO, String newPassword) {
-        accountDTO.setPassword(newPassword);
-        accountRepository.save(mapToAccount(accountDTO));
-    }
-
-    @Override
-    public Staff findStaffByRoleAndWorkStatus(Role role, WorkStatus workStatus) {
-        return accountRepository.findStaffByRoleAndWorkStatus(role, workStatus).isPresent() ? accountRepository.findStaffByRoleAndWorkStatus(role, workStatus).get() : null;
     }
 
     @Override
@@ -107,25 +90,32 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findAccountByRole(role).isPresent() ?  accountRepository.findAccountByRole(role).get() : null;
     }
 
-    private Account mapToAccount(AccountDTO accountDTO) {
-        return Account.builder()
-                .id(accountDTO.getId())
-                .email(accountDTO.getEmail())
-                .password(accountDTO.getPassword())
-                .dateCreated(accountDTO.getDateCreated())
-                .role(accountDTO.getRole())
-                .status(accountDTO.getStatus())
-                .build();
+    @Override
+    public Staff findStaffByRoleAndWorkStatus(Role role, WorkStatus workStatus) {
+        return accountRepository.findStaffByRoleAndWorkStatus(role, workStatus).isPresent() ? accountRepository.findStaffByRoleAndWorkStatus(role, workStatus).get() : null;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="UPDATE METHODS" defaultstate="collapsed">
+    @Override
+    public void updateAccount(AccountDTO accountDTO) {
+        accountRepository.save(modelMapper.map(accountDTO, Account.class));
     }
 
-    private AccountDTO mapToAccountDTO(Account account) {
-        return AccountDTO.builder()
-                .id(account.getId())
-                .email(account.getEmail())
-                .password(account.getPassword())
-                .dateCreated(account.getDateCreated())
-                .role(account.getRole())
-                .status(account.getStatus())
-                .build();
+    @Override
+    public AccountDTO updateAccountStatusActive(String email) {
+        Account acc = accountRepository.findByEmail(email).orElse(null);
+        if (acc == null) return null;
+        acc.setStatus(AccountStatus.ACTIVE);
+        return modelMapper.map(accountRepository.save(acc), AccountDTO.class);
     }
+    //</editor-fold>
+
+    //<editor-fold desc="SAVE METHODS" defaultstate="collapsed">
+    @Override
+    public void saveAccountPassword(AccountDTO accountDTO, String newPassword) {
+        accountDTO.setPassword(newPassword);
+        accountRepository.save(modelMapper.map(accountDTO, Account.class));
+    }
+    //</editor-fold>
 }

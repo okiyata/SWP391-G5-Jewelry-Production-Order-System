@@ -20,17 +20,8 @@ public class QuotationItemService implements IQuotationItemService{
 
     @Override
     public List<QuotationItemDTO> findAllQuotationItems() {
-        return quotationItemRepository.findAll().stream().map(quotationItem -> mapToQuotationItemDTO(quotationItem)).collect(Collectors.toList());
+//        return quotationItemRepository.findAll().stream().map(quotationItem -> mapToQuotationItemDTO(quotationItem)).collect(Collectors.toList());
+        return null;
     }
 
-    private QuotationItemDTO mapToQuotationItemDTO(QuotationItem quotationItem) {
-        return QuotationItemDTO.builder()
-                .quotation(quotationItem.getQuotation())
-                .id(quotationItem.getId())
-                .name(quotationItem.getName())
-                .quantity(quotationItem.getQuantity())
-                .totalPrice(quotationItem.getTotalPrice())
-                .unitPrice(quotationItem.getUnitPrice())
-                .build();
-    }
 }

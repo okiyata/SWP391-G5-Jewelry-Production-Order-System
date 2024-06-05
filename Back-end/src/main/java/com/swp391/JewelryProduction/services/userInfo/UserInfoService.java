@@ -19,17 +19,7 @@ public class UserInfoService implements IUserInfoService{
 
     @Override
     public List<UserInfoDTO> findAllUserInfos() {
-        return userInfoRepository.findAll().stream().map(userInfo -> mapToUserInfoDTO(userInfo)).collect(Collectors.toList());
-    }
-    private UserInfoDTO mapToUserInfoDTO(UserInfo userInfo) {
-        return UserInfoDTO.builder()
-                .id(userInfo.getId())
-                .address(userInfo.getAddress())
-                .gender(userInfo.getGender())
-                .firstName(userInfo.getFirstName())
-                .lastName(userInfo.getLastName())
-                .phoneNumber(userInfo.getPhoneNumber())
-                .birthDate(userInfo.getBirthDate())
-                .build();
+//        return userInfoRepository.findAll().stream().map(userInfo -> mapToUserInfoDTO(userInfo)).collect(Collectors.toList());
+        return null;
     }
 }

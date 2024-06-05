@@ -20,17 +20,7 @@ public class ParameterValueService implements IParameterValueService{
 
     @Override
     public List<ParameterValueDTO> findAllParameterValues() {
-        return parameterValueRepository.findAll().stream().map(parameterValue -> mapToParameterValueDTO(parameterValue)).collect(Collectors.toList());
-    }
-
-    private ParameterValueDTO mapToParameterValueDTO(ParameterValue parameterValue) {
-        return ParameterValueDTO.builder()
-                .value(parameterValue.getValue())
-                .parameter(parameterValue.getParameter())
-                .id(parameterValue.getId())
-                .description(parameterValue.getDescription())
-                .details(parameterValue.getDetails())
-                .specification(parameterValue.getSpecification())
-                .build();
+//        return parameterValueRepository.findAll().stream().map(parameterValue -> mapToParameterValueDTO(parameterValue)).collect(Collectors.toList());
+        return null;
     }
 }

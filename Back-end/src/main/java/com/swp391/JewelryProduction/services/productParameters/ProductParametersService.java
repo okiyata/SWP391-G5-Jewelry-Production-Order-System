@@ -19,14 +19,7 @@ public class ProductParametersService implements IProductParametersService{
 
     @Override
     public List<ProductParametersDTO> findAllProductParameters() {
-        return productParametersRepository.findAll().stream().map(productParameter -> mapToProductParametersDTO(productParameter)).collect(Collectors.toList());
-    }
-
-    private ProductParametersDTO mapToProductParametersDTO(ProductParameters productParameter) {
-        return ProductParametersDTO.builder()
-                .parameters(productParameter.getParameters())
-                .id(productParameter.getId())
-                .name(productParameter.getName())
-                .build();
+//        return productParametersRepository.findAll().stream().map(productParameter -> mapToProductParametersDTO(productParameter)).collect(Collectors.toList());
+        return null;
     }
 }

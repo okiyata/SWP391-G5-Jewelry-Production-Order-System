@@ -20,14 +20,7 @@ public class DesignService implements IDesignService{
 
     @Override
     public List<DesignDTO> findAllDesigns() {
-        return designRepository.findAll().stream().map(design -> mapToDesignDTO(design)).collect(Collectors.toList());
-    }
-
-    private DesignDTO mapToDesignDTO(Design design) {
-        return DesignDTO.builder()
-                .id(design.getId())
-                .designLink(design.getDesignLink())
-                .lastUpdated(design.getLastUpdated())
-                .build();
+//        return designRepository.findAll().stream().map(design -> mapToDesignDTO(design)).collect(Collectors.toList());
+        return null;
     }
 }
