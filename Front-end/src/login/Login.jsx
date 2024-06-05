@@ -1,19 +1,41 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
-import { FaGoogle, FaGithub } from 'react-icons/fa';
+import { FaGoogle, FaGithub } from "react-icons/fa";
+// import UseFetch from "../hooks/useFetch";
 
 export default function Login() {
   const [validated, setValidated] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [data, setData] = useState("");
+  const baseUrl =
+    "https://run.mocky.io/v3/7c18c9af-2b13-4361-9eaa-1ab24bbccb15";
+  const method = "POST";
+  const body = { username, password };
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
+  //Handle submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+      e.stopPropagation();
     } else {
-      // Logic to handle successful form submission
-      console.log("Form submitted successfully");
+      //Send user's input to backend
+      fetch(baseUrl, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      })
+        .then((res) => res.json())
+        .then((data) => setData(data));
+      console.log(data);
+      if (data.status === "OK") {
+        alert(data.message);
+        localStorage.setItem("user", data.token);
+      } else if (data.status === "Failed") {
+        alert(data.message);
+      }
     }
 
     setValidated(true);
@@ -21,10 +43,17 @@ export default function Login() {
 
   return (
     <Container
-      style={{ paddingTop: '10%', paddingBottom: '10%' }}
+      style={{ paddingTop: "10%", paddingBottom: "10%" }}
       className="d-flex justify-content-center align-items-center"
     >
-      <div className="p-4" style={{ width: "30%", backgroundColor: 'rgba(217, 217, 217, 0.7)', borderRadius: 20 }}>
+      <div
+        className="p-4"
+        style={{
+          width: "30%",
+          backgroundColor: "rgba(217, 217, 217, 0.7)",
+          borderRadius: 20,
+        }}
+      >
         <h2 className="text-center mb-4">Sign in</h2>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
@@ -33,6 +62,8 @@ export default function Login() {
               required
               type="email"
               placeholder="Email"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
             />
@@ -46,13 +77,18 @@ export default function Login() {
               required
               type="password"
               className="border-2"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               style={{ borderColor: "#000", borderRadius: 10 }}
             />
             <Form.Control.Feedback type="invalid">
               Please provide a password.
             </Form.Control.Feedback>
             <div className="text-end mt-2">
-              <Link to="/reset_password" className="text-muted text-decoration-none">
+              <Link
+                to="/reset_password"
+                className="text-muted text-decoration-none"
+              >
                 Forget password
               </Link>
             </div>
@@ -73,7 +109,7 @@ export default function Login() {
           </div>
         </Form>
         <div className="d-flex align-items-center my-3">
-        <div style={{ flex: 1, height: "1px", backgroundColor: "#000" }} />
+          <div style={{ flex: 1, height: "1px", backgroundColor: "#000" }} />
           <span className="mx-3 text-muted">Or</span>
           <div style={{ flex: 1, height: "1px", backgroundColor: "#000" }} />
         </div>
