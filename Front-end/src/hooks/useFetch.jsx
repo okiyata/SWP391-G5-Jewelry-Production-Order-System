@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function useFetch({ baseUrl, method, options = {} }) {
+function UseFetch({ baseUrl, method, options = {} }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -17,9 +17,8 @@ function useFetch({ baseUrl, method, options = {} }) {
       .then((res) => res.json())
       .then((data) => setData(data))
       .catch((error) => setError(error));
-  }, [baseUrl, method, options]);
 
-  return { data, error };
+    return { data, error };
+  }, [baseUrl]);
 }
-
-export default useFetch;
+export default UseFetch;
