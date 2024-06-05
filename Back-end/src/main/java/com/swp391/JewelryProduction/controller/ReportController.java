@@ -7,7 +7,7 @@ import com.swp391.JewelryProduction.pojos.Notification;
 import com.swp391.JewelryProduction.pojos.Order;
 import com.swp391.JewelryProduction.pojos.Report;
 import com.swp391.JewelryProduction.services.account.AccountService;
-import com.swp391.JewelryProduction.services.nofitcation.NotificationService;
+import com.swp391.JewelryProduction.services.notification.NotificationService;
 import com.swp391.JewelryProduction.services.order.OrderServiceImpl;
 import com.swp391.JewelryProduction.services.report.ReportServiceImpl;
 import com.swp391.JewelryProduction.util.Response;
@@ -73,5 +73,5 @@ public class ReportController {
                 .buildEntity();
     }
 
-
+    
 }
