@@ -3,7 +3,7 @@ package com.swp391.JewelryProduction;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.swp391.JewelryProduction.services.craw.CrawDataService;
+import com.swp391.JewelryProduction.services.crawl.CrawlDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -26,10 +26,10 @@ public class Application   {
 
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(Application.class, args);
-//		ConfigurableApplicationContext context = Spring/Application.run(Application.class, args);
+//		ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
 //
-//		CrawDataService crawDataService = context.getBean(CrawDataService.class);
-//		crawDataService.crawData();
+//		CrawlDataService crawlDataService = context.getBean(CrawlDataService.class);
+//		crawlDataService.crawData();
 	}
 
 
