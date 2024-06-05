@@ -27,15 +27,18 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportType type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "sender_id")
     private Account sender;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver_id")
     private Account receiver;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order reportingOrder;
+
+    @OneToOne()
+    private Notification notification;
 }

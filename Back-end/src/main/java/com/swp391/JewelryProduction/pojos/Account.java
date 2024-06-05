@@ -4,18 +4,13 @@ import com.swp391.JewelryProduction.enums.*;
 import com.swp391.JewelryProduction.util.IdGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -53,16 +48,26 @@ public class Account{
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private UserInfo userInfo;
 
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
     private List<Report> sendingReports;
 
-    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private List<Report> receivingReports;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications;
+
+    public void addSendingReport(Report report) {
+        report.setSender(this);
+        this.getSendingReports().add(report);
+    }
+
+    public void addReceivingReport(Report report) {
+        report.setReceiver(this);
+        this.getSendingReports().add(report);
+    }
 }

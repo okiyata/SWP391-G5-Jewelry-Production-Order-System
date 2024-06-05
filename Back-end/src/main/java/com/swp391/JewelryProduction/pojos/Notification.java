@@ -13,21 +13,21 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "Notification_Board")
+@Table(name = "Notification")
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "notification", fetch = FetchType.EAGER)
     @JoinColumn(name = "report_id")
     private Report report;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", nullable = true)
     private Order order;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", columnDefinition = "nvarchar(8)")
     private Account account;
 }

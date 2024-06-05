@@ -28,13 +28,14 @@ public class UserInfo {
     @Column(columnDefinition = "date")
     private LocalDate birthDate;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private long phoneNumber;
 
     private String address;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "userInfo", fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id", columnDefinition = "nvarchar(8)")
     private Account account;

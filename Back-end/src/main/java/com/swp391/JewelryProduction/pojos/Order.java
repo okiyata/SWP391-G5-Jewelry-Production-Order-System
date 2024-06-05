@@ -12,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -51,11 +52,21 @@ public class Order {
     @JoinColumn(name = "design_id")
     private Design design;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(
+            mappedBy = "order",
+            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE},
+            fetch = FetchType.LAZY
+    )
     private List<StaffOrderHistory> staffOrderHistory;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Notification> notifications;
+
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Product product;
+
+    @OneToMany(mappedBy = "reportingOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Report> relatedReports;
 
     @Transient
     private Staff saleStaff;
@@ -83,5 +94,35 @@ public class Order {
             }
         }
         return null;
+    }
+
+    public void setSaleStaff (Staff saleStaff) {
+        this.saleStaff = saleStaff;
+        staffOrderHistory.add(StaffOrderHistory.builder()
+                .staff(saleStaff)
+                .order(this)
+                .startDate(LocalDateTime.now())
+                .build()
+        );
+    }
+
+    public void setDesignStaff (Staff designStaff) {
+        this.designStaff = designStaff;
+        staffOrderHistory.add(StaffOrderHistory.builder()
+                .staff(designStaff)
+                .order(this)
+                .startDate(LocalDateTime.now())
+                .build()
+        );
+    }
+
+    public void setProductionStaff (Staff saleStaff) {
+        this.saleStaff = saleStaff;
+        staffOrderHistory.add(StaffOrderHistory.builder()
+                .staff(saleStaff)
+                .order(this)
+                .startDate(LocalDateTime.now())
+                .build()
+        );
     }
 }

@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+@Data
 @Builder
 @Entity
 @Table(name = "material_price_list")

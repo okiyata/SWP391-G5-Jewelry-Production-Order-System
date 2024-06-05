@@ -1,10 +1,7 @@
 package com.swp391.JewelryProduction.pojos;
 
 import com.swp391.JewelryProduction.enums.WorkStatus;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +20,11 @@ import java.util.List;
 public class Staff extends Account{
     private WorkStatus workStatus;
 
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.REMOVE)
+    @OneToMany(
+            mappedBy = "staff",
+            cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE},
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
     private List<StaffOrderHistory> history;
 }
