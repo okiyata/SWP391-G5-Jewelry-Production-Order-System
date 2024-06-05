@@ -11,7 +11,7 @@ export default function Header() {
       style={{ boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)" }}
       className="w-100 d-flex justify-content-between align-items-center px-5 py-2 h-20"
     >
-      <Link to="/home" className="text-decoration-none">
+      <Link to="/" className="text-decoration-none">
         <h1 className="display-4 px-5" style={{ fontSize: '2rem', color: 'black' }}>宝石店</h1>
       </Link>
       <div className="d-flex flex-column justify-content-center gap-2">
