@@ -64,6 +64,9 @@ public class Order {
     @OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Product product;
 
+    @OneToMany(mappedBy = "reportingOrder", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Report> relatedReports;
+
     @Transient
     private Staff saleStaff;
     @Transient
