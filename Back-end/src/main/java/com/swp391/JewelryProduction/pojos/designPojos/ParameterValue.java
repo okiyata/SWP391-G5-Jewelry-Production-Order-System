@@ -1,4 +1,4 @@
-package com.swp391.JewelryProduction.pojos;
+package com.swp391.JewelryProduction.pojos.designPojos;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class ParameterValue {
     @Id
     @GeneratedValue
     private Integer id;
-    @Column(columnDefinition = "nvarchar(50)")
+    @Column(length = 255)
     private String value;
     @Column(columnDefinition = "text")
     private String description;
