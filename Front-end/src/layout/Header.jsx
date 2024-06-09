@@ -4,15 +4,55 @@ import { IoSearchCircle } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
 import { Button } from "react-bootstrap";
+import { Dropdown } from "antd";
 
-export default function Header() {
+export default function Header({ role }) {
+  const items = [
+    {
+      key: "1",
+      label: (
+        <Link to="/" style={{ textDecoration: "none" }}>
+          Profile
+        </Link>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <Link to="/" style={{ textDecoration: "none" }}>
+          Setting
+        </Link>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <Link to="/" style={{ textDecoration: "none" }}>
+          Sign out
+        </Link>
+      ),
+    },
+  ];
+
   return (
     <div
-      style={{ boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)" }}
+      style={{
+        position: "fixed",
+        top: 0,
+        width: "100%",
+        zIndex: 1000,
+        backgroundColor: "white",
+        boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)",
+      }}
       className="w-100 d-flex justify-content-between align-items-center px-5 py-2 h-20"
     >
       <Link to="/home" className="text-decoration-none">
-        <h1 className="display-4 px-5" style={{ fontSize: '2rem', color: 'black' }}>宝石店</h1>
+        <h1
+          className="display-4 px-5"
+          style={{ fontSize: "2rem", color: "black" }}
+        >
+          宝石店
+        </h1>
       </Link>
       <div className="d-flex flex-column justify-content-center gap-2">
         <div className="position-relative w-100">
@@ -31,26 +71,45 @@ export default function Header() {
           />
         </div>
         <div className="d-flex flex-row justify-content-center gap-5 ">
-          <Link className="text-decoration-none text-dark" to="/home">
+          <Link className="text-decoration-none text-dark" to="/">
             Home
           </Link>
-          <Link className="text-decoration-none text-dark" to="/collections">
+          <Link
+            className="text-decoration-none text-dark"
+            to="/collections_page"
+          >
             Collections
           </Link>
-          <Link className="text-decoration-none text-dark" to="/blogs">
+          <Link className="text-decoration-none text-dark" to="/blog_page">
             Blogs
           </Link>
           <Link className="text-decoration-none text-dark" to="/live_price">
             Live Price
           </Link>
-          <Link className="text-decoration-none text-dark" to="/about">
+          <Link className="text-decoration-none text-dark" to="/about_page">
             About
           </Link>
         </div>
       </div>
       <div className="d-flex flex-row align-items-center gap-3">
-        <IoNotificationsOutline size={30} color="black" />
-        <GoPerson size={30} color="black" />
+        {role !== "guest" && (
+          <>
+            <IoNotificationsOutline size={30} color="black" />
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomLeft"
+            >
+              <GoPerson size={30} color="black" />
+            </Dropdown>
+          </>
+        )}
+        {role === "guest" && (
+          <Link to="/login" className="text-decoration-none fw-bolder text-dark">
+            Sign in
+          </Link>
+        )}
         <Button
           style={{ borderRadius: 25, backgroundColor: "#4B4B4B" }}
           variant="outline-light"
