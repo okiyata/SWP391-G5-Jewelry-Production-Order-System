@@ -13,6 +13,11 @@ import Collections from "./Home/Collections";
 import Blogs from "./Home/Blogs";
 import About from "./Home/About";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import UserManagerLayout from "./layout/UserManagerLayout";
+import ClientManager from "./clientManager/ClientManager";
+import OrderManager from "./ordersManager/OrderManager";
+import BlogManager from "./blogManager/BlogManager";
+import EmployeeManager from "./employeeManager/EmployeeManager";
 
 function App() {
   return (
@@ -28,6 +33,15 @@ function App() {
         <Route path="/collections_page" elements={<Collections />} />
         <Route path="/blogs_page" elements={<Blogs />} />
         <Route path="/about_page" elements={<About />} />
+      </Route>
+      <Route path="/userManager" element={<UserManagerLayout />}>
+        <Route path="/userManager/client_manager" element={<ClientManager />} />
+        <Route path="/userManager/orders_manager" element={<OrderManager />} />
+        <Route path="/userManager/blogs_manager" element={<BlogManager />} />
+        <Route
+          path="/userManager/employees_manager"
+          element={<EmployeeManager />}
+        />
       </Route>
     </Routes>
   );
