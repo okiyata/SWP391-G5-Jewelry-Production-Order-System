@@ -1,8 +1,16 @@
-import React from "react";
-import { Space, Table, Tag } from "antd";
+import React, { useState } from "react";
+import { Select, Space, Table, Tag } from "antd";
 import { IoIosArrowDown } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
+import { Option } from "antd/es/mentions";
 export default function ClientManager() {
+  const [filterStatus, setFilterStatus] = useState(null);
+
+  const handleFilterChange = (event) => {
+    const selectedValue = event.target.value;
+    console.log(selectedValue);
+    setFilterStatus(selectedValue);
+  };
   const columns = [
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Id</span>,
@@ -28,7 +36,7 @@ export default function ClientManager() {
       dataIndex: "phone",
     },
     {
-      title: <span style={{ fontSize: 20, fontWeight: 400 }}>Stauts</span>,
+      title: <span style={{ fontSize: 20, fontWeight: 400 }}>Status</span>,
       key: "status",
       dataIndex: "status",
       render: (_, record) => (
@@ -125,6 +133,9 @@ export default function ClientManager() {
       status: "active",
     },
   ];
+  const filteredData = filterStatus
+    ? data.filter((item) => item.status === filterStatus)
+    : data;
 
   return (
     <div style={{ padding: "3%" }} className="">
@@ -159,19 +170,24 @@ export default function ClientManager() {
               borderRadius: 5,
             }}
           >
-            <p style={{ margin: 0, fontSize: 20, color: "white" }}>
-              Permissions
-            </p>
-            <p
+            {" "}
+            <p style={{ margin: 0, fontSize: 20, color: "white" }}>Status</p>
+            <select
+              value={filterStatus}
+              onChange={handleFilterChange}
               style={{
                 margin: 0,
                 fontSize: 20,
                 color: "rgba(255, 139, 55, 1)",
+                backgroundColor: "transparent",
+                border: "none",
+                outline: "none",
               }}
             >
-              All
-            </p>
-            <IoIosArrowDown color="rgba(224, 215, 234, 1)" />
+              <option value="">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
           </div>
           <div
             style={{
@@ -231,7 +247,7 @@ export default function ClientManager() {
       </div>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={filteredData}
         pagination={{ pageSize: 10 }}
       />
     </div>

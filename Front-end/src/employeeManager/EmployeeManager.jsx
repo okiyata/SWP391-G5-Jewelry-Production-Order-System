@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Space, Table, Tag } from "antd";
 import { IoIosArrowDown } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
 
-
 export default function EmployeeManager() {
+  const [filterStatus, setFilterStatus] = useState(null);
+
+  const handleFilterChange = (event) => {
+    const selectedValue = event.target.value;
+    console.log(selectedValue);
+    setFilterStatus(selectedValue);
+  };
   const columns = [
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Id</span>,
@@ -105,7 +111,7 @@ export default function EmployeeManager() {
       phone: "01234556",
       gmail: "New York No. 1 Lake Park",
       status: "active",
-      permissions: "Manager",
+      permissions: "Design",
     },
     {
       id: "CL_0008",
@@ -124,6 +130,9 @@ export default function EmployeeManager() {
       permissions: "Manager",
     },
   ];
+  const filteredData = filterStatus
+    ? data.filter((item) => item.permissions === filterStatus)
+    : data;
 
   return (
     <div style={{ padding: "3%" }} className="">
@@ -161,16 +170,22 @@ export default function EmployeeManager() {
             <p style={{ margin: 0, fontSize: 20, color: "white" }}>
               Permissions
             </p>
-            <p
+            <select
+              value={filterStatus}
+              onChange={handleFilterChange}
               style={{
                 margin: 0,
                 fontSize: 20,
                 color: "rgba(255, 139, 55, 1)",
+                backgroundColor: "transparent",
+                border: "none",
+                outline: "none",
               }}
             >
-              All
-            </p>
-            <IoIosArrowDown color="rgba(224, 215, 234, 1)" />
+              <option value="">All</option>
+              <option value="Manager">Manager</option>
+              <option value="Design">Design</option>
+            </select>
           </div>
           <div
             style={{
@@ -232,9 +247,8 @@ export default function EmployeeManager() {
       </div>
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={filteredData}
         pagination={{ pageSize: 10 }}
-      
       />
     </div>
   );
