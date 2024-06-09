@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -27,7 +28,13 @@ public class Response {
         }
 
         public ResponseEntity<Response> buildEntity() {
+            if (status == null) status = HttpStatus.OK;
             return new ResponseEntity<>(new Response(status, message, responseList), status);
+        }
+
+        public ResponseEntity<Response> buildEntity(HttpHeaders headers) {
+            if (status == null) status = HttpStatus.OK;
+            return new ResponseEntity<>(new Response(status, message, responseList), headers, status);
         }
     }
 }

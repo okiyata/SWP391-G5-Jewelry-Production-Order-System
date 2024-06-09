@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import useScrollSnap from "react-use-scroll-snap";
 import imgTesla from "../assets/imgTesla.png";
 import Oppenheimer from "../assets/Oppenheimer.png";
 import hoden from "../assets/hoden.png";
 import ourMission from "../assets/ourMission.png";
 
 export default function About() {
+  const scrollRef = useRef(null);
+  const [scrollActivated, setScrollActivated] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > window.innerHeight) {
+        setScrollActivated(true);
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useScrollSnap({
+    ref: scrollRef,
+    duration: 500,
+    delay: 10,
+    enabled: scrollActivated,
+  });
+
   return (
     <div
+      ref={scrollRef}
       style={{
         padding: "6% 0%",
         overflowX: "hidden",
@@ -14,21 +40,12 @@ export default function About() {
       className="d-flex w-100 flex-column justify-content-center"
     >
       <div
-        style={{
-          borderBottom: "1px solid black",
-          margin: "0% 5%",
-          paddingBottom: "1%",
-        }}
-        className="w-full"
+        style={{ height: "100vh"}}
+        className="row mt-5"
       >
-        <p style={{ fontSize: 50, fontWeight: 700 }} className="text-center">
-          Our Team
-        </p>
-      </div>
-      <div className="row mt-5">
         <div className="col-6">
           <img
-            style={{ width: "100%", height: "390px" }}
+            style={{ width: "100%", height: "100%" }}
             src={imgTesla}
             alt="Tesla image"
           />
@@ -64,7 +81,7 @@ export default function About() {
           </p>
         </div>
       </div>
-      <div className="row mt-5">
+      <div style={{ height: "100vh" }} className="row mt-5">
         <div
           style={{ paddingLeft: "6%", paddingRight: "2%" }}
           className="col-6 d-flex flex-column justify-content-center"
@@ -99,7 +116,7 @@ export default function About() {
           <img
             style={{
               width: "100%",
-              height: "390px",
+              height: "100%",
               paddingLeft: "2%",
             }}
             src={Oppenheimer}
@@ -107,10 +124,10 @@ export default function About() {
           />
         </div>
       </div>
-      <div className="row mt-5">
+      <div style={{ height: "100vh" }} className="row mt-5">
         <div className="col-6">
           <img
-            style={{ width: "100%", height: "390px" }}
+            style={{ width: "100%", height: "100%" }}
             src={hoden}
             alt="Black hole image"
           />
@@ -148,6 +165,7 @@ export default function About() {
       </div>
       <div
         style={{
+          marginTop: "6%",
           marginLeft: "6%",
           marginRight: "6%",
         }}

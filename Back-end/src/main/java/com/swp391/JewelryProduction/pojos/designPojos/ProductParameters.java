@@ -1,4 +1,4 @@
-package com.swp391.JewelryProduction.pojos;
+package com.swp391.JewelryProduction.pojos.designPojos;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,10 @@
 package com.swp391.JewelryProduction.config;
 
+import com.swp391.JewelryProduction.enums.*;
+import com.swp391.JewelryProduction.util.StringToEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -46,5 +49,15 @@ public class WebConfig implements WebMvcConfigurer {
         bean.setSuffix(".jsp");
 
         return bean;
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToEnum<ReportType>(ReportType.class));
+        registry.addConverter(new StringToEnum<AccountStatus>(AccountStatus.class));
+        registry.addConverter(new StringToEnum<Gender>(Gender.class));
+        registry.addConverter(new StringToEnum<OrderStatus>(OrderStatus.class));
+        registry.addConverter(new StringToEnum<Role>(Role.class));
+        registry.addConverter(new StringToEnum<WorkStatus>(WorkStatus.class));
     }
 }

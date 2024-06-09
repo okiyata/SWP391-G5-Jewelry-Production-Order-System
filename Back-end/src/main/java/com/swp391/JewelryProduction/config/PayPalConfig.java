@@ -2,10 +2,11 @@ package com.swp391.JewelryProduction.config;
 
 import com.paypal.base.rest.APIContext;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class PayPalConfig {
+public class PaypalConfig {
 
     @Value("${paypal.client-id}")
     private String clientID;
@@ -16,7 +17,8 @@ public class PayPalConfig {
     @Value("${paypal.mode}")
     private String mode;
 
-    public APIContext getAPIContext() {
+    @Bean
+    public APIContext apiContext() {
         return new APIContext(clientID, clientSecret, mode);
     }
 }
