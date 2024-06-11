@@ -3,7 +3,7 @@ import snowfall from "../assets/snowfall.jpg";
 
 function Pin(props) {
   return (
-    <div style={{ ...styles.pin, ...styles[props.size] }}>
+    <div className="block" style={{ ...styles.pin, ...styles[props.size] }}>
       <img
         src={snowfall}
         alt="snow is falling"

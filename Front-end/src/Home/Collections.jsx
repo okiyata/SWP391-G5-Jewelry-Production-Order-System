@@ -1,4 +1,5 @@
 import Pin from "../components/Pin";
+import "./Collections.css";
 import { Container } from "react-bootstrap";
 
 const size = ["small", "medium", "large"];
@@ -15,7 +16,29 @@ function Collections() {
 
   return (
     <Container style={{paddingTop: "100px"}}>
-      <div style={styles.pin_container}>
+      <div className="view" style={styles.pin_container}>
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
+        <Pin size={getImageSize()} />
         <Pin size={getImageSize()} />
         <Pin size={getImageSize()} />
         <Pin size={getImageSize()} />
