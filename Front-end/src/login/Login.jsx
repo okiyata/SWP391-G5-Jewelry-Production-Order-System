@@ -9,10 +9,10 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [data, setData] = useState("");
-  const baseUrl =
-    "https://run.mocky.io/v3/7c18c9af-2b13-4361-9eaa-1ab24bbccb15";
+  const baseUrl = "https://66690c4a2e964a6dfed3aa1d.mockapi.io/user";
   const method = "POST";
   const body = { username, password };
+  let bool;
 
   //Handle submit
   const handleSubmit = async (e) => {
@@ -28,16 +28,15 @@ export default function Login() {
         body: JSON.stringify(body),
       })
         .then((res) => res.json())
-        .then((data) => setData(data));
-      console.log(data);
-      if (data.status === "OK") {
-        alert(data.message);
-        localStorage.setItem("user", data.token);
-      } else if (data.status === "Failed") {
-        alert(data.message);
-      }
+        .then((data) => {
+          if (data.status === "OK") {
+            alert(data.message);
+            localStorage.setItem("user", data.token);
+          } else if (data.status === "Failed") {
+            alert(data.message);
+          }
+        });
     }
-
     setValidated(true);
   };
 
