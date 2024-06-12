@@ -28,9 +28,11 @@ public class Design {
                     @Parameter(name = IdGenerator.NUMBER_FORMAT_PARAMETER, value = "%05d")
             }
     )
-    @Column(columnDefinition = "nvarchar(8)")
+    @Column(length = 8, nullable = false, updatable = false, unique = true)
     private String id;
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
+    @Column(name = "design_link")
     private String designLink;
 
     @OneToOne(mappedBy = "design")

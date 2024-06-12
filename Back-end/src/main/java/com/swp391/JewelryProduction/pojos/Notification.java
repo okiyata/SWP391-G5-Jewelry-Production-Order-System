@@ -28,6 +28,12 @@ public class Notification {
     private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "account_id", columnDefinition = "nvarchar(8)")
-    private Account account;
+    @JoinColumn(name = "account_id")
+    private Account receiver;
+
+    @Column(name = "is_delivered")
+    private boolean delivered;
+
+    @Column(name = "is_read")
+    private boolean read;
 }

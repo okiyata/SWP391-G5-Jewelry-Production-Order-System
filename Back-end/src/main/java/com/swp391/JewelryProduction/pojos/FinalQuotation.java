@@ -31,11 +31,12 @@ public class FinalQuotation {
                     @Parameter(name = IdGenerator.NUMBER_FORMAT_PARAMETER, value = "%05d")
             }
     )
+    @Column(length = 8, nullable = false, unique = true)
     private String id;
     private String title;
-    @Column(name = "created_date", nullable = false, columnDefinition = "datetime")
+    @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
-    @Column(name = "expired_date", nullable = false, columnDefinition = "datetime")
+    @Column(name = "expired_date", nullable = false)
     private LocalDate expiredDate;
 
     @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

@@ -19,7 +19,6 @@ public class Report {
     @Id
     @GeneratedValue
     private Integer id;
-
     private String title;
     private String description;
     private LocalDateTime createdDate;

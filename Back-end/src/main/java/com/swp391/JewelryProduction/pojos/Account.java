@@ -33,13 +33,13 @@ public class Account{
                     @Parameter(name = IdGenerator.NUMBER_FORMAT_PARAMETER, value = "%05d")
             }
     )
-    @Column(columnDefinition = "nvarchar(8)")
+    @Column(length = 8, nullable = false, updatable = false, unique = true)
     private String id;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
     private String password;
-    @Column(name = "date_created", nullable = false, columnDefinition = "datetime")
+    @Column(name = "date_created", nullable = false)
     private LocalDateTime dateCreated;
 
     @Enumerated(EnumType.STRING)
@@ -49,6 +49,7 @@ public class Account{
     private AccountStatus status;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
     @PrimaryKeyJoinColumn
     private UserInfo userInfo;
 
@@ -58,7 +59,7 @@ public class Account{
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     private List<Report> receivingReports;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications;
 
     public void addSendingReport(Report report) {

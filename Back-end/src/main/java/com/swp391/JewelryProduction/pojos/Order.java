@@ -2,6 +2,7 @@ package com.swp391.JewelryProduction.pojos;
 
 import com.swp391.JewelryProduction.enums.OrderStatus;
 import com.swp391.JewelryProduction.enums.Role;
+import com.swp391.JewelryProduction.pojos.designPojos.Product;
 import com.swp391.JewelryProduction.util.IdGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,9 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 @Data
 @AllArgsConstructor
@@ -34,11 +33,11 @@ public class Order {
                     @Parameter(name = IdGenerator.NUMBER_FORMAT_PARAMETER, value = "%05d")
             }
     )
-    @Column(columnDefinition = "nvarchar(8)")
+    @Column(length = 8, nullable = false, updatable = false, unique = true)
     private String id;
     private String name;
     private double budget;
-    @Column(name = "date_created", nullable = false, columnDefinition = "datetime")
+    @Column(name = "date_created", nullable = false)
     private LocalDateTime createdDate;
 
     @Enumerated(EnumType.STRING)

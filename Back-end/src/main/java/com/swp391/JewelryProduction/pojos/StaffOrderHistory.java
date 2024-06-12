@@ -18,14 +18,14 @@ import java.time.LocalDateTime;
 @IdClass(StaffOrderID.class)
 public class StaffOrderHistory {
     @Id
-    @Column(name = "staff_id", columnDefinition = "nvarchar(8)")
+    @Column(name = "staff_id", length = 8, nullable = false, updatable = false, unique = true)
     private String staffID;
     @Id
-    @Column(name = "order_id", columnDefinition = "nvarchar(8)")
+    @Column(name = "order_id", length = 8, nullable = false, updatable = false, unique = true)
     private String orderID;
-    @Column(name = "start_date", nullable = false, columnDefinition = "datetime")
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
-    @Column(name = "end_date", columnDefinition = "datetime")
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

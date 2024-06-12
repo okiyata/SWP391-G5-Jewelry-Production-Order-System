@@ -19,24 +19,25 @@ public class UserInfo {
     @Id
     private String id;
 
-    @Column(nullable = false, name = "first_name", columnDefinition = "nvarchar(200)")
+    @Column(nullable = false, name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name", columnDefinition = "nvarchar(200)")
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(columnDefinition = "date")
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column(name = "phone_number", length = 10)
     private long phoneNumber;
 
     private String address;
 
     @OneToOne(mappedBy = "userInfo", fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(name = "id", columnDefinition = "nvarchar(8)")
+    @JoinColumn(name = "id")
     private Account account;
 }

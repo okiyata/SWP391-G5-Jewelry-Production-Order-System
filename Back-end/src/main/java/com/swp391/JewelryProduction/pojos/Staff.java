@@ -18,6 +18,7 @@ import java.util.List;
 @Entity
 @DiscriminatorValue("1")
 public class Staff extends Account{
+    @Enumerated(EnumType.STRING)
     private WorkStatus workStatus;
 
     @OneToMany(
