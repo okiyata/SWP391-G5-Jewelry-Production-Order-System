@@ -1,5 +1,7 @@
 package com.swp391.JewelryProduction.controller;
 
+import com.swp391.JewelryProduction.pojos.designPojos.Product;
+import com.swp391.JewelryProduction.pojos.designPojos.ProductSpecification;
 import com.swp391.JewelryProduction.services.product.ProductService;
 import com.swp391.JewelryProduction.util.Response;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,19 @@ public class ProductController {
 
     @PostMapping("/{productId}/remove")
     public ResponseEntity<Response> removeProduct(@PathVariable String productId) {
-        return null;
+        productService.deleteProduct(productId);
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Request send successfully.")
+                .buildEntity();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Response> createProduct(@RequestBody Product product) {
+        productService.saveProduct(product);
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Request send successfully.")
+                .buildEntity();
     }
 }
