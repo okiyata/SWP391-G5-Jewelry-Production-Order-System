@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +26,5 @@ public class ProductSpecification {
 
     @MapKeyJoinColumn(name = "product_parameter_id")
     @OneToMany(mappedBy = "productSpecification", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Map<ProductParameters, SpecificationValues> parameterValues;
+    private Set<ParameterValue> parameterValues;
 }
