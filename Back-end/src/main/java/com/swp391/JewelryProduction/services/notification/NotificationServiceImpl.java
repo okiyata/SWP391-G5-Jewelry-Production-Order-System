@@ -15,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
 import java.time.Duration;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -73,4 +74,10 @@ public class NotificationServiceImpl implements NotificationService {
     public void saveNotification(Notification notification) {
     notificationRepository.save(notification);
 }
+
+    @Override
+    public List<Notification> findAllByReceiver_Id(String receiverId) {
+        return notificationRepository.findAllByReceiver_Id(receiverId);
+    }
+
 }

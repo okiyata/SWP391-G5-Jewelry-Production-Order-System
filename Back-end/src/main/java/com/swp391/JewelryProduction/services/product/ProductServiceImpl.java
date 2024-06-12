@@ -34,7 +34,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(String id) {
-        productSpecificationRepository.deleteProductSpecificationByProductId(id);
         productRepository.deleteById(id);
     }
 }
