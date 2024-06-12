@@ -24,7 +24,7 @@ export default function Login() {
       //Send user's input to backend
       fetch(baseUrl, {
         method: method,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json"},
         body: JSON.stringify(body),
       })
         .then((res) => res.json())

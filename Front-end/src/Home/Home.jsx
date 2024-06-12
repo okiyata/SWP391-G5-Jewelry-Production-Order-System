@@ -31,7 +31,7 @@ function Home() {
         style={{ backgroundColor: "#4B4B4B" }}
       >
         <Row>
-          <h2 className="text-center p-2 fw-bold">ABOUT US</h2>
+          <h2 className="text-center p-2 fw-bold m-2">ABOUT US</h2>
         </Row>
         <Row>
           <Col className="about-us-context align-content-center">
@@ -281,7 +281,10 @@ function Home() {
         </div>
 
         <div className="d-flex justify-content-center p-3">
-          <button className="btn btn-outline-dark" style={{borderRadius:"20px"}}>
+          <button
+            className="btn btn-outline-dark"
+            style={{ borderRadius: "20px" }}
+          >
             More FeedBacks
           </button>
         </div>
