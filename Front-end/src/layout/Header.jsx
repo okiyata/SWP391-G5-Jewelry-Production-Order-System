@@ -80,7 +80,7 @@ export default function Header({ role }) {
           >
             Collections
           </Link>
-          <Link className="text-decoration-none text-dark" to="/blog_page">
+          <Link className="text-decoration-none text-dark" to="/blogs_page">
             Blogs
           </Link>
           <Link className="text-decoration-none text-dark" to="/live_price">
