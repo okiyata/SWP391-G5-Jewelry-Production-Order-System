@@ -37,7 +37,7 @@ export default function Header({ role }) {
   return (
     <div
       style={{
-        position: "fixed",
+        position: "sticky",
         top: 0,
         width: "100%",
         zIndex: 1000,
