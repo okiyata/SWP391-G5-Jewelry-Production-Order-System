@@ -34,13 +34,8 @@ public class Product {
     private String name;
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "product_specification",
-            joinColumns = { @JoinColumn(name = "product_id") },
-            inverseJoinColumns = { @JoinColumn(name = "value_id")}
-    )
-    private List<ParameterValue> productValues;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ProductSpecification specification;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Order order;

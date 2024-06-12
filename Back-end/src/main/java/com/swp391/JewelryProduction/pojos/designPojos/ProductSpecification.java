@@ -20,8 +20,7 @@ public class ProductSpecification {
     @GeneratedValue
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @OneToOne(mappedBy = "specification", fetch = FetchType.LAZY)
     private Product product;
 
     @MapKeyJoinColumn(name = "product_parameter_id")
