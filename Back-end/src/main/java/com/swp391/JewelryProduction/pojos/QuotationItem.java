@@ -24,5 +24,5 @@ public class QuotationItem {
 
     @ManyToOne
     @JoinColumn(name = "quotation_id")
-    private FinalQuotation quotation;
+    private Quotation quotation;
 }

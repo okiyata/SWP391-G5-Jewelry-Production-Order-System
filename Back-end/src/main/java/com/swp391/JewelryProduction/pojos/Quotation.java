@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "final_quotation")
-public class FinalQuotation {
+public class Quotation {
     @Id
     @GeneratedValue(generator = "quotation_seq")
     @GenericGenerator(

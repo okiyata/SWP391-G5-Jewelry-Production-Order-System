@@ -1,9 +1,6 @@
 package com.swp391.JewelryProduction.dto;
 
-import com.swp391.JewelryProduction.pojos.FinalQuotation;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.swp391.JewelryProduction.pojos.Quotation;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,5 +12,5 @@ public class QuotationItemDTO {
     private int quantity;
     private double unitPrice;
     private double totalPrice;
-    private FinalQuotation quotation;
+    private Quotation quotation;
 }

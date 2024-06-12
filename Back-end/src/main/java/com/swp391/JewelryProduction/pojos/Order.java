@@ -45,7 +45,7 @@ public class Order {
 
     @OneToOne
     @JoinColumn(name = "quotation_id")
-    private FinalQuotation quotation;
+    private Quotation quotation;
 
     @OneToOne
     @JoinColumn(name = "design_id")
