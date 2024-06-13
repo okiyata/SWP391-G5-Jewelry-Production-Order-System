@@ -16,6 +16,7 @@ import reactor.core.publisher.FluxSink;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +79,18 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public List<Notification> findAllByReceiver_Id(String receiverId) {
         return notificationRepository.findAllByReceiver_Id(receiverId);
+    }
+
+    @Override
+    public Notification findById(UUID id) {
+        if(notificationRepository.findById(id).isPresent()) {
+            return notificationRepository.findById(id).get();
+        } else return null;
+    }
+
+    @Override
+    public void deleteNotification(UUID id) {
+        notificationRepository.deleteById(id);
     }
 
 }

@@ -6,12 +6,10 @@ import com.swp391.JewelryProduction.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("api/{accountId}/notification")
@@ -25,6 +23,24 @@ public class NotificationController {
                 .status(HttpStatus.OK)
                 .message("Request send successfully.")
                 .response("notification-list", notificationService.findAllByReceiver_Id(receiverId))
+                .buildEntity();
+    }
+
+    @PostMapping("/{notificationId}/get")
+    public ResponseEntity<Response> getNotification(@PathVariable("notificationId") UUID notificationId) {
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Request send successfully.")
+                .response("notification", notificationService.findById(notificationId))
+                .buildEntity();
+    }
+
+    @PostMapping("/{notificationId}/remove")
+    public ResponseEntity<Response> removeNotification(@PathVariable("notificationId") UUID notificationId, @PathVariable("accountId") String receiverId) {
+        notificationService.deleteNotification(notificationId);
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Request send successfully.")
                 .buildEntity();
     }
 }
