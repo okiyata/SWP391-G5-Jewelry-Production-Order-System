@@ -73,8 +73,8 @@ public class NotificationServiceImpl implements NotificationService {
 //    }
     @Override
     public void saveNotification(Notification notification) {
-    notificationRepository.save(notification);
-}
+        notificationRepository.save(notification);
+    }
 
     @Override
     public List<Notification> findAllByReceiver_Id(String receiverId) {
