@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,6 +94,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Staff findStaffByRoleAndWorkStatus(Role role, WorkStatus workStatus) {
         return accountRepository.findStaffByRoleAndWorkStatus(role, workStatus).isPresent() ? accountRepository.findStaffByRoleAndWorkStatus(role, workStatus).get() : null;
+    }
+
+    @Override
+    public List<AccountDTO> findAllByRole(Role role) {
+        List<AccountDTO> accDTOs = new ArrayList<>();
+        for (Account acc : accountRepository.findAllByRole(role)) {
+            accDTOs.add(modelMapper.map(acc, AccountDTO.class));
+        }
+        return accDTOs;
     }
     //</editor-fold>
 

@@ -30,10 +30,6 @@ public class Report {
     @JoinColumn(name = "sender_id")
     private Account sender;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "receiver_id")
-    private Account receiver;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order reportingOrder;

@@ -3,6 +3,9 @@ package com.swp391.JewelryProduction.dto;
 import com.swp391.JewelryProduction.enums.AccountStatus;
 import com.swp391.JewelryProduction.enums.Gender;
 import com.swp391.JewelryProduction.enums.Role;
+import com.swp391.JewelryProduction.pojos.Notification;
+import com.swp391.JewelryProduction.pojos.Report;
+import com.swp391.JewelryProduction.pojos.UserInfo;
 import com.swp391.JewelryProduction.util.IdGenerator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -13,6 +16,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,7 +27,6 @@ public class AccountDTO{
     @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Email is invalid")
     @NotEmpty(message = "Email cannot be empty")
     private String email;
-    //
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "Password is invalid")
     @NotEmpty(message = "Password cannot by empty")
     private String password;
@@ -31,4 +34,8 @@ public class AccountDTO{
     private Role role;
     private Gender gender;
     private AccountStatus status;
+    private UserInfo userInfo;
+    private List<Report> sendingReports;
+    private List<Report> receivingReports;
+    private List<Notification> notifications;
 }
