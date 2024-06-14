@@ -73,11 +73,6 @@ public class Account{
         this.getSendingReports().add(report);
     }
 
-    public void addReceivingReport(Report report) {
-        report.setReceiver(this);
-        this.getSendingReports().add(report);
-    }
-
     public Order getCurrentOrder () {
         currentOrder = pastOrder.getLast();
         return currentOrder;
