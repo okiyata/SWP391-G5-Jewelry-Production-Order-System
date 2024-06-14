@@ -43,6 +43,10 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id")
+    private Account owner;
+
     @OneToOne
     @JoinColumn(name = "quotation_id")
     private Quotation quotation;
