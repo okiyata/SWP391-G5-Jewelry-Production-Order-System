@@ -173,12 +173,12 @@ public class OrderStateMachineConfig {
                 .withExternal()
                     .source(OrderStatus.REQ_DECLINED).target(OrderStatus.CANCEL)
                     .event(OrderEvent.REQUEST_DECLINE)
-                    .action(notifyAction())
+                    .action(notifyCustomerAction())
                 .and()
                 .withLocal()
                     .source(OrderStatus.REQ_APPROVED).target(OrderStatus.IN_EXCHANGING)
                     .event(OrderEvent.REQUEST_APPROVE)
-                    .action(notifyAction())
+                    .action(notifyCustomerAction())
 
                 .and()
                 .withExternal()
@@ -190,7 +190,7 @@ public class OrderStateMachineConfig {
                 .withExternal()
                     .source(OrderStatus.AWAIT_QUO).target(OrderStatus.QUO_AWAIT_MANA_APPROVAL)
                     .event(OrderEvent.QUOTATION_SEND)
-                    .action()
+//            action().
             //</editor-fold>
             //<editor-fold desc="DESIGN SUPER-STATE TRANSITIONS" defaultstate="collapsed">
             //</editor-fold>
