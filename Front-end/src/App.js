@@ -12,6 +12,7 @@ import ConfirmPassword from "./forgot_password/ConfirmPassword";
 import Collections from "./Home/Collections";
 import About from "./Home/About";
 import Blogs from "./Home/Blogs";
+import OrderPage1 from "./orderFlows/OrderPage1";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserManagerLayout from "./layout/UserManagerLayout";
 import ClientManager from "./clientManager/ClientManager";
@@ -34,6 +35,7 @@ function App() {
         <Route path="/collections_page" element={<Collections />} />
         <Route path="/blogs_page" element={<Blogs />} />
         <Route path="/about_page" element={<About />} />
+        <Route path="/order_page_1" element={<OrderPage1 />} />
       </Route>
       <Route path="/userManager" element={<UserManagerLayout />}>
         {/* <Route path="/userManager/dashboard" element={<DashboardManger />} /> */}
