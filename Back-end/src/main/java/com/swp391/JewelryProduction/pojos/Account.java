@@ -53,6 +53,9 @@ public class Account{
     @PrimaryKeyJoinColumn
     private UserInfo userInfo;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private List<Order> pastOrder;
+
     @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
     private List<Report> sendingReports;
 
@@ -62,6 +65,9 @@ public class Account{
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications;
 
+    @Transient
+    private Order currentOrder;
+
     public void addSendingReport(Report report) {
         report.setSender(this);
         this.getSendingReports().add(report);
@@ -70,5 +76,10 @@ public class Account{
     public void addReceivingReport(Report report) {
         report.setReceiver(this);
         this.getSendingReports().add(report);
+    }
+
+    public Order getCurrentOrder () {
+        currentOrder = pastOrder.getLast();
+        return currentOrder;
     }
 }
