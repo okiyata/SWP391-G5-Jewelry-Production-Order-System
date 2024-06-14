@@ -24,8 +24,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void saveOrder(Order order) {
-        orderRepository.save(order);
+    public Order saveOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Order createNewOrder() {
+        Order order = Order.builder()
+                .status()
+                .build();
+        return null;
     }
 
     @Override
