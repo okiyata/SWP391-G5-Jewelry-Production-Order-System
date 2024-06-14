@@ -1,5 +1,6 @@
 package com.swp391.JewelryProduction.controller;
 
+import com.swp391.JewelryProduction.pojos.Order;
 import com.swp391.JewelryProduction.pojos.Quotation;
 import com.swp391.JewelryProduction.services.order.OrderService;
 import com.swp391.JewelryProduction.services.quotation.QuotationService;
@@ -27,8 +28,9 @@ public class QuotationController {
 
     @PostMapping("/submit")
     public ResponseEntity<Response> createQuotation(@PathVariable String orderId, @RequestBody Quotation quotation) {
-        orderService.findOrderById(orderId).setQuotation(quotation);
-        orderService.saveOrder(orderService.findOrderById(orderId));
+        Order order = orderService.findOrderById(orderId);
+        order.setQuotation(quotation);
+        orderService.updateOrder(order);
         quotationService.saveQuotation(quotation);
         return Response.builder()
                 .status(HttpStatus.OK)
@@ -38,9 +40,10 @@ public class QuotationController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Response> submitQuotation(@PathVariable String orderId, @RequestBody Quotation quotation) {
-        orderService.findOrderById(orderId).setQuotation(null);
-        orderService.saveOrder(orderService.findOrderById(orderId));
+    public ResponseEntity<Response> removeQuotation(@PathVariable String orderId, @RequestBody Quotation quotation) {
+        Order order = orderService.findOrderById(orderId);
+        order.setQuotation(null);
+        orderService.updateOrder(order);
         quotationService.deleteQuotation(quotation);
         return Response.builder()
                 .status(HttpStatus.OK)

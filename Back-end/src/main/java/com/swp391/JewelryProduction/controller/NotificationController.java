@@ -29,11 +29,11 @@ public class NotificationController {
                 .buildEntity();
     }
 
-    @PatchMapping("/read/{notificationID}")
-    public ResponseEntity<Response> changeStatusToRead (@PathVariable("notificationID") UUID notificationID) {
-        return Response.builder()
-                .message("Notification change status to read")
-                .response(String.valueOf(notificationID), notificationService.updateStatusToRead(notificationID))
-                .buildEntity();
-    }
+//    @PatchMapping("/read/{notificationID}")
+//    public ResponseEntity<Response> changeStatusToRead (@PathVariable("notificationID") UUID notificationID) {
+//        return Response.builder()
+//                .message("Notification change status to read")
+//                .response(String.valueOf(notificationID), notificationService.updateStatusToRead(notificationID))
+//                .buildEntity();
+//    }
 }

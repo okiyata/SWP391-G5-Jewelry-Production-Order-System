@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ProductSpecificationRepository extends JpaRepository<ProductSpecification, Integer> {
-    Optional<ProductSpecification> findByProductId(String id);
-    void deleteProductSpecificationByProductId(String id);
+    Optional<ProductSpecification> findById(int id);
 }
