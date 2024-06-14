@@ -22,4 +22,5 @@ public interface AccountService {
     Account findAccountByRole(Role role);
     void saveAccountPassword(AccountDTO accountDTO, String newPassword);
     Staff findStaffByRoleAndWorkStatus(Role role, WorkStatus workStatus);
+    List<AccountDTO> findAllByRole(Role role);
 }
