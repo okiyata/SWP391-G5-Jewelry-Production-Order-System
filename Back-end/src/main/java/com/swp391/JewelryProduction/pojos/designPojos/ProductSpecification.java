@@ -20,10 +20,23 @@ public class ProductSpecification {
     @GeneratedValue
     private Integer id;
 
-    @OneToOne(mappedBy = "specification", fetch = FetchType.LAZY)
-    private Product product;
+    private String type;
 
-    @MapKeyJoinColumn(name = "product_parameter_id")
-    @OneToMany(mappedBy = "productSpecification", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ParameterValue> parameterValues;
+    private String style;
+
+    private String occasion;
+
+    private String length;
+
+    private String metal;
+
+    private String texture;
+
+    private String chainType;
+
+    private String gemstone;
+
+    private String shape;
+
+    private String gemstoneWeight;
 }
