@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Space, Table, Tag } from "antd";
+import { Space, Table, Tag, Button } from "antd";
 import { IoIosArrowDown } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
 
@@ -8,22 +8,24 @@ export default function EmployeeManager() {
 
   const handleFilterChange = (event) => {
     const selectedValue = event.target.value;
-    console.log(selectedValue);
     setFilterStatus(selectedValue);
   };
+
   const columns = [
     {
-      title: <span style={{ fontSize: 20, fontWeight: 400 }}>Id</span>,
+      title: <span style={{ fontSize: 20, fontWeight: 400 }}>ID</span>,
       dataIndex: "id",
       key: "id",
-
-      render: (text) => <span>{text}</span>,
+    },
+    {
+      title: <span style={{ fontSize: 20, fontWeight: 400 }}>Role</span>,
+      dataIndex: "role",
+      key: "role",
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Name</span>,
       dataIndex: "name",
       key: "name",
-      style: { fontSize: "18px" },
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Gmail</span>,
@@ -32,113 +34,52 @@ export default function EmployeeManager() {
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Phone</span>,
-      key: "phone",
       dataIndex: "phone",
+      key: "phone",
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Status</span>,
       key: "status",
       dataIndex: "status",
-      render: (_, record) => (
-        <Space size="middle">
-          {record.status === "active" ? (
-            <Tag color="green">Active</Tag>
-          ) : (
-            <Tag color="red">Inactive</Tag>
-          )}
-        </Space>
+      render: (text) => (
+        <Tag color={text === "active" ? "green" : "red"}>
+          {text.charAt(0).toUpperCase() + text.slice(1)}
+        </Tag>
       ),
     },
     {
-      title: <span style={{ fontSize: 20, fontWeight: 400 }}>Permissions</span>,
-      key: "permissions",
-      dataIndex: "permissions",
+      title: <span style={{ fontSize: 20, fontWeight: 400 }}>Action</span>,
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <span style={{ cursor: "pointer", color: "blue" }}>Delete</span>
+          <span style={{ margin: "0 5px" }}>|</span>
+          <span style={{ cursor: "pointer", color: "blue" }}>Edit</span>
+        </Space>
+      ),
     },
   ];
 
   const data = [
-    {
-      id: "CL_0001",
-      name: "John Brown",
-      phone: "01234556",
-      gmail: "New York No. 1 Lake Park",
-      status: "active",
-      permissions: "Manager",
-    },
-    {
-      id: "CL_0002",
-      name: "Jim Green",
-      phone: "01234556",
-      gmail: "London No. 1 Lake Park",
-      status: "inactive",
-      permissions: "Manager",
-    },
-    {
-      id: "CL_0003",
-      name: "Joe Black",
-      phone: "01234556",
-      gmail: "Sydney No. 1 Lake Park",
-      status: "active",
-      permissions: "Manager",
-    },
-    {
-      id: "CL_0004",
-      name: "John Brown",
-      phone: "01234556",
-      gmail: "New York No. 1 Lake Park",
-      status: "active",
-      permissions: "Manager",
-    },
-    {
-      id: "CL_0005",
-      name: "Jim Green",
-      phone: "01234556",
-      gmail: "London No. 1 Lake Park",
-      status: "inactive",
-      permissions: "Manager",
-    },
-    {
-      id: "CL_0006",
-      name: "Joe Black",
-      phone: "01234556",
-      gmail: "Sydney No. 1 Lake Park",
-      status: "active",
-      permissions: "Manager",
-    },
-    {
-      id: "CL_0007",
-      name: "John Brown",
-      phone: "01234556",
-      gmail: "New York No. 1 Lake Park",
-      status: "active",
-      permissions: "Design",
-    },
-    {
-      id: "CL_0008",
-      name: "Jim Green",
-      phone: "01234556",
-      gmail: "London No. 1 Lake Park",
-      status: "inactive",
-      permissions: "Manager",
-    },
-    {
-      id: "CL_0009",
-      name: "Joe Black",
-      phone: "01234556",
-      gmail: "Sydney No. 1 Lake Park",
-      status: "active",
-      permissions: "Manager",
-    },
+    { id: "AD_0001",role: "Admin", name: "Tran Mai Quang Khai", gmail: "khaitmq@gmail.com", phone: "0867406725", status: "active" },
+    { id: "MA_0002",role: "Manager", name: "Nguyen Hoang Dung", gmail: "dungnh@gmail.com", phone: "0574179547", status: "inactive" },
+    { id: "SS_0003",role: "Sales Staff", name: "Vu Tien Dat", gmail: "datvt@gmail.com", phone: "0936127853", status: "active" },
+    { id: "AD_0004",role: "Admin", name: "Nguyen Viet Thai", gmail: "thainv@gmail.com", phone: "0826709871", status: "active" },
+    { id: "AD_0005",role: "Admin", name: "Bui Khanh Duy", gmail: "duybkse73484@gmail.com", phone: "0936137090", status: "active" },
+    { id: "AD_0006",role: "Admin", name: "Ly Hoang Khang", gmail: "khang@gmail.com", phone: "0845123898", status: "active" },
+    { id: "AD_0007",role: "Admin", name: "Ha Duy Tung", gmail: "tung@gmail.com", phone: "091834926", status: "inactive" },
+    { id: "AD_0008",role: "Admin", name: "Doan Dang Thien Bao", gmail: "bao@gmail.com", phone: "0938110083", status: "active" },
+    { id: "AD_0009",role: "Admin", name: "Nguyen Huu Quoc Hung", gmail: "hung@gmail.com", phone: "0965326132", status: "inactive" },
+    { id: "CB_0010",role: "Contribution", name: "Duong Hong An", gmail: "An@gmail.com", phone: "0987665512", status: "active" },
   ];
+
   const filteredData = filterStatus
-    ? data.filter((item) => item.permissions === filterStatus)
+    ? data.filter((item) => item.status === filterStatus)
     : data;
 
   return (
-    <div style={{ padding: "3%" }} className="">
-      <p style={{ margin: 0, fontSize: 24 }} className="fw-bolder">
-        Welcome, K!
-      </p>
+    <div style={{ padding: "3%" }}>
+      <p style={{ margin: 0, fontSize: 24, fontWeight: 'bold' }}>Welcome, K!</p>
       <p style={{ fontSize: 16 }}>Employee Manager</p>
       <div
         style={{
@@ -183,25 +124,11 @@ export default function EmployeeManager() {
               }}
             >
               <option value="">All</option>
-              <option value="Manager">Manager</option>
-              <option value="Design">Design</option>
+              <option value="admin">Admin</option>
+              <option value="manager">Manager</option>
+              <option value="sales_staff">Sales Staff</option>
+              <option value="contribution">Contribution</option>
             </select>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "5px 10px",
-              backgroundColor: "rgba(101, 101, 101, 1)",
-              gap: 80,
-              borderRadius: 5,
-            }}
-          >
-            <p style={{ margin: 0, fontSize: 20, color: "white" }}>Joined</p>
-
-            <IoIosArrowDown color="rgba(224, 215, 234, 1)" />
           </div>
         </div>
         <div
@@ -237,7 +164,6 @@ export default function EmployeeManager() {
               borderRadius: 5,
             }}
           >
-            {" "}
             <FiPlus color="rgba(224, 215, 234, 1)" />
             <p style={{ margin: 0, fontSize: 20, color: "white" }}>
               Add Employee
