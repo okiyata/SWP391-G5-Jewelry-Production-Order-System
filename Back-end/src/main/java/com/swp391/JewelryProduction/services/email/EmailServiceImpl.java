@@ -33,17 +33,17 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmailWithHtml(String toEmail, String subject, String body, String filePath) throws MessagingException {
+    public void sendEmailWithHtml(String toEmail, String subject, String message) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
         mimeMessage.setFrom("datvtse180371@fpt.edu.vn");
         mimeMessageHelper.setTo(toEmail);
         mimeMessageHelper.setSubject(subject);
-        mimeMessage.setContent(getForm(), "text/html; charset=utf-8");
+        mimeMessage.setContent(getForm(null), "text/html; charset=utf-8");
         javaMailSender.send(mimeMessage);
     }
 
-    public String getForm() {
+    public String getForm(String content) {
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
@@ -226,7 +226,7 @@ public class EmailServiceImpl implements EmailService {
                 "                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n" +
                 "                      <tr>\n" +
                 "                        <td align=\"center\" bgcolor=\"#1a82e2\" style=\"border-radius: 6px;\">\n" +
-                "                          <a href=\"https://www.blogdesire.com\" target=\"_blank\" style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;\">Do Something Sweet</a>\n" +
+                "
                 "                        </td>\n" +
                 "                      </tr>\n" +
                 "                    </table>\n" +
