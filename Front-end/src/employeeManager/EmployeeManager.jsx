@@ -144,19 +144,6 @@ export default function EmployeeManager() {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              padding: "5px 10px",
-              backgroundColor: "rgba(101, 101, 101, 1)",
-              gap: 7,
-              borderRadius: 5,
-            }}
-          >
-            <p style={{ margin: 0, fontSize: 20, color: "white" }}>Export</p>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
               justifyContent: "space-between",
               padding: "5px 20px",
               backgroundColor: "rgba(101, 101, 101, 1)",
