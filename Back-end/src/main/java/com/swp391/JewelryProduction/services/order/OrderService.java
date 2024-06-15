@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface OrderService {
     List<Order> findAllOrders();
+    Order saveNewOrder(String accountId);
     Order findOrderById(String id);
-    Order saveOrder(Order order);
-    Order createNewOrder();
+
+    Order updateOrder(Order order);
 }

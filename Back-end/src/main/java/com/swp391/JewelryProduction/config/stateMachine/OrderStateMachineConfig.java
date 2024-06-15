@@ -246,8 +246,8 @@ public class OrderStateMachineConfig {
             return context -> {
                 //GET REPORT OBJECT FROM REPORT SERVICE TRIGGERING THE EVENT AND PASS IT INTO createNewOrder() METHOD
     //            Report incommingRequest = context.getExtendedState().get("report", Report.class);
-                Order newOrder = orderService.createNewOrder();
-                context.getExtendedState().getVariables().put("order", newOrder);
+                //Order newOrder = orderService.createNewOrder();
+                //context.getExtendedState().getVariables().put("order", newOrder);
                 //Notify logic using NotificationService for notify MANAGER OF REQUESTING REPORT
                 log.info("A new order has been created");
             };

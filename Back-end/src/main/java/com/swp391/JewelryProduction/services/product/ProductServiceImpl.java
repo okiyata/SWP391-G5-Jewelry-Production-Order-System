@@ -21,19 +21,38 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductSpecification findProductSpecificationByProductId(String id) {
-        if(productSpecificationRepository.findByProductId(id).isPresent()) {
-            return productSpecificationRepository.findByProductId(id).get();
+    public ProductSpecification findProductSpecificationById(int id) {
+        if(productSpecificationRepository.findById(id).isPresent()) {
+            return productSpecificationRepository.findById(id).get();
         } else return null;
     }
 
     @Override
-    public void saveProduct(Product product) {
+    public Product saveProduct(Product product) {
         productRepository.save(product);
+        return product;
     }
 
     @Override
     public void deleteProduct(String id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public ProductSpecification save(ProductSpecification specs) {
+        for(ProductSpecification proSpecs : productSpecificationRepository.findAll()) {
+            if(proSpecs.getGemstone().equals(specs.getGemstone()) &&
+                    proSpecs.getChainType().equals(specs.getChainType()) &&
+                    proSpecs.getLength().equals(specs.getLength()) &&
+                    proSpecs.getStyle().equals(specs.getStyle()) &&
+                    proSpecs.getMetal().equals(specs.getMetal()) &&
+                    proSpecs.getShape().equals(specs.getShape()) &&
+                    proSpecs.getOccasion().equals(specs.getOccasion()) &&
+                    proSpecs.getTexture().equals(specs.getTexture()) &&
+                    proSpecs.getType().equals(specs.getType()) &&
+                    proSpecs.getGemstoneWeight().equals(specs.getGemstoneWeight())) return proSpecs;
+            else productSpecificationRepository.save(specs);
+        }
+        return specs;
     }
 }

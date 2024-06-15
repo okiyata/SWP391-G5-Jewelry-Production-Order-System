@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/collection")
+@RequestMapping("api/product")
 public class ProductController {
     private final ProductService productService;
 
@@ -21,15 +21,6 @@ public class ProductController {
                 .status(HttpStatus.OK)
                 .message("Request send successfully.")
                 .response("product-list", productService.findAll())
-                .buildEntity();
-    }
-
-    @GetMapping("/{productId}/specification")
-    public ResponseEntity<Response> getProductSpecification(@PathVariable String productId) {
-        return Response.builder()
-                .status(HttpStatus.OK)
-                .message("Request send successfully.")
-                .response("product-specification", productService.findProductSpecificationByProductId(productId))
                 .buildEntity();
     }
 
@@ -48,6 +39,15 @@ public class ProductController {
         return Response.builder()
                 .status(HttpStatus.OK)
                 .message("Request send successfully.")
+                .buildEntity();
+    }
+
+    @PostMapping("/customize")
+    public ResponseEntity<Response> saveCustomization(@RequestBody ProductSpecification specs) {
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Request send successfully.")
+                .response("product-specification", productService.save(specs))
                 .buildEntity();
     }
 }
