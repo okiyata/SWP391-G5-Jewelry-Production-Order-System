@@ -35,16 +35,15 @@ public enum OrderStatus {
             DES_CUST_DECLINED,
     PRODUCTION,
         IN_PRODUCTION,
-        FINISHED,
         PRO_AWAIT_APPROVAL,                     //send email to customer
             PRO_APPROVAL_PROCESS,
             PRO_APPROVED,
             PRO_DECLINED,
     TRANSPORT,
         SENT,
-        DELIVERED,                              //send email to customer
+        DELIVERED,          //send email to customer
+    ORDER_COMPLETED, //send email to customer
     CANCEL,
-    ORDER_RESTORED,
-    ORDER_COMPLETED
+    ORDER_RESTORED
 }
 
