@@ -1,29 +1,21 @@
 import React, { useState } from "react";
-import { Select, Space, Table, Tag } from "antd";
-import { IoIosArrowDown } from "react-icons/io";
+import { Space, Table, Tag, Button, Modal, Form, Input, Select } from "antd";
 import { FiPlus } from "react-icons/fi";
-import { Option } from "antd/es/mentions";
-export default function ClientManager() {
-  const [filterStatus, setFilterStatus] = useState(null);
 
-  const handleFilterChange = (event) => {
-    const selectedValue = event.target.value;
-    console.log(selectedValue);
-    setFilterStatus(selectedValue);
-  };
+export default function ClientManager() {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const columns = [
     {
-      title: <span style={{ fontSize: 20, fontWeight: 400 }}>Id</span>,
+      title: <span style={{ fontSize: 20, fontWeight: 400 }}>ID</span>,
       dataIndex: "id",
       key: "id",
-
-      render: (text) => <span>{text}</span>,
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Name</span>,
       dataIndex: "name",
       key: "name",
-      style: { fontSize: "18px" },
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Gmail</span>,
@@ -32,116 +24,69 @@ export default function ClientManager() {
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Phone</span>,
-      key: "phone",
       dataIndex: "phone",
+      key: "phone",
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Status</span>,
       key: "status",
       dataIndex: "status",
-      render: (_, record) => (
-        <Space size="middle">
-          {record.status === "active" ? (
-            <Tag color="green">Active</Tag>
-          ) : (
-            <Tag color="red">Inactive</Tag>
-          )}
-        </Space>
+      render: (text) => (
+        <Tag color={text === "active" ? "green" : "red"}>
+          {text.charAt(0).toUpperCase() + text.slice(1)}
+        </Tag>
       ),
     },
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>Action</span>,
       key: "action",
       render: (_, record) => (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <p style={{ margin: 0 }}>Delete</p>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span style={{ cursor: "pointer", color: "blue" }}>Delete</span>
           <span style={{ margin: "0 8px" }}>|</span>
-          <p style={{ margin: 0 }}>Delete</p>
+          <span
+            style={{ cursor: "pointer", color: "blue" }}
+            onClick={() => handleEdit(record)}
+          >
+            Edit
+          </span>
         </div>
       ),
     },
   ];
 
   const data = [
-    {
-      id: "CL_0001",
-      name: "John Brown",
-      phone: "01234556",
-      gmail: "New York No. 1 Lake Park",
-      status: "active",
-    },
-    {
-      id: "CL_0002",
-      name: "Jim Green",
-      phone: "01234556",
-      gmail: "London No. 1 Lake Park",
-      status: "inactive",
-    },
-    {
-      id: "CL_0003",
-      name: "Joe Black",
-      phone: "01234556",
-      gmail: "Sydney No. 1 Lake Park",
-      status: "active",
-    },
-    {
-      id: "CL_0004",
-      name: "John Brown",
-      phone: "01234556",
-      gmail: "New York No. 1 Lake Park",
-      status: "active",
-    },
-    {
-      id: "CL_0005",
-      name: "Jim Green",
-      phone: "01234556",
-      gmail: "London No. 1 Lake Park",
-      status: "inactive",
-    },
-    {
-      id: "CL_0006",
-      name: "Joe Black",
-      phone: "01234556",
-      gmail: "Sydney No. 1 Lake Park",
-      status: "active",
-    },
-    {
-      id: "CL_0007",
-      name: "John Brown",
-      phone: "01234556",
-      gmail: "New York No. 1 Lake Park",
-      status: "active",
-    },
-    {
-      id: "CL_0008",
-      name: "Jim Green",
-      phone: "01234556",
-      gmail: "London No. 1 Lake Park",
-      status: "inactive",
-    },
-    {
-      id: "CL_0009",
-      name: "Joe Black",
-      phone: "01234556",
-      gmail: "Sydney No. 1 Lake Park",
-      status: "active",
-    },
+    { id: "CL_0001", name: "Tran Mai Quang Khai", gmail: "khaitmq@gmail.com", phone: "0867406725", status: "active" },
+    { id: "CL_0002", name: "Nguyen Hoang Dung", gmail: "dungnh@gmail.com", phone: "0574179547", status: "inactive" },
+    { id: "CL_0003", name: "Vu Tien Dat", gmail: "datvt@gmail.com", phone: "0936127853", status: "active" },
+    { id: "CL_0004", name: "Nguyen Viet Thai", gmail: "thainv@gmail.com", phone: "0826709871", status: "active" },
+    { id: "CL_0005", name: "Bui Khanh Duy", gmail: "duybkse73484@gmail.com", phone: "0936137090", status: "active" },
+    { id: "CL_0006", name: "Ly Hoang Khang", gmail: "khang@gmail.com", phone: "0845123898", status: "active" },
+    { id: "CL_0007", name: "Ha Duy Tung", gmail: "tung@gmail.com", phone: "091834926", status: "inactive" },
+    { id: "CL_0008", name: "Doan Dang Thien Bao", gmail: "bao@gmail.com", phone: "0938110083", status: "active" },
+    { id: "CL_0009", name: "Nguyen Huu Quoc Hung", gmail: "hung@gmail.com", phone: "0965326132", status: "inactive" },
+    { id: "CL_0010", name: "Duong Hong An", gmail: "An@gmail.com", phone: "0987665512", status: "active" },
   ];
-  const filteredData = filterStatus
-    ? data.filter((item) => item.status === filterStatus)
-    : data;
+
+  const handleEdit = (record) => {
+    setSelectedUser(record);
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedUser(null);
+  };
+
+  const handleSave = (values) => {
+    console.log("Saved values:", values);
+    setIsModalVisible(false);
+    setSelectedUser(null);
+  };
 
   return (
-    <div style={{ padding: "3%" }} className="">
-      <p style={{ margin: 0, fontSize: 24 }} className="fw-bolder">
-        Welcome, K!
-      </p>
+    <div style={{ padding: "3%" }}>
+      <p style={{ margin: 0, fontSize: 24, fontWeight: 'bold' }}>Welcome, K!</p>
       <p style={{ fontSize: 16 }}>Clients Manager</p>
       <div
         style={{
@@ -159,52 +104,6 @@ export default function ClientManager() {
             gap: 20,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              padding: "5px 10px",
-              backgroundColor: "rgba(101, 101, 101, 1)",
-              gap: 7,
-              borderRadius: 5,
-            }}
-          >
-            {" "}
-            <p style={{ margin: 0, fontSize: 20, color: "white" }}>Status</p>
-            <select
-              value={filterStatus}
-              onChange={handleFilterChange}
-              style={{
-                margin: 0,
-                fontSize: 20,
-                color: "rgba(255, 139, 55, 1)",
-                backgroundColor: "transparent",
-                border: "none",
-                outline: "none",
-              }}
-            >
-              <option value="">All</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "5px 10px",
-              backgroundColor: "rgba(101, 101, 101, 1)",
-              gap: 80,
-              borderRadius: 5,
-            }}
-          >
-            <p style={{ margin: 0, fontSize: 20, color: "white" }}>Joined</p>
-
-            <IoIosArrowDown color="rgba(224, 215, 234, 1)" />
-          </div>
         </div>
         <div
           style={{
@@ -219,19 +118,6 @@ export default function ClientManager() {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              padding: "5px 10px",
-              backgroundColor: "rgba(101, 101, 101, 1)",
-              gap: 7,
-              borderRadius: 5,
-            }}
-          >
-            <p style={{ margin: 0, fontSize: 20, color: "white" }}>Export</p>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
               justifyContent: "space-between",
               padding: "5px 20px",
               backgroundColor: "rgba(101, 101, 101, 1)",
@@ -239,17 +125,53 @@ export default function ClientManager() {
               borderRadius: 5,
             }}
           >
-            {" "}
             <FiPlus color="rgba(224, 215, 234, 1)" />
-            <p style={{ margin: 0, fontSize: 20, color: "white" }}>New User</p>
+            <p style={{ margin: 0, fontSize: 20, color: "white" }}>
+              New User
+            </p>
           </div>
         </div>
       </div>
       <Table
         columns={columns}
-        dataSource={filteredData}
+        dataSource={data}
         pagination={{ pageSize: 10 }}
       />
+      <Modal
+        title="Edit User"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        {selectedUser && (
+          <Form
+            layout="vertical"
+            initialValues={selectedUser}
+            onFinish={handleSave}
+          >
+            <Form.Item label="ID" name="id">
+              <Input disabled />
+            </Form.Item>
+            <Form.Item label="Name" name="name">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Gmail" name="gmail">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Phone" name="phone">
+              <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Save changes
+              </Button>
+              <Button onClick={handleCancel} style={{ marginLeft: 8 }}>
+                Back
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
+      </Modal>
     </div>
   );
 }

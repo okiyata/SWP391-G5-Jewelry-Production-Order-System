@@ -16,7 +16,7 @@ import OrderPage1 from "./orderFlows/OrderPage1";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserManagerLayout from "./layout/UserManagerLayout";
 import ClientManager from "./clientManager/ClientManager";
-// import DashboardManger from "./dashboard/DashboardManger";
+import DashboardManger from "./dashboard/DashboardManger";
 import OrderManager from "./ordersManager/OrderManager";
 import BlogManager from "./blogManager/BlogManager";
 import EmployeeManager from "./employeeManager/EmployeeManager";
@@ -38,7 +38,7 @@ function App() {
         <Route path="/order_page_1" element={<OrderPage1 />} />
       </Route>
       <Route path="/userManager" element={<UserManagerLayout />}>
-        {/* <Route path="/userManager/dashboard" element={<DashboardManger />} /> */}
+        <Route path="/userManager/dashboard" element={<DashboardManger />} />
         <Route path="/userManager/client_manager" element={<ClientManager />} />
         <Route path="/userManager/orders_manager" element={<OrderManager />} />
         <Route path="/userManager/blogs_manager" element={<BlogManager />} />
