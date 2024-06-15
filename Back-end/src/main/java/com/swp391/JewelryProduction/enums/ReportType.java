@@ -5,5 +5,6 @@ public enum ReportType {
     ORDER,
     REPORT,
     QUOTATION,
-    DESIGN
+    DESIGN,
+    NONE
 }

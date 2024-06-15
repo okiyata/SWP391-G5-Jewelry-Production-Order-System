@@ -21,8 +21,8 @@ public enum OrderStatus {
             QUO_CUST_DECLINED,
         AWAIT_TRANSACTION,
             TRANSACTION_PROCESS,
-            TRANSACTION_APPROVED,
-            TRANSACTION_DECLINED,
+            TRANSACTION_SUCCESSFUL,
+            TRANSACTION_UNSUCCESSFUL,
     DESIGN,
         IN_DESIGNING,
         DES_AWAIT_MANA_APPROVAL,
@@ -40,8 +40,11 @@ public enum OrderStatus {
             PRO_APPROVED,
             PRO_DECLINED,
     TRANSPORT,
-        SENT,
-        DELIVERED,          //send email to customer
+        ON_DELIVERING,
+        DELIVERED_AWAIT_APPROVAL,          //send email to customer
+            DELIVERED_APPROVAL_PROCESS,
+            DELIVERED_CONFIRMED,
+            DELIVERED_DENIED,
     ORDER_COMPLETED, //send email to customer
     CANCEL,
     ORDER_RESTORED
