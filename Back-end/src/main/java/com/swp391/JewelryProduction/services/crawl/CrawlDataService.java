@@ -69,7 +69,7 @@ public class CrawlDataService implements ICrawlDataService {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(fixedRate = 60000)
     public void scheduledCrawl() {
         try {
             crawData();
