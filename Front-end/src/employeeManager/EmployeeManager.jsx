@@ -1,14 +1,32 @@
 import React, { useState } from "react";
-import { Space, Table, Tag, Button } from "antd";
+import { Space, Table, Tag, Button, Modal, Form, Input, Select } from "antd";
 import { IoIosArrowDown } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
 
 export default function EmployeeManager() {
-  const [filterStatus, setFilterStatus] = useState(null);
+  const [filterRole, setFilterRole] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const handleFilterChange = (event) => {
     const selectedValue = event.target.value;
-    setFilterStatus(selectedValue);
+    setFilterRole(selectedValue);
+  };
+
+  const handleEdit = (record) => {
+    setSelectedUser(record);
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedUser(null);
+  };
+
+  const handleSave = (values) => {
+    console.log("Saved values:", values);
+    setIsModalVisible(false);
+    setSelectedUser(null);
   };
 
   const columns = [
@@ -54,27 +72,27 @@ export default function EmployeeManager() {
         <Space size="middle">
           <span style={{ cursor: "pointer", color: "blue" }}>Delete</span>
           <span style={{ margin: "0 5px" }}>|</span>
-          <span style={{ cursor: "pointer", color: "blue" }}>Edit</span>
+          <span style={{ cursor: "pointer", color: "blue" }} onClick={() => handleEdit(record)}>Edit</span>
         </Space>
       ),
     },
   ];
 
   const data = [
-    { id: "AD_0001",role: "Admin", name: "Tran Mai Quang Khai", gmail: "khaitmq@gmail.com", phone: "0867406725", status: "active" },
-    { id: "MA_0002",role: "Manager", name: "Nguyen Hoang Dung", gmail: "dungnh@gmail.com", phone: "0574179547", status: "inactive" },
-    { id: "SS_0003",role: "Sales Staff", name: "Vu Tien Dat", gmail: "datvt@gmail.com", phone: "0936127853", status: "active" },
-    { id: "AD_0004",role: "Admin", name: "Nguyen Viet Thai", gmail: "thainv@gmail.com", phone: "0826709871", status: "active" },
-    { id: "AD_0005",role: "Admin", name: "Bui Khanh Duy", gmail: "duybkse73484@gmail.com", phone: "0936137090", status: "active" },
-    { id: "AD_0006",role: "Admin", name: "Ly Hoang Khang", gmail: "khang@gmail.com", phone: "0845123898", status: "active" },
-    { id: "AD_0007",role: "Admin", name: "Ha Duy Tung", gmail: "tung@gmail.com", phone: "091834926", status: "inactive" },
-    { id: "AD_0008",role: "Admin", name: "Doan Dang Thien Bao", gmail: "bao@gmail.com", phone: "0938110083", status: "active" },
-    { id: "AD_0009",role: "Admin", name: "Nguyen Huu Quoc Hung", gmail: "hung@gmail.com", phone: "0965326132", status: "inactive" },
-    { id: "CB_0010",role: "Contribution", name: "Duong Hong An", gmail: "An@gmail.com", phone: "0987665512", status: "active" },
+    { id: "AD_0001", role: "Admin", name: "Tran Mai Quang Khai", gmail: "khaitmq@gmail.com", phone: "0867406725", status: "active" },
+    { id: "MA_0002", role: "Manager", name: "Nguyen Hoang Dung", gmail: "dungnh@gmail.com", phone: "0574179547", status: "inactive" },
+    { id: "SS_0003", role: "Sales Staff", name: "Vu Tien Dat", gmail: "datvt@gmail.com", phone: "0936127853", status: "active" },
+    { id: "AD_0004", role: "Admin", name: "Nguyen Viet Thai", gmail: "thainv@gmail.com", phone: "0826709871", status: "active" },
+    { id: "AD_0005", role: "Admin", name: "Bui Khanh Duy", gmail: "duybkse73484@gmail.com", phone: "0936137090", status: "active" },
+    { id: "AD_0006", role: "Admin", name: "Ly Hoang Khang", gmail: "khang@gmail.com", phone: "0845123898", status: "active" },
+    { id: "AD_0007", role: "Admin", name: "Ha Duy Tung", gmail: "tung@gmail.com", phone: "091834926", status: "inactive" },
+    { id: "AD_0008", role: "Admin", name: "Doan Dang Thien Bao", gmail: "bao@gmail.com", phone: "0938110083", status: "active" },
+    { id: "AD_0009", role: "Admin", name: "Nguyen Huu Quoc Hung", gmail: "hung@gmail.com", phone: "0965326132", status: "inactive" },
+    { id: "CB_0010", role: "Contribution", name: "Duong Hong An", gmail: "An@gmail.com", phone: "0987665512", status: "active" },
   ];
 
-  const filteredData = filterStatus
-    ? data.filter((item) => item.status === filterStatus)
+  const filteredData = filterRole
+    ? data.filter((item) => item.role.toLowerCase() === filterRole.toLowerCase())
     : data;
 
   return (
@@ -109,10 +127,10 @@ export default function EmployeeManager() {
             }}
           >
             <p style={{ margin: 0, fontSize: 20, color: "white" }}>
-              Permissions
+              Role Filter
             </p>
             <select
-              value={filterStatus}
+              value={filterRole}
               onChange={handleFilterChange}
               style={{
                 margin: 0,
@@ -124,10 +142,10 @@ export default function EmployeeManager() {
               }}
             >
               <option value="">All</option>
-              <option value="admin">Admin</option>
-              <option value="manager">Manager</option>
-              <option value="sales_staff">Sales Staff</option>
-              <option value="contribution">Contribution</option>
+              <option value="Admin">Admin</option>
+              <option value="Manager">Manager</option>
+              <option value="Sales Staff">Sales Staff</option>
+              <option value="Contribution">Contribution</option>
             </select>
           </div>
         </div>
@@ -163,6 +181,44 @@ export default function EmployeeManager() {
         dataSource={filteredData}
         pagination={{ pageSize: 10 }}
       />
+      <Modal
+        title="Edit Employees"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        {selectedUser && (
+          <Form
+            layout="vertical"
+            initialValues={selectedUser}
+            onFinish={handleSave}
+          >
+            <Form.Item label="ID" name="id">
+              <Input disabled />
+            </Form.Item>
+            <Form.Item label="Role" name="role">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Name" name="name">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Gmail" name="gmail">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Phone" name="phone">
+              <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Save changes
+              </Button>
+              <Button onClick={handleCancel} style={{ marginLeft: 8 }}>
+                Back
+              </Button>
+            </Form.Item>
+          </Form>
+        )}
+      </Modal>
     </div>
   );
 }
