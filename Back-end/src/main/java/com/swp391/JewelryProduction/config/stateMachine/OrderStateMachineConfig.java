@@ -3,14 +3,22 @@ package com.swp391.JewelryProduction.config.stateMachine;
 
 import com.swp391.JewelryProduction.enums.OrderEvent;
 import com.swp391.JewelryProduction.enums.OrderStatus;
+import com.swp391.JewelryProduction.enums.Role;
+import com.swp391.JewelryProduction.pojos.Account;
+import com.swp391.JewelryProduction.pojos.Notification;
 import com.swp391.JewelryProduction.pojos.Order;
+import com.swp391.JewelryProduction.pojos.Report;
+import com.swp391.JewelryProduction.services.account.AccountService;
+import com.swp391.JewelryProduction.services.notification.NotificationService;
 import com.swp391.JewelryProduction.services.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
@@ -30,6 +38,9 @@ import org.springframework.statemachine.guard.Guard;
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Configuration
 public class OrderStateMachineConfig {
@@ -65,15 +76,21 @@ public class OrderStateMachineConfig {
     public static class config extends EnumStateMachineConfigurerAdapter<OrderStatus, OrderEvent> {
 
         private final OrderService orderService;
+        private final NotificationService notificationService;
+        private final AccountService accountService;
+        private final ModelMapper modelMapper;
+
         private StateRepository<? extends RepositoryState> stateRepository;
         private TransitionRepository<? extends RepositoryTransition> transitionRepository;
         private StateMachineRuntimePersister<OrderStatus, OrderEvent, String> stateMachineRuntimePersister;
+        private StateMachineInterceptor stateMachineInterceptor;
 
         @Override
         public void configure(StateMachineConfigurationConfigurer<OrderStatus, OrderEvent> config) throws Exception {
             config
                     .withPersistence()
-                    .runtimePersister(stateMachineRuntimePersister);
+                    .runtimePersister(stateMachineRuntimePersister)
+            ;
         }
 
         @Override
@@ -97,7 +114,7 @@ public class OrderStateMachineConfig {
                     .state(OrderStatus.REQ_AWAIT_APPROVAL)
                         .choice(OrderStatus.REQ_APPROVAL_PROCESS)
                         .state(OrderStatus.REQ_APPROVED)
-                        .state(OrderStatus.REQ_DECLINED)
+                        .state(OrderStatus.REQ_DECLINED, )
                     .state(OrderStatus.AWAIT_ASSIGN_STAFF)
                     .state(OrderStatus.IN_EXCHANGING)
 
@@ -130,11 +147,11 @@ public class OrderStateMachineConfig {
                         .choice(OrderStatus.DES_CUST_APPROVAL_PROCESS)
                         .state(OrderStatus.DES_CUST_APPROVED)
                         .state(OrderStatus.DES_CUST_DECLINED)
+
                 .and()
                 .withStates()
                     .parent(OrderStatus.PRODUCTION)
                     .initial(OrderStatus.IN_PRODUCTION)
-                    .state(OrderStatus.FINISHED)
                     .state(OrderStatus.PRO_AWAIT_APPROVAL)
                         .choice(OrderStatus.PRO_APPROVAL_PROCESS)
                         .state(OrderStatus.PRO_APPROVED)
@@ -154,16 +171,19 @@ public class OrderStateMachineConfig {
                 .withExternal()
                     .source(OrderStatus.CANCEL).target(OrderStatus.ORDER_RESTORED)
                     .event(OrderEvent.RESTORE_ORDER)
+                .and()
+                .withHistory()
+                    .source(OrderStatus.ORDER_RESTORED).target(OrderStatus.REQUESTING)  //Placeholder target
 
                 .and()
                 .withLocal()
                     .source(OrderStatus.REQUESTING).target(OrderStatus.REQ_AWAIT_APPROVAL)
-                    .event(OrderEvent.REQUEST_RECEIVED)
+                    .event(OrderEvent.REQ_RECEIVED)
                     .action(notifyOrderCreateAction())
                 .and()
                 .withLocal()
                     .source(OrderStatus.REQ_AWAIT_APPROVAL).target(OrderStatus.REQ_APPROVAL_PROCESS)
-                    .event(OrderEvent.PROCESS_REQUEST)
+                    .event(OrderEvent.REQ_PROCESS)
                 .and()
                 .withChoice()
                     .source(OrderStatus.REQ_APPROVAL_PROCESS)
@@ -172,13 +192,15 @@ public class OrderStateMachineConfig {
                 .and()
                 .withExternal()
                     .source(OrderStatus.REQ_DECLINED).target(OrderStatus.CANCEL)
-                    .event(OrderEvent.REQUEST_DECLINE)
-                    .action(notifyCustomerAction())
+                    .event(OrderEvent.REQ_DECLINE)
                 .and()
                 .withLocal()
-                    .source(OrderStatus.REQ_APPROVED).target(OrderStatus.IN_EXCHANGING)
-                    .event(OrderEvent.REQUEST_APPROVE)
-                    .action(notifyCustomerAction())
+                    .source(OrderStatus.REQ_APPROVED).target(OrderStatus.AWAIT_ASSIGN_STAFF)
+                    .event(OrderEvent.REQ_APPROVE)
+                .and()
+                .withLocal()
+                    .source(OrderStatus.AWAIT_ASSIGN_STAFF).target(OrderStatus.IN_EXCHANGING)
+                    .event(OrderEvent.ASSIGN_STAFF)
 
                 .and()
                 .withExternal()
@@ -189,7 +211,7 @@ public class OrderStateMachineConfig {
                 .and()
                 .withExternal()
                     .source(OrderStatus.AWAIT_QUO).target(OrderStatus.QUO_AWAIT_MANA_APPROVAL)
-                    .event(OrderEvent.QUOTATION_SEND)
+                    .event(OrderEvent.QUO_FINISH)
 //            action().
             //</editor-fold>
             //<editor-fold desc="DESIGN SUPER-STATE TRANSITIONS" defaultstate="collapsed">
@@ -197,22 +219,20 @@ public class OrderStateMachineConfig {
 
             ;
 
-            configureCancelTransition(transitions, OrderStatus.values(), OrderStatus.CANCEL, OrderEvent.CANCEL);
+            configureCancelTransition(transitions, OrderStatus.values());
         }
 
         private void configureCancelTransition(
                 StateMachineTransitionConfigurer<OrderStatus, OrderEvent> transitions,
-                OrderStatus[] statuses,
-                OrderStatus targetState,
-                OrderEvent triggerEvent
+                OrderStatus[] statuses
         ) throws Exception {
             for (OrderStatus status : statuses) {
-                if (status != targetState) {
+                if (status != OrderStatus.CANCEL) {
                     transitions
                             .withExternal()
                             .source(status)
-                            .target(targetState)
-                            .event(triggerEvent)
+                            .target(OrderStatus.CANCEL)
+                            .event(OrderEvent.CANCEL)
                             .action(notifyCancelAction());
                 }
             }
@@ -230,26 +250,27 @@ public class OrderStateMachineConfig {
 
         //<editor-fold desc="ACTION BEAN" defaultstate="collapsed">
         @Bean
-        public Action<OrderStatus, OrderEvent> managerApproveAction() {
-            return context ->
-                    context.getExtendedState().getVariables().put("managerApproved", true);
-        }
-
-        @Bean
-        public Action<OrderStatus, OrderEvent> customerApproveAction() {
-            return context ->
-                    context.getExtendedState().getVariables().put("customerApproved", true);
-        }
-
-        @Bean
         public Action<OrderStatus, OrderEvent> notifyOrderCreateAction() {
             return context -> {
-                //GET REPORT OBJECT FROM REPORT SERVICE TRIGGERING THE EVENT AND PASS IT INTO createNewOrder() METHOD
-    //            Report incommingRequest = context.getExtendedState().get("report", Report.class);
-                //Order newOrder = orderService.createNewOrder();
-                //context.getExtendedState().getVariables().put("order", newOrder);
-                //Notify logic using NotificationService for notify MANAGER OF REQUESTING REPORT
-                log.info("A new order has been created");
+                Order order = context.getExtendedState().get("order", Order.class);
+                Report report = context.getExtendedState().get("report", Report.class);
+                List<Account> managers = accountService
+                        .findAllByRole(Role.MANAGER)
+                        .stream()
+                        .map(acc -> modelMapper.map(acc, Account.class))
+                        .toList();
+
+                managers.forEach(manager -> {
+                        Notification notification = Notification.builder()
+                                .receiver(manager)
+                                .report(report)
+                                .order(order)
+                                .build();
+                        notification = notificationService.createOptionNotification(notification);
+                        log.info("Notification with id {} of order id {} sent to user {} of role {}",
+                                notification.getId(), order.getId(), manager.getId(), manager.getRole()
+                        );
+                });
             };
         }
 
@@ -302,8 +323,31 @@ public class OrderStateMachineConfig {
         public Action<OrderStatus, OrderEvent> notifyCancelAction() {
             return context -> {
                 Order order = context.getExtendedState().get("order", Order.class);
-                //Notify logic using NotificationService
-                log.info("Cancel order {}", order.getId());
+                StateMachine<OrderStatus, OrderEvent> stateMachine = context.getStateMachine();
+                Message<OrderEvent> message;
+
+                switch (context.getStateMachine().getState().getId()) {
+                    case OrderStatus.REQ_DECLINED -> {
+                        message = MessageBuilder
+                                .withPayload(OrderEvent.REQ_DECLINE)
+                                .build();
+                    } case OrderStatus.QUO_MANA_DECLINED -> {
+                        message = MessageBuilder
+                                .withPayload(OrderEvent.QUO_MANA_DECLINE)
+                                .build();
+                    } case OrderStatus.QUO_CUST_DECLINED ->
+                        message = MessageBuilder
+                                .withPayload(OrderEvent.QUO_CUST_DECLINE).build();
+                    case OrderStatus.DES_MANA_DECLINED ->
+                        message = MessageBuilder.withPayload(OrderEvent.DES_MANA_DECLINE).build();
+                    case OrderStatus.DES_CUST_DECLINED ->
+                        message = MessageBuilder.withPayload(OrderEvent.DES_CUST_DECLINE).build();
+                    case OrderStatus.PRO_DECLINED ->
+                        message = MessageBuilder.withPayload(OrderEvent.PRO_DECLINE).build();
+                    default ->
+                        throw new RuntimeException("Unexpected state machine state " + context.getStateMachine().getState());
+                }
+                stateMachine.sendEvent(Mono.just(message)).subscribe();
             };
         }
         //</editor-fold>
