@@ -53,10 +53,18 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{nickname}/role")
-    public ResponseEntity<String> getCurrentRole(@PathVariable String nickname) {
-        String role = userService.getCurrentRole(nickname);
-        return ResponseEntity.ok(role);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable String userId) {
+        try {
+            User user = userService.findUserById(userId);
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 }

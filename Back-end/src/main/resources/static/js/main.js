@@ -14,21 +14,24 @@ const roleSelect = document.getElementById('role-select');
 
 
 let stompClient = null;
+let currentUser = null;
 let userId = null;
-let userName = null;
+let userSaleStaff = null;
 let selectedUserId = null;
-let currentUserRole = null;
 
 async function connect(event) {
     event.preventDefault();
 
     userId = document.querySelector('#id').value.trim();
     if (userId) {
+
         try {
+            const saleStaffResponse = await fetch(`/${userId}/sale-staff`);
+            userSaleStaff = await saleStaffResponse.text();
             const response = await fetch(`/user/check/${userId}`);
             if (response.ok) {
-                const user = await response.json();
-                onUserFound(user);
+                currentUser = await response.json();
+                onUserFound(currentUser);
             } else if (response.status === 404) {
                 alert('User not found. Please enter a valid ID.');
             } else {
@@ -49,8 +52,6 @@ function onUserFound(user) {
     const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
 
-    userName = user.name;
-
     stompClient.connect({}, onConnected, onError);
 }
 
@@ -60,16 +61,9 @@ async function onConnected() {
 
     stompClient.subscribe(`/topic/public`, onMessageReceived);
 
-    document.querySelector('#connected-user-fullname').textContent = userName;
+    document.querySelector('#connected-user-fullname').textContent = currentUser.name;
 
-    await fetchUserRole();
     await findAndDisplayConnectedUsers();
-}
-
-async function fetchUserRole() {
-    const currentUserRoleResponse = await fetch(`/${userId}/role`);
-    currentUserRole = await currentUserRoleResponse.text();
-    return currentUserRole;
 }
 
 async function fetchUnreadMessages() {
@@ -105,11 +99,13 @@ async function fetchUnreadMessages() {
 
 async function findAndDisplayConnectedUsers() {
     try {
-        if (currentUserRole === "CUSTOMER") {
+        if (currentUser.role === "CUSTOMER") {
             roleSelectList.classList.add('hidden');
-            const allUsersResponse = await fetch(`/users/Customer`);
-            const users = await allUsersResponse.json();
-            await renderConnectedUsers(users.filter(user => user.id !== userId));
+            if(userSaleStaff !== "") {
+                const allUsersResponse = await fetch(`/user/check/${userSaleStaff}`);
+                const user = await allUsersResponse.json();
+                await renderConnectedUsers([user]);
+            }
         } else {
             roleSelectList.classList.remove('hidden');
             const allUsersResponse = await fetch(`/users/${roleSelect.value}`);
@@ -128,10 +124,16 @@ function renderConnectedUsers(users) {
     const connectedUsersList = document.getElementById('connectedUsers');
     connectedUsersList.innerHTML = ''; // Clear the list
 
-    users.forEach(user => {
-        const listItem = createUserElement(user);
-        connectedUsersList.appendChild(listItem);
-    });
+    if (users.length === 0) {
+        const noUsersMessage = document.createElement('p');
+        noUsersMessage.textContent = 'No users connected';
+        connectedUsersList.appendChild(noUsersMessage);
+    } else {
+        users.forEach(user => {
+            const listItem = createUserElement(user);
+            connectedUsersList.appendChild(listItem);
+        });
+    }
 }
 
 function createUserElement(user) {
@@ -146,27 +148,12 @@ function createUserElement(user) {
     const usernameSpan = document.createElement('span');
     usernameSpan.textContent = user.name;
 
-    const statusContainer = document.createElement('div');
-    statusContainer.classList.add('status-container');
-
-    const statusSpan = document.createElement('span');
-    statusSpan.textContent = '●';
-    statusSpan.classList.add(user.status === 'ONLINE' ? 'online' : 'offline');
-
-    const statusTextSpan = document.createElement('span');
-    statusTextSpan.textContent = user.status === 'ONLINE' ? 'Online' : 'Offline';
-    statusTextSpan.classList.add(user.status === 'ONLINE' ? 'online' : 'offline');
-
-    statusContainer.appendChild(statusSpan);
-    statusContainer.appendChild(statusTextSpan);
-
     const receivedMsgs = document.createElement('span');
     receivedMsgs.textContent = '0';
     receivedMsgs.classList.add('nbr-msg', 'hidden');
 
     listItem.appendChild(userImage);
     listItem.appendChild(usernameSpan);
-    listItem.appendChild(statusContainer);
     listItem.appendChild(receivedMsgs);
 
     listItem.addEventListener('click', userItemClick);

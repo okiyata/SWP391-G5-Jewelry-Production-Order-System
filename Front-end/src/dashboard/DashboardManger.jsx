@@ -1,19 +1,16 @@
 import React from "react";
 import { Space, Table, Tag } from "antd";
-import { IoIosArrowDown } from "react-icons/io";
-import { FiPlus } from "react-icons/fi";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { IoMdCart } from "react-icons/io";
 import { LiaUser } from "react-icons/lia";
-import styles from "../employeeManager/DashboardManager.module.css";
 import LineChartComponent from "../chart/LineChart";
-export default function DashboardManger() {
+
+export default function DashboardManager() {
   const columns = [
     {
       title: <span style={{ fontSize: 18, fontWeight: 400 }}>Id</span>,
       dataIndex: "id",
       key: "id",
-
       render: (text) => <span>{text}</span>,
     },
     {
@@ -50,16 +47,10 @@ export default function DashboardManger() {
       title: <span style={{ fontSize: 18, fontWeight: 400 }}>Action</span>,
       key: "action",
       render: (_, record) => (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <p style={{ margin: 0 }}>Delete</p>
+        <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+          <p style={{ margin: 0, cursor: "pointer", color: "blue" }}>Edit</p>
           <span style={{ margin: "0 8px" }}>|</span>
-          <p style={{ margin: 0 }}>Delete</p>
+          <p style={{ margin: 0, cursor: "pointer", color: "blue" }}>Delete</p>
         </div>
       ),
     },
@@ -130,12 +121,12 @@ export default function DashboardManger() {
       status: "active",
     },
   ];
+
   const columnsOrder = [
     {
       title: <span style={{ fontSize: 20, fontWeight: 400 }}>OrderID</span>,
       dataIndex: "orderId",
       key: "orderId",
-
       render: (text) => <span>{text}</span>,
     },
     {
@@ -430,7 +421,6 @@ export default function DashboardManger() {
           />
         </div>
       </div>
-  \
       <p style={{ margin: 0, fontSize: 20 }} className="fw-bolder">
         Client
       </p>
