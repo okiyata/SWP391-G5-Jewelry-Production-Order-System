@@ -17,6 +17,7 @@ import java.util.Map;
 @Builder
 public class Response {
     private HttpStatus status;
+    private Integer statusCode;
     private String message;
     private Map<String, Object> responseList;
 
@@ -29,12 +30,12 @@ public class Response {
 
         public ResponseEntity<Response> buildEntity() {
             if (status == null) status = HttpStatus.OK;
-            return new ResponseEntity<>(new Response(status, message, responseList), status);
+            return new ResponseEntity<>(new Response(status, status.value(), message, responseList), status);
         }
 
         public ResponseEntity<Response> buildEntity(HttpHeaders headers) {
             if (status == null) status = HttpStatus.OK;
-            return new ResponseEntity<>(new Response(status, message, responseList), headers, status);
+            return new ResponseEntity<>(new Response(status, status.value(), message, responseList), headers, status);
         }
     }
 }
