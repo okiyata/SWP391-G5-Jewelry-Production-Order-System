@@ -29,7 +29,7 @@ public class FirebaseConfig {
                 }
             }
         }
-        ClassPathResource serviceKeyResource = new ClassPathResource("serviceKey.json");
+        ClassPathResource serviceKeyResource = new ClassPathResource(CONFIG_PATH);
         InputStream serviceAccount = serviceKeyResource.getInputStream();
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
