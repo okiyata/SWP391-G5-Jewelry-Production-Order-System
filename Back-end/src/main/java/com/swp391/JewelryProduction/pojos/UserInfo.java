@@ -1,5 +1,6 @@
 package com.swp391.JewelryProduction.pojos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.swp391.JewelryProduction.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,12 +20,13 @@ public class UserInfo {
     @Id
     private String id;
 
-    @Column(nullable = false, name = "first_name")
+    @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
 
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
