@@ -6,28 +6,34 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 
-//@Configuration
+@Configuration
 public class FirebaseConfig {
     @Value("${firebase.url}")
     private String CONFIG_PATH;
 
-//    @Bean
+    @Bean
     public FirebaseApp initializeFirebase() throws IOException {
-        String firebaseConfigPath = System.getenv("FIREBASE_CONFIG_PATH");
-
-        if (firebaseConfigPath == null) {
-            throw new IllegalStateException("FIREBASE_CONFIG_PATH environment variable is not set.");
+        List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
+        if (!firebaseApps.isEmpty()) {
+            for (FirebaseApp app : firebaseApps) {
+                if (app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)) {
+                    return app; // Return the existing instance
+                }
+            }
         }
-
-        FileInputStream serviceAccount = new FileInputStream(CONFIG_PATH);
-
+        ClassPathResource serviceKeyResource = new ClassPathResource("serviceKey.json");
+        InputStream serviceAccount = serviceKeyResource.getInputStream();
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setStorageBucket("chat-d8802.appspot.com")
                 .build();
 
         return FirebaseApp.initializeApp(options);
