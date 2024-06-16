@@ -3,6 +3,7 @@ package com.swp391.JewelryProduction.controller;
 import com.swp391.JewelryProduction.dto.AccountDTO;
 import com.swp391.JewelryProduction.pojos.Account;
 import com.swp391.JewelryProduction.pojos.UserInfo;
+import com.swp391.JewelryProduction.repositories.AccountRepository;
 import com.swp391.JewelryProduction.security.services.AuthenticationService;
 import com.swp391.JewelryProduction.services.account.AccountService;
 import com.swp391.JewelryProduction.util.Response;
@@ -30,6 +31,7 @@ public class RegistrationController {
     private final AccountService accountService;
     private final AuthenticationService authenticationService;
     private final ModelMapper modelMapper;
+    private final AccountRepository accountRepository;
 
     @PostMapping("/register")
     public ResponseEntity<Response> register(
@@ -58,13 +60,10 @@ public class RegistrationController {
     public ResponseEntity<Response> confirmRegister(@RequestParam String otp, @RequestHeader("Key") String emailKey) {
         boolean isVerified = authenticationService.verifyOTP(emailKey, otp);
 
-        String jwtToken = null;
         try {
             if (isVerified) {
-                AccountDTO registerAcc = accountService.updateAccountStatusActive(emailKey);
+                Account registerAcc = accountService.updateAccountStatusActive(emailKey);
                 if (registerAcc == null) throw new Exception("Failed to verify account");
-                jwtToken = authenticationService.register(registerAcc);
-                logger.info(jwtToken);
             }
         } catch (Exception e) {
             return Response.builder().status(HttpStatus.BAD_REQUEST).message(e.getMessage()).buildEntity();
@@ -72,7 +71,6 @@ public class RegistrationController {
         return Response.builder()
                 .status(HttpStatus.OK)
                 .message("Verify email account successfully")
-                .response("Token", jwtToken)
                 .buildEntity();
     }
 
@@ -98,6 +96,19 @@ public class RegistrationController {
                 .status(HttpStatus.OK)
                 .message("Login successfully")
                 .response("Token", jwtToken)
+                .buildEntity();
+    }
+
+    @PostMapping("/user-info")
+    public ResponseEntity<Response> userInfo (
+            @RequestBody UserInfo info,
+            @RequestHeader(name = "key") String email) {
+        Account acc = null;
+        acc = accountService.saveUserInfo(info, email);
+
+        return Response.builder()
+                .message("User info added successfully")
+                .response("info", acc.getUserInfo())
                 .buildEntity();
     }
 
