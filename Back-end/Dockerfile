@@ -1,9 +1,12 @@
 FROM maven:3.9.7-ibm-semeru-21-jammy AS build
 LABEL authors="nguye"
+WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:21-jdk
+WORKDIR /app
 COPY --from=build /target/JewelryProduction-0.0.1-SNAPSHOT.jar JewelryProduction.jar
 EXPOSE 8080
+CMD ["sh", "-c", "java -jar app.jar --server.port=${PORT}"]
 ENTRYPOINT ["java", "-jar", "JewelryProduction.jar"]
