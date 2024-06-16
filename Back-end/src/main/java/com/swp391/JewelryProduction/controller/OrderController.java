@@ -1,6 +1,8 @@
 package com.swp391.JewelryProduction.controller;
 
 import com.swp391.JewelryProduction.dto.RequestDTOs.StaffGroup;
+import com.swp391.JewelryProduction.enums.OrderEvent;
+import com.swp391.JewelryProduction.enums.OrderStatus;
 import com.swp391.JewelryProduction.enums.Role;
 import com.swp391.JewelryProduction.pojos.Design;
 import com.swp391.JewelryProduction.pojos.Order;
@@ -15,7 +17,14 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.StateMachinePersist;
+import org.springframework.statemachine.persist.StateMachinePersister;
+import org.springframework.statemachine.service.StateMachineService;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("api/order")
@@ -23,6 +32,10 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final OrderService orderService;
     private final StaffService staffService;
+
+    private StateMachineService<OrderStatus, OrderEvent> stateMachineService;
+    private StateMachinePersist<OrderStatus, OrderEvent, String> stateMachinePersist;
+    private StateMachine<OrderStatus, OrderEvent> currentStateMachine;
 
     @GetMapping("/list")
     public ResponseEntity<Response> list() {
@@ -52,7 +65,15 @@ public class OrderController {
         order.setDesignStaff(staffGroup.getDesignStaff());
         order.setProductionStaff(staffGroup.getProductionStaff());
         orderService.updateOrder(order);
-        //NOTIFY TO STAFF GROUP THROUGH EMAIL AND WEB NOTIFICATION
+
+        StateMachine<OrderStatus, OrderEvent> stateMachine = getStateMachine(orderId);
+        stateMachine.sendEvent(
+                Mono.just(MessageBuilder.
+                        withPayload(OrderEvent.ASSIGN_STAFF)
+                        .build()
+                )
+        ).subscribe();
+
         return Response.builder()
                 .status(HttpStatus.OK)
                 .message("Request sent successfully")
@@ -64,7 +85,15 @@ public class OrderController {
         Order order = orderService.findOrderById(orderId);
         order.setQuotation(quotation);
         orderService.updateOrder(order);
-        //NOTIFY TO MANAGER THROUGH EMAIL AND WEB NOTIFICATION
+
+        StateMachine<OrderStatus, OrderEvent> stateMachine = getStateMachine(orderId);
+        stateMachine.sendEvent(
+                Mono.just(MessageBuilder.
+                        withPayload(OrderEvent.QUO_MANA_PROCESS)
+                        .build()
+                )
+        ).subscribe();
+
         return Response.builder()
                 .status(HttpStatus.OK)
                 .message("Request sent successfully")
@@ -76,10 +105,31 @@ public class OrderController {
         Order order = orderService.findOrderById(orderId);
         order.setDesign(design);
         orderService.updateOrder(order);
-        //NOTIFY TO MANAGER THROUGH EMAIL AND WEB NOTIFICATION
+
+        StateMachine<OrderStatus, OrderEvent> stateMachine = getStateMachine(orderId);
+        stateMachine.sendEvent(
+                Mono.just(MessageBuilder.
+                        withPayload(OrderEvent.DES_MANA_PROCESS)
+                        .build()
+                )
+        ).subscribe();
+
         return Response.builder()
                 .status(HttpStatus.OK)
                 .message("Request sent successfully")
                 .buildEntity();
+    }
+
+    private synchronized StateMachine<OrderStatus, OrderEvent> getStateMachine(String machineId) throws RuntimeException {
+        if (currentStateMachine == null) {
+            currentStateMachine = stateMachineService.acquireStateMachine(machineId);
+            currentStateMachine.startReactively().block();
+        } else if (!ObjectUtils.nullSafeEquals(currentStateMachine.getId(), machineId)) {
+            stateMachineService.releaseStateMachine(currentStateMachine.getId());
+            currentStateMachine.stopReactively().block();
+            currentStateMachine = stateMachineService.acquireStateMachine(machineId);
+            currentStateMachine.startReactively().block();
+        }
+        return currentStateMachine;
     }
 }

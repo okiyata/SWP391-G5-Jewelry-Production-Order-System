@@ -1,16 +1,20 @@
 package com.swp391.JewelryProduction.controller;
 
-import com.paypal.api.payments.Links;
-import com.paypal.api.payments.Payment;
+import com.paypal.api.payments.*;
+import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import com.swp391.JewelryProduction.services.PaypalService;
+import com.swp391.JewelryProduction.services.email.EmailService;
+import com.swp391.JewelryProduction.util.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,6 +22,8 @@ import org.springframework.web.servlet.view.RedirectView;
 public class PaypalController {
 
     private final PaypalService paypalService;
+    private final APIContext apiContext;
+    private final EmailService emailService;
 
     @GetMapping("/")
     public String home() {
@@ -56,19 +62,20 @@ public class PaypalController {
     }
 
     @GetMapping("/payment/success")
-    public String paymentSuccess(
+    public ResponseEntity<Response> paymentSuccess(
             @RequestParam("paymentId") String paymentId,
-            @RequestParam("PayerID") String payerId
+            @RequestParam("payerID") String payerId
     ) {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
-            if (payment.getState().equals("approved")) {
-                return "paymentSuccess";
-            }
         } catch (PayPalRESTException e) {
             log.error("Error occurred:: ", e);
         }
-        return "paymentSuccess";
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Payment is done and your fucking money is gone")
+                .response("paymentId", paymentId)
+                .buildEntity();
     }
 
     @GetMapping("/payment/cancel")
@@ -79,5 +86,23 @@ public class PaypalController {
     @GetMapping("/payment/error")
     public String paymentError() {
         return "paymentError";
+    }
+
+    @GetMapping("/payment/receipt")
+    public void generateReceipt(@RequestBody String paymentId) {
+        Payment payment = null;
+        try {
+            payment = paypalService.getPaymentDetails(paymentId);
+            List<Transaction> transactions = payment.getTransactions();
+            if (!transactions.isEmpty()) {
+                Transaction transaction = transactions.getFirst();
+                List<RelatedResources> relatedResources = transaction.getRelatedResources();
+                if (!relatedResources.isEmpty()) {
+                    Sale sale = paypalService.getSaleDetails(relatedResources.getFirst().getSale().getId());
+                }
+            }
+        } catch (PayPalRESTException e) {
+            e.printStackTrace();
+        }
     }
 }

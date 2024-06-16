@@ -45,8 +45,8 @@ public class RegistrationController {
                     .message("Register account unsuccessfully.")
                     .response("Reason", "Account already exists")
                     .buildEntity();
-
-        logger.info("OTP code: " + authenticationService.generateOTP(accountDTO.getEmail()));
+        String otp = authenticationService.generateOTP(accountDTO.getEmail());
+        logger.info("OTP code: " + otp);
 
         return Response.builder()
                 .status(HttpStatus.OK)
@@ -76,8 +76,20 @@ public class RegistrationController {
                 .buildEntity();
     }
 
+    @RequestMapping("/resend-otp")
+    public ResponseEntity<Response> resendOTP (@RequestHeader("Key") String email) {
+        String otp = authenticationService.generateOTP(email);
+
+        //Logic for implementing the email service
+
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("The OTP have been resend successfully, please check your email")
+                .buildEntity();
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<Response> login (@Valid @RequestBody Account account, BindingResult bindingResult) {
+    public ResponseEntity<Response> login (@Valid @RequestBody AccountDTO account, BindingResult bindingResult) {
         ResponseEntity<Response> errorMsg = getResponseError(bindingResult);
         if (errorMsg != null) return errorMsg;
 

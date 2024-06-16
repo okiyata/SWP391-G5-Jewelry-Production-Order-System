@@ -2,6 +2,8 @@ package com.swp391.JewelryProduction.controller;
 
 import com.swp391.JewelryProduction.services.account.AccountService;
 import com.swp391.JewelryProduction.services.notification.NotificationService;
+import com.swp391.JewelryProduction.services.order.OrderService;
+import com.swp391.JewelryProduction.services.report.ReportService;
 import com.swp391.JewelryProduction.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -14,11 +16,13 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/notification")
+@RequestMapping("/api/notification-center")
 public class NotificationController {
     private final NotificationService notificationService;
     private final AccountService accountService;
     private final ModelMapper modelMapper;
+    private final ReportService reportService;
+    private final OrderService orderService;
 
     @GetMapping("/{accountId}/get-all")
     public ResponseEntity<Response> getAllNotifications(@PathVariable("accountId") String receiverId) {
@@ -36,4 +40,22 @@ public class NotificationController {
 //                .response(String.valueOf(notificationID), notificationService.updateStatusToRead(notificationID))
 //                .buildEntity();
 //    }
+
+    @GetMapping("/get/{notificationId}")
+    public ResponseEntity<Response> getNotification(@PathVariable("notificationId") UUID notificationId) {
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Request send successfully")
+                .response("notification", notificationService.getNotificationById(notificationId))
+                .buildEntity();
+    }
+
+    @PostMapping("/{orderId}/confirm")
+    public ResponseEntity<Response> submitConfirmation(@RequestParam String confirm, @PathVariable("orderId") String orderId ) throws Exception {
+        reportService.handleUserResponse(orderId, confirm);
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Request send successfully")
+                .buildEntity();
+    }
 }

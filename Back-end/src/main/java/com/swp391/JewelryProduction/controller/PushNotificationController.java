@@ -23,9 +23,9 @@ public class PushNotificationController {
     private final AccountService accountService;
     private final ModelMapper modelMapper;
 
-//    @GetMapping("/{accountID}")
-//    public Flux<ServerSentEvent<List<Notification>>> notify (@PathVariable("accountID") String accountID) {
-//        Account receiver = modelMapper.map(accountService.findAccountById(accountID), Account.class);
-//        return notificationService.subscribeNotificationStream(receiver);
-//    }
+    @GetMapping("/{accountID}")
+    public Flux<ServerSentEvent<List<Notification>>> notify (@PathVariable("accountID") String accountID) {
+        Account receiver = modelMapper.map(accountService.findAccountById(accountID), Account.class);
+        return notificationService.subscribeNotificationStream(receiver);
+    }
 }
