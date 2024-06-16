@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Data
 @Builder
@@ -18,8 +17,8 @@ public class MessagesConstant {
     private String companyContact = "jewelryshop.business@gmail.com";
     private String title;
     private String description;
-    private RequestApprovedMessage requestApprovedMessage = new RequestApprovedMessage();
-    private RequestDeclinedMessage requestDeclinedMessage = new RequestDeclinedMessage();
+    private final RequestApprovedMessage requestApprovedMessage = new RequestApprovedMessage();
+    private final RequestDeclinedMessage requestDeclinedMessage = new RequestDeclinedMessage();
 
     public class RequestApprovedMessage {
         public String title () {
