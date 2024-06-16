@@ -110,6 +110,7 @@ export default function Header({ role }) {
             Sign in
           </Link>
         )}
+        <Link to="/order_page">
         <Button
           style={{ borderRadius: 25, backgroundColor: "#4B4B4B" }}
           variant="outline-light"
@@ -117,6 +118,7 @@ export default function Header({ role }) {
         >
           Make jewelry
         </Button>
+        </Link>
       </div>
     </div>
   );
