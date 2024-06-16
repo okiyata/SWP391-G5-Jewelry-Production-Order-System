@@ -5,11 +5,12 @@ import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children, roles, ...rest }) => {
   const { token } = useAuth();
-  var decodedToken;
-  if(token){
+  let decodedToken;
+
+  if (token) {
     decodedToken = jwtDecode(token);
   }
-  
+
   //Navigate to login page if user have not logged in or token has expired
   if (!token) {
     return <Navigate to="/login" />;

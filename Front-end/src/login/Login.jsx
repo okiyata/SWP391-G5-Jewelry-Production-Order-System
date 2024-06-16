@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { useAuth } from "../provider/AuthProvider";
@@ -11,6 +11,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setToken } = useAuth();
+  const navigate = useNavigate();
 
   //Handle submit
   const handleSubmit = async (e) => {
@@ -30,6 +31,7 @@ export default function Login() {
           if (response.status === "OK") {
             alert(response.message);
             setToken(response.token);
+            navigate("/");
           } else if (response.status === "BAD REQUEST") {
             throw new Error(response.message);
           }

@@ -83,7 +83,7 @@ export default function Header({ role }) {
           <Link className="text-decoration-none text-dark" to="/blogs_page">
             Blogs
           </Link>
-          <Link className="text-decoration-none text-dark" to="/live_price">
+          <Link className="text-decoration-none text-dark" to="/live_price_page">
             Live Price
           </Link>
           <Link className="text-decoration-none text-dark" to="/about_page">
