@@ -39,7 +39,10 @@ public class UserService {
             // Chuẩn bị dữ liệu cho Firestore document
             Map<String, Object> userData = new HashMap<>();
             userData.put("id", account.getId());
-            userData.put("name", account.getUserInfo().getFirstName());
+            userData.put("name", (account.getUserInfo() == null)?
+                    account.getEmail():
+                    account.getUserInfo().getFirstName()
+            );
             userData.put("role", account.getRole().toString());
             userData.put("saleStaff", account.getCurrentOrder().getSaleStaff().getId());
 
