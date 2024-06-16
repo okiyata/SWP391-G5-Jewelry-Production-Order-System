@@ -31,6 +31,7 @@ import org.springframework.statemachine.data.StateRepository;
 import org.springframework.statemachine.data.TransitionRepository;
 import org.springframework.statemachine.guard.Guard;
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
+import org.springframework.statemachine.processor.StateMachineAnnotationPostProcessor;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -57,6 +58,11 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<OrderS
     private StateRepository<? extends RepositoryState> stateRepository;
     private TransitionRepository<? extends RepositoryTransition> transitionRepository;
     private StateMachineRuntimePersister<OrderStatus, OrderEvent, String> stateMachineRuntimePersister;
+
+    @Bean
+    public static StateMachineAnnotationPostProcessor stateMachineAnnotationPostProcessor() {
+        return new StateMachineAnnotationPostProcessor();
+    }
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<OrderStatus, OrderEvent> config) throws Exception {
