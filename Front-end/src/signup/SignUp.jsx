@@ -12,6 +12,9 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const reqVal = { email, password };
+
+  console.log(reqVal);
 
   const handleSubmit = (e) => {
     const form = e.currentTarget;
@@ -34,8 +37,13 @@ export default function SignUp() {
         data: { email, password },
       })
         .then((response) => {
-          localStorage.setItem("email", response.data);
-          navigate("/info");
+          if (response.status === "OK") {
+            localStorage.setItem("purpose", "register");
+            localStorage.setItem("email", email);
+            navigate("/otp");
+          } else if (response.status === "BAD REQUEST") {
+            throw new Error(response.message);
+          }
         })
         .catch((error) => {
           alert(error);

@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { RiArrowLeftLine, RiArrowRightLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
+import axios from "axios";
 
 export default function ResetPassword() {
   const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -18,20 +20,49 @@ export default function ResetPassword() {
       e.stopPropagation();
     } else {
       e.preventDefault();
-      navigate("/otp");
+      axios({
+        method: "POST",
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/...",
+        headers: {"Content-Type": "application/json"},
+        data: { email },
+      })
+        .then((response) => {
+          if (response.status === "OK") {
+            navigate("/otp");
+            localStorage.setItem("purpose", "reset_password");
+            localStorage.setItem("email", email);
+          } else if (response.status === "BAD REQUEST")
+            throw new Error(response.message);
+        })
+        .catch((error) => {
+          alert(error);
+          console.error(error);
+        });
     }
     setValidated(true);
   };
 
   return (
-    <Container style={{ paddingTop: '10%', paddingBottom: '10%' }} className="d-flex justify-content-center align-items-center py-32">
-      <div className="p-4" style={{ width: "30%", backgroundColor: 'rgba(217, 217, 217, 0.7)', borderRadius: 20 }}>
+    <Container
+      style={{ paddingTop: "10%", paddingBottom: "10%" }}
+      className="d-flex justify-content-center align-items-center py-32"
+    >
+      <div
+        className="p-4"
+        style={{
+          width: "30%",
+          backgroundColor: "rgba(217, 217, 217, 0.7)",
+          borderRadius: 20,
+        }}
+      >
         <h2 className="text-center mb-4">Reset Password</h2>
         <Form noValidate validated={validated} onSubmit={handleNext}>
           <Form.Group className="mb-4">
             <Form.Control
               required
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
@@ -45,14 +76,24 @@ export default function ResetPassword() {
               type="button"
               onClick={handleBack}
               className="d-flex align-items-center border-2"
-              style={{ backgroundColor: "rgba(201, 201, 201, 1)", borderColor: "#000", borderRadius: 10, color: "#000" }}
+              style={{
+                backgroundColor: "rgba(201, 201, 201, 1)",
+                borderColor: "#000",
+                borderRadius: 10,
+                color: "#000",
+              }}
             >
               <RiArrowLeftLine size={20} /> <span className="ms-2">Back</span>
             </Button>
             <Button
               type="submit"
               className="d-flex align-items-center border-2"
-              style={{ backgroundColor: "rgba(201, 201, 201, 1)", borderColor: "#000", borderRadius: 10, color: "#000" }}
+              style={{
+                backgroundColor: "rgba(201, 201, 201, 1)",
+                borderColor: "#000",
+                borderRadius: 10,
+                color: "#000",
+              }}
             >
               <span className="me-2">Next</span> <RiArrowRightLine size={20} />
             </Button>

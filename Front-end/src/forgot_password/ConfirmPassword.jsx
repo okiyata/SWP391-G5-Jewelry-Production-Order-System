@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { RiArrowLeftLine, RiArrowRightLine } from "react-icons/ri";
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button } from "react-bootstrap";
+import axios from "axios";
 
 export default function ConfirmPassword() {
   const [validated, setValidated] = useState(false);
-  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
   const navigate = useNavigate();
+
+  const email = localStorage.getItem("email");
 
   const handleBack = () => {
     navigate("/otp");
@@ -16,33 +19,68 @@ export default function ConfirmPassword() {
 
   const handleSubmit = (e) => {
     const form = e.currentTarget;
-    if (form.checkValidity() === false || password !== confirmPassword) {
+    if (form.checkValidity() === false || newPassword !== confirmPassword) {
       e.preventDefault();
       e.stopPropagation();
-      if (password !== confirmPassword) {
+      if (newPassword !== confirmPassword) {
         setPasswordMatch(false);
       }
     } else {
       e.preventDefault();
-      navigate("/login");
+      axios({
+        method: "POST",
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/...",
+        headers: {
+          "Content-Type": "application/json",
+          key: { email },
+        },
+        data: { newPassword },
+      })
+        .then((response) => {
+          if (response.status === "OK") {
+            localStorage.removeItem("purpose");
+            localStorage.removeItem("email");
+            navigate("/login");
+          } else if (response.status === "BAD REQUEST") {
+            throw new Error(response.message);
+          }
+        })
+        .catch((error) => {
+          alert(error.message);
+          console.error(error);
+        });
     }
     setValidated(true);
   };
 
   return (
-    <Container style={{ paddingTop: '10%', paddingBottom: '10%' }} className="d-flex justify-content-center align-items-center py-32">
-      <div className="p-4" style={{ width: "30%", backgroundColor: 'rgba(217, 217, 217, 0.7)', borderRadius: 20 }}>
+    <Container
+      style={{ paddingTop: "10%", paddingBottom: "10%" }}
+      className="d-flex justify-content-center align-items-center py-32"
+    >
+      <div
+        className="p-4"
+        style={{
+          width: "30%",
+          backgroundColor: "rgba(217, 217, 217, 0.7)",
+          borderRadius: 20,
+        }}
+      >
         <h2 className="text-center mb-4">Enter New Password</h2>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Form.Group className="mb-4">
             <Form.Control
               required
               type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Password"
               className="border-2"
-              style={{ borderColor: "#000", borderRadius: 10, marginBottom: '20px' }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                borderColor: "#000",
+                borderRadius: 10,
+                marginBottom: "20px",
+              }}
               isInvalid={!passwordMatch}
             />
             <Form.Control.Feedback type="invalid">
@@ -61,7 +99,9 @@ export default function ConfirmPassword() {
               isInvalid={!passwordMatch}
             />
             <Form.Control.Feedback type="invalid">
-              {password !== confirmPassword ? "Passwords do not match." : "Please confirm your new password."}
+              {newPassword !== confirmPassword
+                ? "Passwords do not match."
+                : "Please confirm your new password."}
             </Form.Control.Feedback>
           </Form.Group>
           <div className="d-flex flex-row justify-content-center gap-4">
@@ -69,14 +109,24 @@ export default function ConfirmPassword() {
               type="button"
               onClick={handleBack}
               className="d-flex align-items-center border-2"
-              style={{ backgroundColor: "rgba(201, 201, 201, 1)", borderColor: "#000", borderRadius: 10, color: "#000" }}
+              style={{
+                backgroundColor: "rgba(201, 201, 201, 1)",
+                borderColor: "#000",
+                borderRadius: 10,
+                color: "#000",
+              }}
             >
               <RiArrowLeftLine size={20} /> <span className="ms-2">Back</span>
             </Button>
             <Button
               type="submit"
               className="d-flex align-items-center border-2"
-              style={{ backgroundColor: "rgba(201, 201, 201, 1)", borderColor: "#000", borderRadius: 10, color: "#000" }}
+              style={{
+                backgroundColor: "rgba(201, 201, 201, 1)",
+                borderColor: "#000",
+                borderRadius: 10,
+                color: "#000",
+              }}
             >
               <span className="me-2">Next</span> <RiArrowRightLine size={20} />
             </Button>

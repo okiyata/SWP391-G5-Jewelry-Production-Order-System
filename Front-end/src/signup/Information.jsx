@@ -28,7 +28,7 @@ export default function Information() {
 
       axios({
         method: "POST",
-        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/info",
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/user-info",
         headers: {
           "Content-Type": "application/json",
           key: { email },
@@ -36,8 +36,13 @@ export default function Information() {
         data: { firstName, lastName, dob, gender, phone, address },
       })
         .then((response) => {
-          localStorage.removeItem("email");
-          navigate("/login");
+          localStorage.removeItem("purpose");
+          if (response.status === "OK") {
+            localStorage.removeItem("email");
+            navigate("/login");
+          } else if (response.status === "BAD REQUEST") {
+            throw new Error(response.message);
+          }
         })
         .catch((error) => {
           alert(error);
