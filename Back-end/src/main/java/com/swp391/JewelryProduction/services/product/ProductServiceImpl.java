@@ -4,6 +4,7 @@ import com.swp391.JewelryProduction.pojos.designPojos.Product;
 import com.swp391.JewelryProduction.pojos.designPojos.ProductSpecification;
 import com.swp391.JewelryProduction.repositories.ProductRepository;
 import com.swp391.JewelryProduction.repositories.ProductSpecificationRepository;
+import com.swp391.JewelryProduction.util.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductSpecification findProductSpecificationById(int id) {
-        if(productSpecificationRepository.findById(id).isPresent()) {
-            return productSpecificationRepository.findById(id).get();
-        } else return null;
+        return productSpecificationRepository.
+                findById(id)
+                .orElseThrow(
+                        () -> new ObjectNotFoundException("Product specification with id " + id + " does not exist")
+                );
     }
 
     @Override
