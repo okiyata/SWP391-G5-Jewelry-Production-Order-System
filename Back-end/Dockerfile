@@ -1,6 +1,5 @@
 FROM maven:3.9.7-ibm-semeru-21-jammy AS build
 LABEL authors="nguye"
-WORKDIR /app
 COPY . .
 RUN mvn clean package -DskipTests
 
