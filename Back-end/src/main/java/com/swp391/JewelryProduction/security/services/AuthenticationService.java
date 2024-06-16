@@ -54,6 +54,7 @@ public class AuthenticationService {
         logger.info(user.toString());
 
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getAccount().getId());
         claims.put("first_name", user.getUserInfo().getFirstName());
         claims.put("role", user.getAccount().getRole());
         claims.put("status", user.getAccount().getStatus());
@@ -69,6 +70,7 @@ public class AuthenticationService {
         );
         var user = userRepository.findByEmail(accountDTO.getEmail()).orElseThrow(() -> new UsernameNotFoundException("No user found"));
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getAccount().getId());
         claims.put("first_name", user.getUserInfo().getFirstName());
         claims.put("role", user.getAccount().getRole());
         claims.put("status", user.getAccount().getStatus());
