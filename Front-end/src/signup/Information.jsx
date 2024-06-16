@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -5,19 +6,43 @@ import { useNavigate } from "react-router-dom";
 export default function Information() {
   const [validated, setValidated] = useState(false);
   const [dobError, setDobError] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dob, setDob] = useState();
+  const [gender, setGender] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    const form = e.currentTarget;
+    e.preventDefault();
 
     const formValid = form.checkValidity();
     const dobValid = validateDob(form.elements.dob.value);
 
     if (!formValid || !dobValid) {
-      event.stopPropagation();
+      e.stopPropagation();
     } else {
-      navigate("/Home");
+      const email = localStorage.getItem("email");
+
+      axios({
+        method: "POST",
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/info",
+        headers: {
+          "Content-Type": "application/json",
+          key: { email },
+        },
+        data: { firstName, lastName, dob, gender, phone, address },
+      })
+        .then((response) => {
+          localStorage.removeItem("email");
+          navigate("/login");
+        })
+        .catch((error) => {
+          alert(error);
+          console.log("There is an error: " + error);
+        });
     }
 
     setValidated(true);
@@ -65,6 +90,9 @@ export default function Information() {
                 <Form.Control
                   required
                   type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  name="firstName"
                   className="border-2"
                   style={{ borderColor: "#000", borderRadius: 10 }}
                 />
@@ -79,6 +107,9 @@ export default function Information() {
                 <Form.Control
                   required
                   type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  name="lastName"
                   className="border-2"
                   style={{ borderColor: "#000", borderRadius: 10 }}
                 />
@@ -93,6 +124,8 @@ export default function Information() {
             <Form.Control
               required
               type="date"
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
               name="dob"
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
@@ -100,7 +133,11 @@ export default function Information() {
             <Form.Control.Feedback type="invalid">
               Please provide a date of birth.
             </Form.Control.Feedback>
-            {dobError && <Alert variant="danger" className="mt-2">{dobError}</Alert>}
+            {dobError && (
+              <Alert variant="danger" className="mt-2">
+                {dobError}
+              </Alert>
+            )}
           </Form.Group>
           <Form.Group className="d-flex flex-row align-items-center justify-items-center">
             <Form.Label>Gender:</Form.Label>
@@ -111,6 +148,7 @@ export default function Information() {
                 label="Male"
                 name="gender"
                 value="male"
+                onChange={(e) => setGender(e.target.value)}
                 className="me-3"
               />
               <Form.Check
@@ -119,6 +157,7 @@ export default function Information() {
                 label="Female"
                 name="gender"
                 value="female"
+                onChange={(e) => setGender(e.target.value)}
               />
             </div>
             <Form.Control.Feedback type="invalid" className="ms-3">
@@ -131,6 +170,8 @@ export default function Information() {
               required
               type="tel"
               pattern="[0-9]{10}"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
             />
@@ -143,6 +184,8 @@ export default function Information() {
             <Form.Control
               required
               type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
             />

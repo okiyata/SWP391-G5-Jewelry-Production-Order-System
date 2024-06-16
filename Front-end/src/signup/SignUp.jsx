@@ -3,9 +3,11 @@ import { RiArrowLeftLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { FaGoogle, FaGithub } from "react-icons/fa";
+import axios from "axios";
 
 export default function SignUp() {
   const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,9 +24,25 @@ export default function SignUp() {
         setError("");
       }
     } else {
-      setError("");
-      navigate("/info");
+      //Fetch Data in here
+      axios({
+        method: "POST",
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/register",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: { email, password },
+      })
+        .then((response) => {
+          localStorage.setItem("email", response.data);
+          navigate("/info");
+        })
+        .catch((error) => {
+          alert(error);
+          console.log("There was an error: " + error);
+        });
     }
+
     setValidated(true);
   };
 
@@ -55,6 +73,8 @@ export default function SignUp() {
             <Form.Control
               required
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
