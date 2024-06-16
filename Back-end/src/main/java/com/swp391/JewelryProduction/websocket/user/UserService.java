@@ -41,6 +41,7 @@ public class UserService {
             userData.put("id", account.getId());
             userData.put("name", account.getUserInfo().getFirstName());
             userData.put("role", account.getRole().toString());
+            userData.put("saleStaff", account.getCurrentOrder().getSaleStaff().getId());
 
             ApiFuture<WriteResult> result = docRef.set(userData);
             try {
@@ -65,18 +66,35 @@ public class UserService {
 
     public List<User> findUsersByRole(String role) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
-        ApiFuture<QuerySnapshot> future = db.collection(USER_COLLECTION_NAME)
-                .whereEqualTo("role", role)
-                .get();
-
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         List<User> users = new ArrayList<>();
+        ApiFuture<QuerySnapshot> future;
 
-        for (DocumentSnapshot document : documents) {
-            users.add(document.toObject(User.class));
+        if (role.equals("STAFF")) {
+            // Lấy tất cả người dùng
+            future = db.collection(USER_COLLECTION_NAME).get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+            // Lọc những người dùng có role kết thúc bằng 'STAFF'
+            for (DocumentSnapshot document : documents) {
+                String userRole = document.getString("role");
+                if (userRole != null && userRole.endsWith("STAFF")) {
+                    users.add(document.toObject(User.class));
+                }
+            }
+        } else {
+            // Lấy những người dùng có role chính xác
+            future = db.collection(USER_COLLECTION_NAME)
+                    .whereEqualTo("role", role)
+                    .get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+            for (DocumentSnapshot document : documents) {
+                users.add(document.toObject(User.class));
+            }
         }
         return users;
     }
+
 
     public User findUserById(String userId) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
@@ -87,24 +105,6 @@ public class UserService {
             return document.toObject(User.class);
         } else {
             return null;
-        }
-    }
-
-    public String getCurrentRole(String userId) {
-        Firestore db = FirestoreClient.getFirestore();
-        DocumentReference docRef = db.collection(USER_COLLECTION_NAME).document(userId);
-
-        try {
-            ApiFuture<DocumentSnapshot> future = docRef.get();
-            DocumentSnapshot document = future.get();
-
-            if (document.exists()) {
-                return document.getString("role");
-            } else {
-                throw new RuntimeException("User document not found");
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException("Error fetching current role", e);
         }
     }
 
