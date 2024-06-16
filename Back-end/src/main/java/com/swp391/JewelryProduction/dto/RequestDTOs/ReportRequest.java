@@ -15,6 +15,6 @@ public class ReportRequest {
     private String description;
     private ReportType type;
     private String senderId;
-    private String receiverId;
-    private Object specs;
+    //Contain id for Specification id, Quotation id, Design id
+    private String reportContentID;
 }
