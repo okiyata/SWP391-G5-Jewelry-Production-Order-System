@@ -9,6 +9,7 @@ import com.swp391.JewelryProduction.pojos.Staff;
 import com.swp391.JewelryProduction.pojos.UserInfo;
 import com.swp391.JewelryProduction.repositories.AccountRepository;
 import com.swp391.JewelryProduction.repositories.UserInfoRepository;
+import com.swp391.JewelryProduction.util.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +41,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDTO findAccountByEmail(String email) {
-        return modelMapper.map(accountRepository.findByEmail(email), AccountDTO.class);
+        return modelMapper
+                .map(accountRepository.findByEmail(email)
+                                .orElseThrow(() -> new ObjectNotFoundException("Account with email " + email + " not found")),
+                        AccountDTO.class
+                );
     }
 
     @Override
