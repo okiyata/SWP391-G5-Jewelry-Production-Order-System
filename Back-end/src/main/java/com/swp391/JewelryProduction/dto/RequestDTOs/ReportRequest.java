@@ -14,7 +14,7 @@ public class ReportRequest {
     private String title;
     private String description;
     private ReportType type;
-    private String senderEmail;
-    private String receiverEmail;
+    private String senderId;
+    private String receiverId;
     private Object specs;
 }

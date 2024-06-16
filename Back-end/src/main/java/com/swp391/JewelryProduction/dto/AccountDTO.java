@@ -1,14 +1,11 @@
 package com.swp391.JewelryProduction.dto;
 
 import com.swp391.JewelryProduction.enums.AccountStatus;
-import com.swp391.JewelryProduction.enums.Gender;
 import com.swp391.JewelryProduction.enums.Role;
 import com.swp391.JewelryProduction.pojos.Notification;
+import com.swp391.JewelryProduction.pojos.Order;
 import com.swp391.JewelryProduction.pojos.Report;
 import com.swp391.JewelryProduction.pojos.UserInfo;
-import com.swp391.JewelryProduction.util.IdGenerator;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -32,10 +29,15 @@ public class AccountDTO{
     private String password;
     private LocalDateTime dateCreated;
     private Role role;
-    private Gender gender;
     private AccountStatus status;
     private UserInfo userInfo;
+    private List<Order> pastOrder;
     private List<Report> sendingReports;
-    private List<Report> receivingReports;
     private List<Notification> notifications;
+    private Order currentOrder;
+
+    public Order getCurrentOrder () {
+        currentOrder = pastOrder.getLast();
+        return currentOrder;
+    }
 }
