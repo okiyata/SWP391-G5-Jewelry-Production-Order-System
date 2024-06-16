@@ -9,6 +9,7 @@ import com.swp391.JewelryProduction.pojos.Staff;
 import com.swp391.JewelryProduction.pojos.UserInfo;
 import com.swp391.JewelryProduction.repositories.AccountRepository;
 import com.swp391.JewelryProduction.repositories.UserInfoRepository;
+import com.swp391.JewelryProduction.security.model.User;
 import com.swp391.JewelryProduction.util.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -28,55 +29,65 @@ public class AccountServiceImpl implements AccountService {
     private final UserInfoRepository infoRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final UserInfoRepository userInfoRepository;
 
     //<editor-fold desc="GET METHODS" defaultstate="collapsed">
     @Override
-    public List<AccountDTO> findAllAccounts() {
+    public List<Account> findAllAccounts() {
         return accountRepository
-                .findAll()
-                .stream()
-                .map(account -> modelMapper.map(account, AccountDTO.class))
-                .collect(Collectors.toList());
+                .findAll();
     }
 
     @Override
-    public AccountDTO findAccountByEmail(String email) {
-        return modelMapper
-                .map(accountRepository.findByEmail(email)
-                                .orElseThrow(() -> new ObjectNotFoundException("Account with email " + email + " not found")),
-                        AccountDTO.class
-                );
+    public Account findAccountByEmail(String email) {
+        return accountRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new ObjectNotFoundException("Account with email " + email + " not found"));
     }
 
     @Override
-    public AccountDTO findAccountById(String accountId) {
+    public Account findAccountById(String accountId) {
         Account accModel = accountRepository.findById(accountId).orElse(null);
         if (accModel == null) return null;
-        return modelMapper.map(accModel, AccountDTO.class);
+        return accModel;
     }
 
     @Override
-    public AccountDTO findAccountByEmailAndPassword(String email, String password) {
+    public Account findAccountByEmailAndPassword(String email, String password) {
         Account acc = accountRepository.findByEmail(email).orElse(null);
         if (acc == null || !passwordEncoder.matches(password, acc.getPassword()))
             return null;
 
-        return this.modelMapper.map(acc, AccountDTO.class);
+        return acc;
     }
 
     @Override
-    public AccountDTO saveAccountIfNew(AccountDTO accountDTO) {
+    public Account saveAccountIfNew(AccountDTO accountDTO) {
         if (accountRepository.existsByEmail(accountDTO.getEmail()))
             return null;
+        UserInfo info = new UserInfo();
+        Account acc = Account.builder()
+                .email(accountDTO.getEmail())
+                .password(passwordEncoder.encode(accountDTO.getPassword()))
+                .role(Role.CUSTOMER)
+                .status(AccountStatus.LOCKED)
+                .dateCreated(LocalDateTime.now())
+                .userInfo(info)
+                .build();
+        info.setAccount(acc);
 
-        accountDTO.setRole(Role.CUSTOMER);
-        accountDTO.setStatus(AccountStatus.LOCKED);
-        accountDTO.setDateCreated(LocalDateTime.now());
-        accountDTO.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
-        Account accModel = modelMapper.map(accountDTO, Account.class);
+        accountRepository.save(acc);
+        return acc;
+    }
 
-        accountRepository.save(accModel);
-        return accountDTO;
+    @Override
+    public Account saveUserInfo(UserInfo info, String email) {
+        Account acc = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new ObjectNotFoundException("Account with email " + email + " cannot be found, cannot update info"));
+        acc.setUserInfo(info);
+        info.setAccount(acc);
+        accountRepository.save(acc);
+        return null;
     }
 
     @Override
@@ -102,12 +113,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountDTO> findAllByRole(Role role) {
-        List<AccountDTO> accDTOs = new ArrayList<>();
-        for (Account acc : accountRepository.findAllByRole(role)) {
-            accDTOs.add(modelMapper.map(acc, AccountDTO.class));
-        }
-        return accDTOs;
+    public List<Account> findAllByRole(Role role) {
+        return accountRepository.findAllByRole(role);
     }
     //</editor-fold>
 
@@ -118,11 +125,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO updateAccountStatusActive(String email) {
+    public Account updateAccountStatusActive(String email) {
         Account acc = accountRepository.findByEmail(email).orElse(null);
         if (acc == null) return null;
         acc.setStatus(AccountStatus.ACTIVE);
-        return modelMapper.map(accountRepository.save(acc), AccountDTO.class);
+        return accountRepository.save(acc);
     }
     //</editor-fold>
 
@@ -133,4 +140,15 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(modelMapper.map(accountDTO, Account.class));
     }
     //</editor-fold>
+
+    //<editor-fold desc="DELETE METHODS" defaultstate="collapsed">
+
+    @Override
+    public void deleteAccount(String accountID) {
+        Account acc = accountRepository.findById(accountID).orElseThrow(() -> new ObjectNotFoundException("Account with id " + accountID + " not found, can't be deleted"));
+        accountRepository.delete(acc);
+    }
+    //</editor-fold>
+
+
 }
