@@ -70,4 +70,12 @@ public class PaypalService {
 
         return payment.execute(apiContext, execution);
     }
+
+    public Payment getPaymentDetails(String paymentId) throws PayPalRESTException {
+        return Payment.get(apiContext, paymentId);
+    }
+
+    public Sale getSaleDetails(String saleId) throws PayPalRESTException {
+        return Sale.get(apiContext, saleId);
+    }
 }
