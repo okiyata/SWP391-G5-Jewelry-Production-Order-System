@@ -58,7 +58,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/anonymous").anonymous()
 //                        .requestMatchers("/login", "/api").permitAll()
 //                        .anyRequest().authenticated()
-                        .requestMatchers("/api/auth/**", "/api/registration/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/api/registration/**", "/").permitAll()
                         .anyRequest().authenticated()
                 )
 //                .formLogin(login -> login
