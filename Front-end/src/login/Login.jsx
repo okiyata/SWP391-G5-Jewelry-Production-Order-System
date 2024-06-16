@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
 import { FaGoogle, FaGithub } from "react-icons/fa";
+import { useAuth } from "../provider/AuthProvider";
 // import UseFetch from "../hooks/useFetch";
 
 export default function Login() {
   const [validated, setValidated] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [data, setData] = useState("");
+  const { setToken } = useAuth();
   const baseUrl = "https://66690c4a2e964a6dfed3aa1d.mockapi.io/user";
   const method = "POST";
   const body = { username, password };
-  let bool;
 
   //Handle submit
   const handleSubmit = async (e) => {
@@ -24,15 +24,15 @@ export default function Login() {
       //Send user's input to backend
       fetch(baseUrl, {
         method: method,
-        headers: { "Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "OK") {
             alert(data.message);
-            localStorage.setItem("user", data.token);
-          } else if (data.status === "Failed") {
+            setToken(data.token);
+          } else if (data.status === "BAD REQUEST") {
             alert(data.message);
           }
         });
