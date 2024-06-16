@@ -1,8 +1,11 @@
 package com.swp391.JewelryProduction.config;
 
+import com.swp391.JewelryProduction.dto.AccountDTO;
+import com.swp391.JewelryProduction.pojos.Account;
 import com.swp391.JewelryProduction.security.model.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -53,7 +56,27 @@ public class ApplicationConfig {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
+                .setMatchingStrategy(MatchingStrategies.STRICT);
+
+        // Custom mapping configuration
+        modelMapper.typeMap(AccountDTO.class, Account.class).addMappings(mapper -> {
+            mapper.skip(Account::setId); // Skip setting the ID if it's auto-generated
+            mapper.skip(Account::setPastOrder); // Handle pastOrder separately
+            mapper.skip(Account::setSendingReports); // Handle sendingReports separately
+            mapper.skip(Account::setNotifications); // Handle notifications separately
+        });
+
+        modelMapper.typeMap(Account.class, AccountDTO.class).addMappings(mapper -> {
+            mapper.skip(AccountDTO::setPastOrder); // Handle pastOrder separately
+            mapper.skip(AccountDTO::setSendingReports); // Handle sendingReports separately
+            mapper.skip(AccountDTO::setNotifications); // Handle notifications separately
+        });
+
+        return modelMapper;
     }
 
     @Bean
