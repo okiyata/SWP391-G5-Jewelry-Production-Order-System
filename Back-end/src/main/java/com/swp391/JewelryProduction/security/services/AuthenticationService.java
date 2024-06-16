@@ -34,7 +34,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
 
-    private final Integer EXPIRE_MINS = 5;
+    private final Integer EXPIRE_MINS = 2;
     private final LoadingCache<String, String> otpCache = CacheBuilder
             .newBuilder()
             .expireAfterWrite(EXPIRE_MINS, TimeUnit.MINUTES)
@@ -88,7 +88,8 @@ public class AuthenticationService {
 
     public boolean verifyOTP (String emailKey, String otp) {
         String savedOTP = otpCache.getIfPresent(emailKey);
+        if (savedOTP == null) throw new RuntimeException("Your OTP have been expired, please re-send it again");
         otpCache.invalidate(emailKey);
-        return savedOTP != null && savedOTP.equals(otp);
+        return savedOTP.equals(otp);
     }
 }
