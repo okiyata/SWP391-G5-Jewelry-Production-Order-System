@@ -36,7 +36,7 @@ public class Order {
     @Column(length = 8, nullable = false, updatable = false, unique = true)
     private String id;
     private String name;
-    private String description;
+    private double budget;
     @Column(name = "date_created", nullable = false)
     private LocalDateTime createdDate;
 
@@ -47,12 +47,11 @@ public class Order {
     @JoinColumn(name = "owner_id")
     private Account owner;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "quotation_id")
     private Quotation quotation;
 
-
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "design_id")
     private Design design;
 

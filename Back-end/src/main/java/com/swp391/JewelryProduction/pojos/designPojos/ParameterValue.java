@@ -37,7 +37,4 @@ public class ParameterValue {
 
     @ManyToMany(mappedBy = "parentValues")
     private List<ParameterValue> childrenValues;
-
-    @ManyToMany(mappedBy = "productValues")
-    private List<Product> products;
 }

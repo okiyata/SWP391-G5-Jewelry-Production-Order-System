@@ -36,4 +36,7 @@ public class Notification {
 
     @Column(name = "is_read")
     private boolean read;
+
+    @Column(name = "is_option")
+    private boolean isOption;
 }

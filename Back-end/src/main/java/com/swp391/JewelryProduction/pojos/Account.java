@@ -59,9 +59,6 @@ public class Account{
     @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
     private List<Report> sendingReports;
 
-    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-    private List<Report> receivingReports;
-
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Notification> notifications;
 
