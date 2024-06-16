@@ -46,17 +46,17 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Report createRequest(ReportRequest request, Order order) {
-        Account sender = modelMapper.map(accountService.findAccountById(request.getSenderId()), Account.class);
-        Report report = Report.builder()
+    public Report createRequest(ReportRequest report, Order order) {
+        Account sender = modelMapper.map(accountService.findAccountById(report.getSenderId()), Account.class);
+        Report request = Report.builder()
                         .reportingOrder(order)
-                        .title(request.getTitle())
-                        .description(request.getDescription())
+                        .title(report.getTitle())
+                        .description(report.getDescription())
                         .createdDate(LocalDateTime.now())
                         .type(ReportType.REQUEST)
                         .sender(sender)
                         .build();
-        order.getRelatedReports().add(report);
+        order.getRelatedReports().add(request);
         orderService.updateOrder(order);
 
         StateMachine<OrderStatus, OrderEvent> stateMachine = instantiateStateMachine(order);
@@ -64,17 +64,47 @@ public class ReportServiceImpl implements ReportService {
         stateMachine.sendEvent(Mono.just(MessageBuilder
                         .withPayload(OrderEvent.REQ_RECEIVED).build())
         ).subscribe();
-        return report;
+        return request;
     }
 
     @Override
     public Report createQuotationReport(ReportRequest report, Order order) {
-        return null;
+        Report quote = Report.builder()
+                .reportingOrder(order)
+                .title(report.getTitle())
+                .description(report.getDescription())
+                .createdDate(LocalDateTime.now())
+                .type(ReportType.QUOTATION)
+                .sender(modelMapper.map(accountService.findAccountById(report.getSenderId()), Account.class))
+                .build();
+        order.getRelatedReports().add(quote);
+        orderService.updateOrder(order);
+
+        StateMachine<OrderStatus, OrderEvent> stateMachine = instantiateStateMachine(order);
+        stateMachine.sendEvent(Mono.just(MessageBuilder
+                .withPayload(OrderEvent.QUO_MANA_PROCESS).build())
+        ).subscribe();
+        return quote;
     }
 
     @Override
     public Report createDesignReport(ReportRequest report, Order order) {
-        return null;
+        Report design = Report.builder()
+                .reportingOrder(order)
+                .title(report.getTitle())
+                .description(report.getDescription())
+                .createdDate(LocalDateTime.now())
+                .type(ReportType.DESIGN)
+                .sender(modelMapper.map(accountService.findAccountById(report.getSenderId()), Account.class))
+                .build();
+        order.getRelatedReports().add(design);
+        orderService.updateOrder(order);
+
+        StateMachine<OrderStatus, OrderEvent> stateMachine = instantiateStateMachine(order);
+        stateMachine.sendEvent(Mono.just(MessageBuilder
+                .withPayload(OrderEvent.DES_MANA_PROCESS).build())
+        ).subscribe();
+        return design;
     }
 
     @Override
