@@ -1,5 +1,7 @@
 package com.swp391.JewelryProduction.services.email;
 
+import com.paypal.api.payments.Payment;
+import com.paypal.api.payments.Sale;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +41,11 @@ public class EmailServiceImpl implements EmailService {
         mimeMessage.setFrom("datvtse180371@fpt.edu.vn");
         mimeMessageHelper.setTo(toEmail);
         mimeMessageHelper.setSubject(subject);
-        mimeMessage.setContent(getForm(null), "text/html; charset=utf-8");
+        mimeMessage.setContent(getForm("Email's header", "Email's content", "#", "Text", "Email's content"), "text/html; charset=utf-8");
         javaMailSender.send(mimeMessage);
     }
 
-    public String getForm(String content) {
+    public String getForm(String header, String content1, String redirectURL, String buttonName, String content2) {
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
@@ -186,7 +188,7 @@ public class EmailServiceImpl implements EmailService {
                 "        <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" style=\"max-width: 600px;\">\n" +
                 "          <tr>\n" +
                 "            <td align=\"left\" bgcolor=\"#ffffff\" style=\"padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;\">\n" +
-                "              <h1 style=\"margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;\">Confirm Your Email Address</h1>\n" +
+                "              <h1 style=\"margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;\">"+header+"</h1>\n" +
                 "            </td>\n" +
                 "          </tr>\n" +
                 "        </table>\n" +
@@ -212,7 +214,7 @@ public class EmailServiceImpl implements EmailService {
                 "          <!-- start copy -->\n" +
                 "          <tr>\n" +
                 "            <td align=\"left\" bgcolor=\"#ffffff\" style=\"padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;\">\n" +
-                "              <p style=\"margin: 0;\">Tap the button below to confirm your email address. If you didn't create an account with <a href=\"https://blogdesire.com\">Paste</a>, you can safely delete this email.</p>\n" +
+                "              <p style=\"margin: 0;\">"+content1+"<a href=\"https://blogdesire.com\">Paste</a>, you can safely delete this email.</p>\n" +
                 "            </td>\n" +
                 "          </tr>\n" +
                 "          <!-- end copy -->\n" +
@@ -226,7 +228,7 @@ public class EmailServiceImpl implements EmailService {
                 "                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n" +
                 "                      <tr>\n" +
                 "                        <td align=\"center\" bgcolor=\"#1a82e2\" style=\"border-radius: 6px;\">\n" +
-                "
+                "                           <a href=\""+redirectURL+"\" target=\"_blank\" style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;\">"+buttonName+"</a>\n" +
                 "                        </td>\n" +
                 "                      </tr>\n" +
                 "                    </table>\n" +
@@ -240,8 +242,7 @@ public class EmailServiceImpl implements EmailService {
                 "          <!-- start copy -->\n" +
                 "          <tr>\n" +
                 "            <td align=\"left\" bgcolor=\"#ffffff\" style=\"padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;\">\n" +
-                "              <p style=\"margin: 0;\">If that doesn't work, copy and paste the following link in your browser:</p>\n" +
-                "              <p style=\"margin: 0;\"><a href=\"https://blogdesire.com\" target=\"_blank\">https://blogdesire.com/xxx-xxx-xxxx</a></p>\n" +
+                "              <p style=\"margin: 0;\">"+content2+"</p>\n" +
                 "            </td>\n" +
                 "          </tr>\n" +
                 "          <!-- end copy -->\n" +
@@ -249,7 +250,7 @@ public class EmailServiceImpl implements EmailService {
                 "          <!-- start copy -->\n" +
                 "          <tr>\n" +
                 "            <td align=\"left\" bgcolor=\"#ffffff\" style=\"padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf\">\n" +
-                "              <p style=\"margin: 0;\">Cheers,<br> Paste</p>\n" +
+                "              <p style=\"margin: 0;\">Thank you for using our service,<br> Jewelry Production</p>\n" +
                 "            </td>\n" +
                 "          </tr>\n" +
                 "          <!-- end copy -->\n" +
@@ -305,6 +306,24 @@ public class EmailServiceImpl implements EmailService {
                 "  <!-- end body -->\n" +
                 "\n" +
                 "</body>\n" +
+                "</html>";
+    }
+
+    public String generateReceiptHtml(Payment payment, Sale sale) {
+        // Generate a simple HTML receipt
+        return "<html>" +
+                "<head><title>Payment Receipt</title></head>" +
+                "<body>" +
+                "<h1>Payment Receipt</h1>" +
+                "<p>Payment ID: " + payment.getId() + "</p>" +
+                "<p>Sale ID: " + sale.getId() + "</p>" +
+                "<p>State: " + sale.getState() + "</p>" +
+                "<p>Amount: " + sale.getAmount().getTotal() + " " + sale.getAmount().getCurrency() + "</p>" +
+                "<p>Payment Mode: " + sale.getPaymentMode() + "</p>" +
+                "<p>Protection Eligibility: " + sale.getProtectionEligibility() + "</p>" +
+                "<p>Create Time: " + sale.getCreateTime() + "</p>" +
+                "<p>Update Time: " + sale.getUpdateTime() + "</p>" +
+                "</body>" +
                 "</html>";
     }
 }
