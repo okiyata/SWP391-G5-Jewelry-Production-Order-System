@@ -1,10 +1,58 @@
 import React, { useState } from "react";
-import { Space, Table, Tag, Button, Modal, Form, Input, Select } from "antd";
+import { Table, Tag, Button, Modal, Form, Input } from "antd";
 import { FiPlus } from "react-icons/fi";
 
 export default function ClientManager() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [deleteUser, setDeleteUser] = useState(null);
+  const [data, setData] = useState([
+    { id: "CL_0001", name: "Tran Mai Quang Khai", gmail: "khaitmq@gmail.com", phone: "0867406725", status: "active" },
+    { id: "CL_0002", name: "Nguyen Hoang Dung", gmail: "dungnh@gmail.com", phone: "0574179547", status: "inactive" },
+    { id: "CL_0003", name: "Vu Tien Dat", gmail: "datvt@gmail.com", phone: "0936127853", status: "active" },
+    { id: "CL_0004", name: "Nguyen Viet Thai", gmail: "thainv@gmail.com", phone: "0826709871", status: "active" },
+    { id: "CL_0005", name: "Bui Khanh Duy", gmail: "duybkse73484@gmail.com", phone: "0936137090", status: "active" },
+    { id: "CL_0006", name: "Ly Hoang Khang", gmail: "khang@gmail.com", phone: "0845123898", status: "active" },
+    { id: "CL_0007", name: "Ha Duy Tung", gmail: "tung@gmail.com", phone: "091834926", status: "inactive" },
+    { id: "CL_0008", name: "Doan Dang Thien Bao", gmail: "bao@gmail.com", phone: "0938110083", status: "active" },
+    { id: "CL_0009", name: "Nguyen Huu Quoc Hung", gmail: "hung@gmail.com", phone: "0965326132", status: "inactive" },
+    { id: "CL_0010", name: "Duong Hong An", gmail: "An@gmail.com", phone: "0987665512", status: "active" },
+  ]);
+
+  const handleEdit = (record) => {
+    setSelectedUser(record);
+    setIsModalVisible(true);
+  };
+
+  const handleDeleteClick = (record) => {
+    setDeleteUser(record);
+    setIsDeleteModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedUser(null);
+  };
+
+  const handleSave = (values) => {
+    const newData = data.map((item) => (item.id === values.id ? values : item));
+    setData(newData);
+    setIsModalVisible(false);
+    setSelectedUser(null);
+  };
+
+  const handleConfirmDelete = () => {
+    const newData = data.filter((item) => item.id !== deleteUser.id);
+    setData(newData);
+    setIsDeleteModalVisible(false);
+    setDeleteUser(null);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalVisible(false);
+    setDeleteUser(null);
+  };
 
   const columns = [
     {
@@ -42,7 +90,12 @@ export default function ClientManager() {
       key: "action",
       render: (_, record) => (
         <div style={{ display: "flex", alignItems: "center" }}>
-          <span style={{ cursor: "pointer", color: "blue" }}>Delete</span>
+          <span
+            style={{ cursor: "pointer", color: "blue" }}
+            onClick={() => handleDeleteClick(record)}
+          >
+            Delete
+          </span>
           <span style={{ margin: "0 8px" }}>|</span>
           <span
             style={{ cursor: "pointer", color: "blue" }}
@@ -54,35 +107,6 @@ export default function ClientManager() {
       ),
     },
   ];
-
-  const data = [
-    { id: "CL_0001", name: "Tran Mai Quang Khai", gmail: "khaitmq@gmail.com", phone: "0867406725", status: "active" },
-    { id: "CL_0002", name: "Nguyen Hoang Dung", gmail: "dungnh@gmail.com", phone: "0574179547", status: "inactive" },
-    { id: "CL_0003", name: "Vu Tien Dat", gmail: "datvt@gmail.com", phone: "0936127853", status: "active" },
-    { id: "CL_0004", name: "Nguyen Viet Thai", gmail: "thainv@gmail.com", phone: "0826709871", status: "active" },
-    { id: "CL_0005", name: "Bui Khanh Duy", gmail: "duybkse73484@gmail.com", phone: "0936137090", status: "active" },
-    { id: "CL_0006", name: "Ly Hoang Khang", gmail: "khang@gmail.com", phone: "0845123898", status: "active" },
-    { id: "CL_0007", name: "Ha Duy Tung", gmail: "tung@gmail.com", phone: "091834926", status: "inactive" },
-    { id: "CL_0008", name: "Doan Dang Thien Bao", gmail: "bao@gmail.com", phone: "0938110083", status: "active" },
-    { id: "CL_0009", name: "Nguyen Huu Quoc Hung", gmail: "hung@gmail.com", phone: "0965326132", status: "inactive" },
-    { id: "CL_0010", name: "Duong Hong An", gmail: "An@gmail.com", phone: "0987665512", status: "active" },
-  ];
-
-  const handleEdit = (record) => {
-    setSelectedUser(record);
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setSelectedUser(null);
-  };
-
-  const handleSave = (values) => {
-    console.log("Saved values:", values);
-    setIsModalVisible(false);
-    setSelectedUser(null);
-  };
 
   return (
     <div style={{ padding: "3%" }}>
@@ -171,6 +195,14 @@ export default function ClientManager() {
             </Form.Item>
           </Form>
         )}
+      </Modal>
+      <Modal
+        title="Confirm Delete"
+        visible={isDeleteModalVisible}
+        onOk={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      >
+        <p>Are you sure you want to delete this user?</p>
       </Modal>
     </div>
   );
