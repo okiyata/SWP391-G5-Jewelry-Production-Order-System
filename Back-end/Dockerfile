@@ -5,7 +5,6 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:21-jdk
-WORKDIR /app
 COPY --from=build /target/JewelryProduction-0.0.1-SNAPSHOT.jar JewelryProduction.jar
 EXPOSE 8080
 CMD ["sh", "-c", "java -jar app.jar --server.port=${PORT}"]
