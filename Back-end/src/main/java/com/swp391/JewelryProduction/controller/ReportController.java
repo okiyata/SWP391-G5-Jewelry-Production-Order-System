@@ -1,6 +1,7 @@
 package com.swp391.JewelryProduction.controller;
 
 import com.swp391.JewelryProduction.dto.RequestDTOs.ReportRequest;
+import com.swp391.JewelryProduction.pojos.Quotation;
 import com.swp391.JewelryProduction.services.account.AccountService;
 import com.swp391.JewelryProduction.services.notification.NotificationService;
 import com.swp391.JewelryProduction.services.order.OrderService;
@@ -19,16 +20,15 @@ import org.springframework.web.bind.annotation.*;
 public class ReportController {
     private final OrderService orderService;
     private final ReportService reportService;
-    private final AccountService accountService;
     private final ProductService productService;
 
     @PostMapping("/{accountId}/{productSpecId}/create/request")
     public ResponseEntity<Response> createRequest(
             @RequestBody ReportRequest request,
-            @PathVariable("productSpecId") int specId,
+            @PathVariable("productSpecId") String specId,
             @PathVariable("accountId") String accountId)
     {
-        request.setSpecs(productService.findProductSpecificationById(specId));
+        request.setReportContentID(specId);
         request.setSenderId(accountId);
         reportService.createRequest(request, orderService.saveNewOrder(accountId));
         return Response.builder()
@@ -37,6 +37,11 @@ public class ReportController {
                 .buildEntity();
     }
 
-//    @PostMapping("/{accountId}/{producSpecId}/create/quote")
-//    public ResponseEntity<Response> createQuota
+//    @PostMapping("/{accountId}/{orderId}/create/quote")
+//    public ResponseEntity<Response> createQuoteReport(
+//            @RequestBody ReportRequest quoteRequest,
+//            @PathVariable("accountId") String accountId)
+//    {
+//        quoteRequest.setReportContentID(quote);
+//    }
 }
