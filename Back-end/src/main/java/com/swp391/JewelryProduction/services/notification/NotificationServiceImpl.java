@@ -1,20 +1,17 @@
 package com.swp391.JewelryProduction.services.notification;
 
-import com.swp391.JewelryProduction.dto.AccountDTO;
 import com.swp391.JewelryProduction.pojos.Account;
 import com.swp391.JewelryProduction.pojos.Notification;
-import com.swp391.JewelryProduction.pojos.Order;
-import com.swp391.JewelryProduction.pojos.Report;
 import com.swp391.JewelryProduction.repositories.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
+import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +24,7 @@ public class NotificationServiceImpl implements NotificationService {
 //    private final ModelMapper modelMapper;
 //    private final Flux<ServerSentEvent<Notification>> notificationFlux = Flux.push(this::generateNotifications);
 //
-//    private final String EVENT_NAME = "notify";
+//
 //
 //    private ServerSentEvent<Notification> generateNotification(AccountDTO account, Report report, Order order) {
 //        Notification newNotification = Notification.builder()
@@ -71,11 +68,7 @@ public class NotificationServiceImpl implements NotificationService {
 //                        notification.data().getAccount().getId().equals(id)),
 //                id);
 //    }
-    @Override
-    public void saveNotification(Notification notification) {
-        notificationRepository.save(notification);
-    }
-
+    //<editor-fold desc="MVC Service methods" defaultstate="collapsed">
     @Override
     public List<Notification> findAllByReceiver_Id(String receiverId) {
         return notificationRepository.findAllByReceiver_Id(receiverId);
@@ -93,4 +86,88 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.deleteById(id);
     }
 
+    @Override
+    public Notification getNotificationById(UUID id) {
+        return notificationRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Notification> getAllNotificationsByReceiverNotRead(Account receiver) {
+        return notificationRepository.findAllByReceiverAndDeliveredFalse(receiver);
+    }
+
+    @Override
+    public List<Notification> getAllNotificationsByReceiver(Account receiver) {
+        return notificationRepository.findAllByReceiver(receiver);
+    }
+
+    @Override
+    public Notification updateStatusToRead(UUID id) {
+        Notification notification = notificationRepository
+                .findById(id)
+                .orElseThrow(NullPointerException::new);
+        notification.setRead(true);
+        return notificationRepository.save(notification);
+    }
+
+    @Override
+    public void clearAllNotifications() {
+        notificationRepository.deleteAll();
+    }
+
+    @Override
+    public void clearAllNotificationsByReceiver(Account receiver) {
+        notificationRepository.deleteAllByReceiver(receiver);
+    }
+
+    @Override
+    public Notification saveNotification(Notification notification) {
+        notification.setDelivered(false);
+        notification.setRead(false);
+        notification.setOption(false);
+        return notificationRepository.save(notification);
+    }
+
+    @Override
+    public Notification createOptionNotification(Notification notification) {
+        notification.setDelivered(false);
+        notification.setRead(false);
+        notification.setOption(true);
+        return notificationRepository.save(notification);
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="WebFlux Service methods" defaultstate="collapsed">
+    private final String EVENT_NAME = "notify";
+
+    @Override
+    public Flux<ServerSentEvent<List<Notification>>> subscribeNotificationStream(Account receiver) {
+        if (receiver != null) {
+            return Flux.interval(Duration.ofSeconds(3))
+                    .publishOn(Schedulers.boundedElastic())
+                    .map(sequence -> ServerSentEvent.<List<Notification>>builder()
+                            .id(String.valueOf(sequence))
+                            .event(EVENT_NAME)
+                            .data(getNotifications(receiver))
+                            .build()
+                    );
+        }
+        return Flux.interval(Duration.ofSeconds(3))
+                .map(sequence -> ServerSentEvent.<List<Notification>>builder()
+                        .id(String.valueOf(sequence))
+                        .event(EVENT_NAME)
+                        .data(new ArrayList<>())
+                        .build());
+    }
+
+    private List<Notification> getNotifications(Account receiver) {
+        List<Notification> notifications = notificationRepository
+                .findAllByReceiverAndDeliveredFalse(receiver);
+        notifications.forEach(notification -> {
+            notification.setDelivered(true);
+        });
+        return notificationRepository.saveAll(notifications);
+    }
+    //</editor-fold>
 }
