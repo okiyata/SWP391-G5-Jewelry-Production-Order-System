@@ -2,9 +2,11 @@ package com.swp391.JewelryProduction.services.email;
 
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Sale;
-import jakarta.mail.MessagingException;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,32 +14,36 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.Properties;
+
+@Slf4j
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender javaMailSender;
+    private Session session;
+    private Properties properties;
 
     private final String buttonLink = "<a href=\"%$s\" target=\"_blank\" style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;\">%2$s</a>\n";
     private final String otpText = "<p style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;\">Your OTP code<br/>%1$s<p>";
 
     @Value("${spring.mail.username}")
     private String senderEmail;
+    @Value("${spring.mail.password}")
+    private String smtpPassword;
 
-//    @Autowired
-//    public EmailServiceImpl(JavaMailSender javaMailSender) {
-//        this.javaMailSender = javaMailSender;
-//    }
-
-    @Override
-    public void sendSimpleEmail(String toEmail, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(toEmail);
-        message.setTo(toEmail);
-        message.setSubject(subject);
-        message.setText(body);
-
-        javaMailSender.send(message);
+    @Autowired
+    public EmailServiceImpl(JavaMailSender javaMailSender) {
+        properties = System.getProperties();
+		properties.setProperty("mail.smtp.host", "smtp.gmail.com");
+		properties.setProperty("mail.smtp.port", "587");
+		properties.setProperty("mail.smtp.auth", "true");
+		properties.setProperty("mail.smtp.starttls.enable", "true");
+        this.session = Session.getDefaultInstance(System.getProperties(), new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(senderEmail, smtpPassword);
+            }
+        });
     }
 
     @Override
@@ -50,18 +56,17 @@ public class EmailServiceImpl implements EmailService {
             String redirectLink,
             String latterContent
     ) throws MessagingException {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessage.setFrom(senderEmail);
-        mimeMessageHelper.setTo(toEmail);
-        mimeMessageHelper.setSubject(subject);
+        MimeMessage mimeMessage = new MimeMessage(session);
+        mimeMessage.setFrom(new InternetAddress(senderEmail));
+        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+        mimeMessage.setSubject(subject);
         mimeMessage.setContent(getForm(
                 header,
                 formerContent,
                 String.format(buttonLink, redirectLink, message),
                 latterContent
         ), "text/html; charset=utf-8");
-        javaMailSender.send(mimeMessage);
+        Transport.send(mimeMessage);
     }
 
     @Override
@@ -69,18 +74,19 @@ public class EmailServiceImpl implements EmailService {
             String toEmail,
             String otpCode
     ) throws MessagingException {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessage.setFrom(senderEmail);
-        mimeMessageHelper.setTo(toEmail);
-        mimeMessageHelper.setSubject("Email Verification code: " + otpCode);
+        log.info(senderEmail + ": " + smtpPassword);
+
+        MimeMessage mimeMessage = new MimeMessage(session);
+        mimeMessage.setFrom(new InternetAddress(senderEmail));
+        mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+        mimeMessage.setSubject("Email Verification code: " + otpCode);
         mimeMessage.setContent(getForm(
                 "Verify your email account",
                 "We have received a request to use " + toEmail + " to create an account on our website. Please use this code to verify your email eligibility.",
                 String.format(otpText, otpCode),
                 "The OTP code will expire in 2 minutes. For your security, please do not share it with anyone. This information can only be seen by you."
         ), "text/html; charset=utf-8");
-        javaMailSender.send(mimeMessage);
+        Transport.send(mimeMessage);
     }
 
     public String getForm(String header, String content1, String mainContent, String content2) {
