@@ -4,19 +4,23 @@ import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.Sale;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-
 @Service
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
+
+    private final String buttonLink = "<a href=\"%$s\" target=\"_blank\" style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;\">%2$s</a>\n";
+    private final String otpText = "<p style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;\">Your OTP code<br/>%1$s<p>";
+
+    @Value("${spring.mail.username}")
+    private String senderEmail;
 
     @Autowired
     public EmailServiceImpl(JavaMailSender javaMailSender) {
@@ -24,7 +28,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmail(String toEmail, String subject, String body) {
+    public void sendSimpleEmail(String toEmail, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(toEmail);
         message.setTo(toEmail);
@@ -35,17 +39,49 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmailWithHtml(String toEmail, String subject, String message) throws MessagingException {
+    public void sendLinkEmail(
+            String toEmail,
+            String subject,
+            String header,
+            String formerContent,
+            String message,
+            String redirectLink,
+            String latterContent
+    ) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessage.setFrom("datvtse180371@fpt.edu.vn");
+        mimeMessage.setFrom(senderEmail);
         mimeMessageHelper.setTo(toEmail);
         mimeMessageHelper.setSubject(subject);
-        mimeMessage.setContent(getForm("Email's header", "Email's content", "#", "Text", "Email's content"), "text/html; charset=utf-8");
+        mimeMessage.setContent(getForm(
+                header,
+                formerContent,
+                String.format(buttonLink, redirectLink, message),
+                latterContent
+        ), "text/html; charset=utf-8");
         javaMailSender.send(mimeMessage);
     }
 
-    public String getForm(String header, String content1, String redirectURL, String buttonName, String content2) {
+    @Override
+    public void sendOtpTextEmail(
+            String toEmail,
+            String otpCode
+    ) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        mimeMessage.setFrom(senderEmail);
+        mimeMessageHelper.setTo(toEmail);
+        mimeMessageHelper.setSubject("Email Verification code: " + otpCode);
+        mimeMessage.setContent(getForm(
+                "Verify your email account",
+                "We have received a request to use " + toEmail + " to create an account on our website. Please use this code to verify your email eligibility.",
+                String.format(otpText, otpCode),
+                "The OTP code will expire in 2 minutes. For your security, please do not share it with anyone. This information can only be seen by you."
+        ), "text/html; charset=utf-8");
+        javaMailSender.send(mimeMessage);
+    }
+
+    public String getForm(String header, String content1, String mainContent, String content2) {
         return "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
@@ -214,7 +250,7 @@ public class EmailServiceImpl implements EmailService {
                 "          <!-- start copy -->\n" +
                 "          <tr>\n" +
                 "            <td align=\"left\" bgcolor=\"#ffffff\" style=\"padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;\">\n" +
-                "              <p style=\"margin: 0;\">"+content1+"<a href=\"https://blogdesire.com\">Paste</a>, you can safely delete this email.</p>\n" +
+                "              <p style=\"margin: 0;\">"+content1+"</p>\n" +
                 "            </td>\n" +
                 "          </tr>\n" +
                 "          <!-- end copy -->\n" +
@@ -228,7 +264,7 @@ public class EmailServiceImpl implements EmailService {
                 "                    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n" +
                 "                      <tr>\n" +
                 "                        <td align=\"center\" bgcolor=\"#1a82e2\" style=\"border-radius: 6px;\">\n" +
-                "                           <a href=\""+redirectURL+"\" target=\"_blank\" style=\"display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;\">"+buttonName+"</a>\n" +
+                "                           " + mainContent +
                 "                        </td>\n" +
                 "                      </tr>\n" +
                 "                    </table>\n" +
