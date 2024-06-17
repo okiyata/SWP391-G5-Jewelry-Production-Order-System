@@ -59,12 +59,14 @@ function OrderPage1() {
         selectedMetal,
         selectedLength,
       },
-    }).then((response) => {
-      // Create a components for quotation
-      navigate("/quotaion");
-    }).catch((error) => {
-      console.log("There is an error in this code" + error);
-    });
+    })
+      .then((response) => {
+        // Create a components for quotation
+        navigate("/quotaion");
+      })
+      .catch((error) => {
+        console.log("There is an error in this code" + error);
+      });
   };
 
   const handleDisable = () => {
