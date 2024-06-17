@@ -25,7 +25,7 @@ const responsive = {
 
 export default function ImageRotator() {
   return (
-    <Container className="p-3">
+    <Container className="p-4">
       <Carousel
         responsive={responsive}
         centerMode={false}
@@ -35,6 +35,7 @@ export default function ImageRotator() {
         pauseOnHover
         autoPlaySpeed={3000}
         autoPlay={true}
+        arrows={false}
         containerClass=" carousel-container"
       >
         <div className="card text-center" style={{margin: "0px 5px"}}>

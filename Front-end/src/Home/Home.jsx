@@ -10,7 +10,7 @@ function Home() {
       <Carousel />
 
       {/*Collections section*/}
-      <div>
+      <div >
         <div
           className="slider-bar d-flex align-content-center justify-content-center p-2"
           style={{ backgroundColor: "#4B4B4B", marginBottom: "10px" }}
@@ -19,7 +19,7 @@ function Home() {
             to={"/collections_page"}
             className="text-decoration-none text-white fw-bold"
           >
-            <h2>OUR COLLECTIONS</h2>
+            <h2 className="mt-1 pt-1 pb-1">OUR COLLECTIONS</h2>
           </Link>
         </div>
         <ImageRotator />
@@ -27,13 +27,11 @@ function Home() {
 
       {/*About us section*/}
       <section
-        className="about-us-section text-white mb-2 mt-2 p-2 pb-5"
+        className="about-us-section text-white mb-2 mt-2 p-2 pb-5 "
         style={{ backgroundColor: "#4B4B4B" }}
       >
-        <Row>
-          <h2 className="text-center p-2 fw-bold m-2">ABOUT US</h2>
-        </Row>
-        <Row>
+        <h2 className="text-center mt-1 pt-3 pb-3 fw-bold">ABOUT US</h2>
+        <Row className="w-100" style={{marginLeft:"1px"}}>
           <Col className="about-us-context align-content-center">
             <div
               className="w-75"
@@ -71,6 +69,7 @@ function Home() {
           </Col>
         </Row>
       </section>
+
       {/*Feedback section*/}
       <div className="d-flex justify-content-center mb-5">
         <div
