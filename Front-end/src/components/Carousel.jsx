@@ -12,11 +12,11 @@ function ControlledCarousel() {
     setIndex(selectedIndex);
   };
   return (
-    <div className="carousel-banner" style={{ margin: "10px 0px 0px" }}>
+    <div className="carousel-banner" style={{ margin: "5px 0px 5px" }}>
       <Carousel
         activeIndex={index}
         onSelect={handleSelect}
-        indicators={false}
+        indicators={true}
         fade
       >
         <Carousel.Item>
@@ -24,7 +24,7 @@ function ControlledCarousel() {
             src={LuxuryBanner1}
             alt="luxury-banner-1"
             className="d-block w-100"
-            style={{ objectFit: "cover", height: "80vh" }}
+            style={{ objectFit: "cover", height: "87vh" }}
           />
         </Carousel.Item>
         <Carousel.Item>
@@ -32,7 +32,7 @@ function ControlledCarousel() {
             src={LuxuryBanner2}
             alt="luxury-banner-2"
             className="d-block w-100"
-            style={{ objectFit: "cover", height: "80vh" }}
+            style={{ objectFit: "cover", height: "87vh" }}
           />
         </Carousel.Item>
         <Carousel.Item>
@@ -40,7 +40,7 @@ function ControlledCarousel() {
             src={NecklaceBanner}
             alt="necklace-banner"
             className="d-block w-100"
-            style={{ objectFit: "cover", height: "80vh" }}
+            style={{ objectFit: "cover", height: "87vh" }}
           />
         </Carousel.Item>
       </Carousel>

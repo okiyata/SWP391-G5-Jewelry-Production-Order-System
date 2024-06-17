@@ -6,7 +6,7 @@ import Header from "./Header";
 export default function LandingPageLayout() {
   return (
     <div className="d-flex flex-column ">
-      <Header role="guest" />
+      <Header />
 
       <div className="flex-grow-1">
         <Outlet />

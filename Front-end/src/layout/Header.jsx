@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoSearchCircle } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
@@ -36,8 +36,11 @@ export default function Header() {
   ];
 
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token);
-  const role = decodedToken.role;
+  const [role, setRole] = useState("GUEST");
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    setRole(decodedToken.role);
+  }
 
   return (
     <div
@@ -100,7 +103,7 @@ export default function Header() {
         </div>
       </div>
       <div className="d-flex flex-row align-items-center gap-3">
-        {role !== "guest" && (
+        {role !== "GUEST" && (
           <>
             <IoNotificationsOutline size={30} color="black" />
             <Dropdown
@@ -113,7 +116,7 @@ export default function Header() {
             </Dropdown>
           </>
         )}
-        {role === "guest" && (
+        {role === "GUEST" && (
           <Link
             to="/login"
             className="text-decoration-none fw-bolder text-dark"

@@ -56,7 +56,7 @@ export default function SignUp() {
 
   return (
     <Container
-      style={{ paddingTop: "10%", paddingBottom: "10%" }}
+      style={{ paddingTop: "4%", paddingBottom: "5%" }}
       className="d-flex justify-content-center align-items-center"
     >
       <div
@@ -96,6 +96,7 @@ export default function SignUp() {
             <Form.Control
               required
               type="password"
+              placeholder="Password"
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
               value={password}
@@ -110,6 +111,7 @@ export default function SignUp() {
             <Form.Control
               required
               type="password"
+              placeholder="Confirm Password"
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
               value={confirmPassword}
