@@ -21,13 +21,18 @@ public class QuotationServiceImpl implements QuotationService {
     }
 
     @Override
-    public void saveQuotation(Quotation quotation) {
-        quotationRepository.save(quotation);
+    public Quotation saveQuotation(Quotation quotation) {
+        return quotationRepository.save(quotation);
     }
 
     @Override
     public void deleteQuotation(Quotation quotation) {
         quotationRepository.delete(quotation);
+    }
+
+    @Override
+    public void deleteQuotationByID(String quotationID) {
+        quotationRepository.deleteById(quotationID);
     }
 
     @Override

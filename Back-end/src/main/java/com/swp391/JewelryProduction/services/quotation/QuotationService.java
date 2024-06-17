@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public interface QuotationService {
     Quotation findQuotationByOrderId(String orderId);
-    void saveQuotation(Quotation quotation);
+    Quotation saveQuotation(Quotation quotation);
     void deleteQuotation(Quotation quotation);
+    void deleteQuotationByID (String quotationID);
     List<Quotation> findAllQuotations();
 }
