@@ -7,6 +7,7 @@ import com.swp391.JewelryProduction.repositories.ProductSpecificationRepository;
 import com.swp391.JewelryProduction.util.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findAll() {
-        return productRepository.findAll().stream().toList();
+        return productRepository.findAll();
     }
 
     @Override
@@ -30,17 +31,20 @@ public class ProductServiceImpl implements ProductService {
                 );
     }
 
+    @Transactional
     @Override
     public Product saveProduct(Product product) {
         productRepository.save(product);
         return product;
     }
 
+    @Transactional
     @Override
     public void deleteProduct(String id) {
         productRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public ProductSpecification save(ProductSpecification specs) {
         for(ProductSpecification proSpecs : productSpecificationRepository.findAll()) {
