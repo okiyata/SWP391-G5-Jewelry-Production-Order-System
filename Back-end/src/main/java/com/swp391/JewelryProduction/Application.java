@@ -94,6 +94,15 @@ public class Application   {
 						.status(AccountStatus.ACTIVE)
 						.build();
 				accountRepository.save(acc);
+
+			acc = Account.builder()
+					.email("tranmaiquangkhai@gmail.com")
+					.password(passwordEncoder.encode("Khai1@"))
+					.dateCreated(LocalDateTime.now())
+					.role(Role.ADMIN)
+					.status(AccountStatus.ACTIVE)
+					.build();
+			accountRepository.save(acc);
 		};
 	}
 }
