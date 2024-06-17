@@ -30,8 +30,11 @@ import org.springframework.statemachine.data.RepositoryTransition;
 import org.springframework.statemachine.data.StateRepository;
 import org.springframework.statemachine.data.TransitionRepository;
 import org.springframework.statemachine.guard.Guard;
+import org.springframework.statemachine.listener.StateMachineListener;
+import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.processor.StateMachineAnnotationPostProcessor;
+import org.springframework.statemachine.state.State;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -64,11 +67,25 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<OrderS
         return new StateMachineAnnotationPostProcessor();
     }
 
+    @Bean
+    public StateMachineListener<OrderStatus, OrderEvent> loggingListener() {
+        return new StateMachineListenerAdapter<OrderStatus, OrderEvent>() {
+            @Override
+            public void stateChanged(State<OrderStatus, OrderEvent> from, State<OrderStatus, OrderEvent> to) {
+                // Optional: Log state changes
+                log.info("State changed from {} to {}", from, to);
+            }
+        };
+    }
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<OrderStatus, OrderEvent> config) throws Exception {
         config
                 .withPersistence()
                 .runtimePersister(stateMachineRuntimePersister)
+                .and()
+                .withConfiguration()
+                .listener(loggingListener())
         ;
     }
 
@@ -95,7 +112,7 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<OrderS
                 .state(OrderStatus.REQ_APPROVED, approvedAction(), null)
                 .state(OrderStatus.REQ_DECLINED, declinedAction(), null)
                 .state(OrderStatus.AWAIT_ASSIGN_STAFF)
-                .state(OrderStatus.IN_EXCHANGING, createChatRoomAction())
+                .state(OrderStatus.IN_EXCHANGING, createChatRoomAction(), null)
 
                 .and()
                 .withStates()
@@ -418,6 +435,7 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<OrderS
         return context -> {
             Order order = orderService.findOrderById(context.getExtendedState().get("orderID", String.class));
             Report report = reportService.findReportByID(context.getExtendedState().get("reportID", Integer.class));
+
             List<Account> managers = accountService
                     .findAllByRole(Role.MANAGER)
                     .stream()
