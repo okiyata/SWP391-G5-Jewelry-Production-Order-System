@@ -34,11 +34,11 @@ public class UserInfo {
     private Gender gender;
 
     @Column(name = "phone_number", length = 10)
-    private long phoneNumber;
+    private Long phoneNumber;
 
     private String address;
 
-    @OneToOne(mappedBy = "userInfo", fetch = FetchType.LAZY)
+    @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     private Account account;

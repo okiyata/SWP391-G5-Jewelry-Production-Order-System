@@ -48,7 +48,7 @@ public class Account{
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     @PrimaryKeyJoinColumn
     private UserInfo userInfo;

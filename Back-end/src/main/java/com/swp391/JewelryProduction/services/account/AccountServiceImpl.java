@@ -120,10 +120,16 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public Account saveAccountIfNew(AccountDTO accountDTO) {
-        if (accountRepository.existsByEmail(accountDTO.getEmail()))
+        Account acc = accountRepository.findByEmail(accountDTO.getEmail()).orElse(null);
+        if (acc != null && acc.getStatus().equals(AccountStatus.LOCKED)) {
+            if (passwordEncoder.matches(accountDTO.getPassword(), acc.getPassword()))
+                return acc;
+        } else if (acc != null)
             return null;
+
+
         UserInfo info = new UserInfo();
-        Account acc = Account.builder()
+        acc = Account.builder()
                 .email(accountDTO.getEmail())
                 .password(passwordEncoder.encode(accountDTO.getPassword()))
                 .role(Role.CUSTOMER)
@@ -142,9 +148,8 @@ public class AccountServiceImpl implements AccountService {
     public Account saveUserInfo(UserInfo info, String email) {
         Account acc = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new ObjectNotFoundException("Account with email " + email + " cannot be found, cannot update info"));
-        acc.setUserInfo(info);
         info.setAccount(acc);
-        accountRepository.save(acc);
+        userInfoRepository.save(info);
         return null;
     }
     //</editor-fold>

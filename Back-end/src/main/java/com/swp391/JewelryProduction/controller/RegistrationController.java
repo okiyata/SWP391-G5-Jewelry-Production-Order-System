@@ -1,6 +1,7 @@
 package com.swp391.JewelryProduction.controller;
 
 import com.swp391.JewelryProduction.dto.AccountDTO;
+import com.swp391.JewelryProduction.dto.UserInfoDTO;
 import com.swp391.JewelryProduction.pojos.Account;
 import com.swp391.JewelryProduction.pojos.UserInfo;
 import com.swp391.JewelryProduction.repositories.AccountRepository;
@@ -71,10 +72,10 @@ public class RegistrationController {
         boolean isVerified = authenticationService.verifyOTP(emailKey, otp);
 
         try {
-            if (isVerified) {
-                Account registerAcc = accountService.updateAccountStatusActive(emailKey);
-                if (registerAcc == null) throw new Exception("Failed to verify account, please re-send the otp");
-            }
+            log.info(otp + ": " + isVerified);
+            if (!isVerified)
+                throw new RuntimeException("The OTP is wrong, please try again");
+            Account registerAcc = accountService.updateAccountStatusActive(emailKey);
         } catch (Exception e) {
             return Response.builder().status(HttpStatus.BAD_REQUEST).message(e.getMessage()).buildEntity();
         }
@@ -116,12 +117,13 @@ public class RegistrationController {
     public ResponseEntity<Response> userInfo (
             @RequestBody UserInfo info,
             @RequestHeader(name = "key") String email) {
-        Account acc = null;
-        acc = accountService.saveUserInfo(info, email);
+        Account acc = accountService.saveUserInfo(info, email);
+//        UserInfo info = accountService.findAccountByEmail(email).getUserInfo();
+//        UserInfoDTO dto = modelMapper.map(info, UserInfoDTO.class);
 
         return Response.builder()
                 .message("User info added successfully")
-                .response("info", acc.getUserInfo())
+                .response("info", modelMapper.map(acc.getUserInfo(), UserInfoDTO.class))
                 .buildEntity();
     }
 
@@ -146,9 +148,14 @@ public class RegistrationController {
 
     @PostMapping("/update-password")
     public ResponseEntity<Response> updatePassword (
-            @RequestBody @Valid @NotEmpty @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "Password is invalid") String newPassword,
+            @RequestBody @NotEmpty @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "Password is invalid") String newPassword,
             @RequestHeader("key") String email) {
-        Account updatedAcc = accountService.updateAccount(AccountDTO.builder().email(email).password(newPassword).build());
+        Account updatedAcc = accountService.updateAccount(
+                AccountDTO.builder()
+                        .email(email)
+                        .password(newPassword)
+                        .build()
+        );
         if (updatedAcc == null) throw new RuntimeException();
         return Response.builder()
                 .message("Password updated successfully for account with email "+email+", please log in again.")

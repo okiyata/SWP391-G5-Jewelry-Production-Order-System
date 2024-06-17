@@ -92,7 +92,8 @@ public class AuthenticationService {
         String savedOTP = otpCache.getIfPresent(emailKey);
         if (savedOTP == null) throw new RuntimeException("Your OTP have been expired, please re-send it again");
         boolean isVerified = savedOTP.equals(otp);
-        otpCache.invalidate(emailKey);
+        if (isVerified)
+            otpCache.invalidate(emailKey);
         return isVerified;
     }
 }
