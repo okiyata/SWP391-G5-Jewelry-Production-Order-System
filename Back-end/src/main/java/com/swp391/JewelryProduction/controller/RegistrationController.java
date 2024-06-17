@@ -6,9 +6,14 @@ import com.swp391.JewelryProduction.pojos.UserInfo;
 import com.swp391.JewelryProduction.repositories.AccountRepository;
 import com.swp391.JewelryProduction.security.services.AuthenticationService;
 import com.swp391.JewelryProduction.services.account.AccountService;
+import com.swp391.JewelryProduction.services.email.EmailService;
 import com.swp391.JewelryProduction.util.Response;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,23 +26,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/registration")
 public class RegistrationController {
-    private final static Logger logger = LoggerFactory.getLogger(RegistrationController.class);
-
 
     private final AccountService accountService;
     private final AuthenticationService authenticationService;
     private final ModelMapper modelMapper;
-    private final AccountRepository accountRepository;
+    private final EmailService emailService;
 
     @PostMapping("/register")
     public ResponseEntity<Response> register(
             @Valid @RequestBody AccountDTO accountDTO,
             BindingResult bindingResult
     ) {
+        log.info("/api/registration/register endpoint called: " + accountDTO);
         ResponseEntity<Response> errorMsg = getResponseError(bindingResult);
         if (errorMsg != null) return errorMsg;
 
@@ -48,7 +53,10 @@ public class RegistrationController {
                     .response("Reason", "Account already exists")
                     .buildEntity();
         String otp = authenticationService.generateOTP(accountDTO.getEmail());
-        logger.info("OTP code: " + otp);
+        log.info("OTP code: " + otp);
+        try {
+            emailService.sendOtpTextEmail(accountDTO.getEmail(), otp);
+        } catch (MessagingException e) { throw new RuntimeException(e); }
 
         return Response.builder()
                 .status(HttpStatus.OK)
@@ -57,13 +65,15 @@ public class RegistrationController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Response> confirmRegister(@RequestParam String otp, @RequestHeader("Key") String emailKey) {
+    public ResponseEntity<Response> confirmRegister(
+            @RequestParam("otp") String otp,
+            @RequestHeader("Key") String emailKey) {
         boolean isVerified = authenticationService.verifyOTP(emailKey, otp);
 
         try {
             if (isVerified) {
                 Account registerAcc = accountService.updateAccountStatusActive(emailKey);
-                if (registerAcc == null) throw new Exception("Failed to verify account");
+                if (registerAcc == null) throw new Exception("Failed to verify account, please re-send the otp");
             }
         } catch (Exception e) {
             return Response.builder().status(HttpStatus.BAD_REQUEST).message(e.getMessage()).buildEntity();
@@ -78,7 +88,10 @@ public class RegistrationController {
     public ResponseEntity<Response> resendOTP (@RequestHeader("Key") String email) {
         String otp = authenticationService.generateOTP(email);
 
-        //Logic for implementing the email service
+        log.info("OTP code: " + otp);
+        try {
+            emailService.sendOtpTextEmail(email, otp);
+        } catch (MessagingException e) { throw new RuntimeException(e); }
 
         return Response.builder()
                 .status(HttpStatus.OK)
@@ -111,6 +124,37 @@ public class RegistrationController {
                 .response("info", acc.getUserInfo())
                 .buildEntity();
     }
+
+    @PostMapping("/forget-password")
+    public ResponseEntity<Response> forgetPassword (
+            @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Email is invalid")
+            @NotEmpty
+            @RequestParam("email") String email
+    ) {
+        try {
+            Account acc = accountService.findAccountByEmail(email);
+            String otp = authenticationService.generateOTP(email);
+            log.info("OTP code: " + otp);
+
+            emailService.sendOtpTextEmail(email, otp);
+        } catch (MessagingException e) { throw new RuntimeException(e); }
+
+        return Response.builder()
+                .message("Please verify your email account")
+                .buildEntity();
+    }
+
+    @PostMapping("/update-password")
+    public ResponseEntity<Response> updatePassword (
+            @RequestBody @Valid @NotEmpty @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "Password is invalid") String newPassword,
+            @RequestHeader("key") String email) {
+        Account updatedAcc = accountService.updateAccount(AccountDTO.builder().email(email).password(newPassword).build());
+        if (updatedAcc == null) throw new RuntimeException();
+        return Response.builder()
+                .message("Password updated successfully for account with email "+email+", please log in again.")
+                .buildEntity();
+    }
+
 
     private ResponseEntity<Response> getResponseError(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

@@ -24,12 +24,12 @@ public class ProductController {
                 .buildEntity();
     }
 
-    @PostMapping("/{productId}/remove")
+    @DeleteMapping("/{productId}/remove")
     public ResponseEntity<Response> removeProduct(@PathVariable String productId) {
         productService.deleteProduct(productId);
         return Response.builder()
                 .status(HttpStatus.OK)
-                .message("Request send successfully.")
+                .message("Product with id "+productId+" has been deleted successfully")
                 .buildEntity();
     }
 

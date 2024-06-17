@@ -1,5 +1,6 @@
 package com.swp391.JewelryProduction.controller;
 
+import com.swp391.JewelryProduction.pojos.Notification;
 import com.swp391.JewelryProduction.services.account.AccountService;
 import com.swp391.JewelryProduction.services.notification.NotificationService;
 import com.swp391.JewelryProduction.services.order.OrderService;
@@ -16,13 +17,10 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/notification-center")
+@RequestMapping("/api/notification")
 public class NotificationController {
     private final NotificationService notificationService;
-    private final AccountService accountService;
-    private final ModelMapper modelMapper;
     private final ReportService reportService;
-    private final OrderService orderService;
 
     @GetMapping("/{accountId}/get-all")
     public ResponseEntity<Response> getAllNotifications(@PathVariable("accountId") String receiverId) {
@@ -30,6 +28,15 @@ public class NotificationController {
                 .status(HttpStatus.OK)
                 .message("Request send successfully.")
                 .response("notification-list", notificationService.findAllByReceiver_Id(receiverId))
+                .buildEntity();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Response> createNotification (Notification notification) {
+        return Response.builder()
+                .status(HttpStatus.OK)
+                .message("Notification saved successfully")
+                .response("notification-list", notificationService.saveNotification(notification))
                 .buildEntity();
     }
 

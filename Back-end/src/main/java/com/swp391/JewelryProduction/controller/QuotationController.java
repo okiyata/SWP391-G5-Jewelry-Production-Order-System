@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/{orderId}/quotation")
 @RequiredArgsConstructor
-public class QuotationController {
+public class    QuotationController {
     private final QuotationService quotationService;
     private final OrderService orderService;
 
@@ -21,7 +21,7 @@ public class QuotationController {
     public ResponseEntity<Response> getQuotation(@PathVariable String orderId) {
         return Response.builder()
                 .status(HttpStatus.OK)
-                .message("Request send successfully.")
+                .message("Quotation of order id "+orderId+" successfully fetched.")
                 .response("quotation", quotationService.findQuotationByOrderId(orderId))
                 .buildEntity();
     }
@@ -31,24 +31,23 @@ public class QuotationController {
         Order order = orderService.findOrderById(orderId);
         order.setQuotation(quotation);
         orderService.updateOrder(order);
-        quotationService.saveQuotation(quotation);
+        quotation = quotationService.saveQuotation(quotation);
         return Response.builder()
                 .status(HttpStatus.OK)
-                .message("Request send successfully.")
-                .response("quotation", quotationService.findQuotationByOrderId(orderId))
+                .message("Quotation has been saved successfully")
+                .response("quotation", quotation)
                 .buildEntity();
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<Response> removeQuotation(@PathVariable String orderId, @RequestBody Quotation quotation) {
+    @DeleteMapping("/delete/{quotationID}")
+    public ResponseEntity<Response> removeQuotation(@PathVariable String orderId, @PathVariable("quotationID") String quotationID) {
         Order order = orderService.findOrderById(orderId);
         order.setQuotation(null);
         orderService.updateOrder(order);
-        quotationService.deleteQuotation(quotation);
+        quotationService.deleteQuotationByID(quotationID);
         return Response.builder()
                 .status(HttpStatus.OK)
-                .message("Request send successfully.")
-                .response("quotation", quotationService.findQuotationByOrderId(orderId))
+                .message("Quotation has been deleted successfully")
                 .buildEntity();
     }
 }
