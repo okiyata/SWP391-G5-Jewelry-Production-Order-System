@@ -37,7 +37,8 @@ public class AccountDTO{
     private Order currentOrder;
 
     public Order getCurrentOrder () {
-        currentOrder = pastOrder.getLast();
+        if (pastOrder != null)
+            currentOrder = pastOrder.getLast();
         return currentOrder;
     }
 }
