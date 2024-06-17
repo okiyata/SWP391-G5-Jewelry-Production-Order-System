@@ -4,6 +4,7 @@ import com.swp391.JewelryProduction.enums.OrderEvent;
 import com.swp391.JewelryProduction.enums.OrderStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
+import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.state.State;
 import org.springframework.statemachine.support.StateMachineInterceptorAdapter;
@@ -25,10 +26,30 @@ public class StateMachineInterceptor extends StateMachineInterceptorAdapter<Orde
             StateMachine<OrderStatus, OrderEvent> stateMachine,
             StateMachine<OrderStatus, OrderEvent> rootStateMachine)
     {
+        log.info("Pre State Change: State = {}, Message = {}, Transition = {}, State Machine Id = {}",
+                state, message, transition, stateMachine.getId());
         try {
             super.preStateChange(state, message, transition, stateMachine, rootStateMachine);
         } catch (Exception e) {
             throw new RuntimeException("Error during state change", e);
         }
+    }
+
+    @Override
+    public Message<OrderEvent> preEvent(Message<OrderEvent> message, StateMachine<OrderStatus, OrderEvent> stateMachine) {
+        log.info("Pre Event: Message = {}, State Machine Id = {}", message, stateMachine.getId());
+        return message;
+    }
+
+    @Override
+    public StateContext<OrderStatus, OrderEvent> preTransition(StateContext<OrderStatus, OrderEvent> stateContext) {
+        log.info("Pre Transition: State Context = {}, State Machine Id = {}", stateContext, stateContext.getStateMachine().getId());
+        return stateContext;
+    }
+
+    @Override
+    public StateContext<OrderStatus, OrderEvent> postTransition(StateContext<OrderStatus, OrderEvent> stateContext) {
+        log.info("Post Transition: State Context = {}, State Machine Id = {}", stateContext, stateContext.getStateMachine().getId());
+        return stateContext;
     }
 }
