@@ -3,8 +3,10 @@ package com.swp391.JewelryProduction.websocket.user;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
-import com.swp391.JewelryProduction.pojos.Account;
+import com.swp391.JewelryProduction.pojos.*;
 import com.swp391.JewelryProduction.repositories.AccountRepository;
+import com.swp391.JewelryProduction.services.account.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,20 +19,17 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private static final String USER_COLLECTION_NAME = "users";
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
-    private final AccountRepository accountRepository;
-
-    public UserService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    private final AccountService accountService;
 
     public void syncUsersToFirestore() {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference usersCollection = db.collection("users");
-        List<Account> accounts = accountRepository.findAll(); // Lấy tất cả các tài khoản từ SQL
+        List<Account> accounts = accountService.findAllAccounts(); // Lấy tất cả các tài khoản từ SQL
 
         for (Account account : accounts) {
             // Tạo document với ID là ID của tài khoản từ SQL
@@ -44,7 +43,9 @@ public class UserService {
                     account.getUserInfo().getFirstName()
             );
             userData.put("role", account.getRole().toString());
-            userData.put("saleStaff", account.getCurrentOrder().getSaleStaff().getId());
+            Order currentOrder = account.getCurrentOrder();
+            if (currentOrder != null)
+                userData.put("saleStaff", currentOrder.getSaleStaff().getId());
 
             ApiFuture<WriteResult> result = docRef.set(userData);
             try {
