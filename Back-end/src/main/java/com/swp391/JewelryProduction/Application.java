@@ -1,12 +1,20 @@
 package com.swp391.JewelryProduction;
 
+import com.github.javafaker.Faker;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.swp391.JewelryProduction.enums.AccountStatus;
+import com.swp391.JewelryProduction.enums.Role;
+import com.swp391.JewelryProduction.pojos.Account;
+import com.swp391.JewelryProduction.repositories.AccountRepository;
 import com.swp391.JewelryProduction.services.crawl.CrawlDataService;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -17,11 +25,14 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 @SpringBootApplication
 @ComponentScan({"com.swp391.JewelryProduction.security.*", "com.swp391.JewelryProduction.*"})
@@ -31,6 +42,11 @@ import java.io.IOException;
 public class Application   {
 
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
+	private final PasswordEncoder passwordEncoder;
+
+	public Application(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(Application.class, args);
@@ -53,36 +69,31 @@ public class Application   {
 	}
 
 
-//	CommandLineRunner commandLineRunner (AccountRepository accountRepository) {
-//		return args -> {
-//				logger.info("Application start");
-////				Faker faker = new Faker();
-////				Random rand = new Random();
-////				for (int i = 0; i < 50; i++) {
-////					Account account = Account.builder()
-////							.email(faker.internet().safeEmailAddress())
-////							.password(faker.internet().password())
-////							.dateCreated(LocalDateTime.now())
-////							.role(Role.CUSTOMER)
-////							.build();
-////					accountRepository.save(account);
-////				}
-//
-//				Account acc = Account.builder()
-//						.email("nguyenhoangdung335@gmail.com")
-//						.password("dung111004")
-//						.dateCreated(LocalDateTime.now())
-//						.role(Role.CUSTOMER)
-//						.build();
-//				accountRepository.save(acc);
-//			acc = Account.builder()
-//					.id("ACC00003")
-//					.email("nguyenhoangdung335@gmail.com")
-//					.password("dung111004")
-//					.dateCreated(LocalDateTime.now())
-//					.role(Role.CUSTOMER)
-//					.build();
-//			accountRepository.save(acc);
-//		};
-//	}
+	@Bean
+	public CommandLineRunner commandLineRunner (AccountRepository accountRepository) {
+		return args -> {
+				logger.info("Application start");
+				Faker faker = new Faker();
+				Random rand = new Random();
+				for (int i = 0; i < 50; i++) {
+					Account account = Account.builder()
+							.email(faker.internet().safeEmailAddress())
+							.password(passwordEncoder.encode(faker.internet().password()))
+							.dateCreated(LocalDateTime.now())
+							.role(Role.CUSTOMER)
+							.status(AccountStatus.ACTIVE)
+							.build();
+					accountRepository.save(account);
+				}
+
+				Account acc = Account.builder()
+						.email("nguyenhoangdung335@gmail.com")
+						.password(passwordEncoder.encode("dung111004"))
+						.dateCreated(LocalDateTime.now())
+						.role(Role.ADMIN)
+						.status(AccountStatus.ACTIVE)
+						.build();
+				accountRepository.save(acc);
+		};
+	}
 }
