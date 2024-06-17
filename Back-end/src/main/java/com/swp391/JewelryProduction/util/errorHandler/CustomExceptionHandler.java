@@ -4,6 +4,7 @@ import com.swp391.JewelryProduction.util.Response;
 import com.swp391.JewelryProduction.util.exceptions.ObjectNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -20,11 +21,9 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@Slf4j
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     private final View error;
@@ -47,6 +46,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
             errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
         }
+        errors.forEach(log::error);
 
         ApiError apiError =
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
@@ -63,6 +63,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         String error = ex.getParameterName() + " parameter is missing";
 
+        log.error(error);
         ApiError apiError =
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), List.of(error));
         return new ResponseEntity<Object>(
@@ -77,6 +78,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
             errors.put(violation.getRootBeanClass().getName() + " " +
                     violation.getPropertyPath(), violation.getMessage());
         }
+        errors.forEach((key, value) -> log.error(key + "\t:\t" + value));
 
         return Response.builder()
                 .status(HttpStatus.BAD_REQUEST)
@@ -89,7 +91,10 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Response> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex, WebRequest request) {
         String error =
-                ex.getName() + " should be of type " + ex.getRequiredType().getName();
+                ex.getName() + " should be of type " + Objects.requireNonNull(ex.getRequiredType()).getName();
+
+        log.error(error);
+
         return Response.builder()
                  .status(HttpStatus.BAD_REQUEST)
                  .message(ex.getLocalizedMessage())
@@ -105,6 +110,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         if (errorMsg == null || errorMsg.isEmpty())
             errorMsg = "Object not found";
 
+        log.error(errorMsg);
+
         return Response.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .message("ObjectNotFoundException is throw")
@@ -114,6 +121,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<Response> handleAll(Exception ex, WebRequest request) {
+
+        log.error("Internal Server Error: " + ex.getLocalizedMessage());
+
         return Response.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message(ex.getLocalizedMessage())
