@@ -5,6 +5,7 @@ import com.swp391.JewelryProduction.pojos.Account;
 import com.swp391.JewelryProduction.pojos.Order;
 import com.swp391.JewelryProduction.repositories.OrderRepository;
 import com.swp391.JewelryProduction.services.account.AccountService;
+import com.swp391.JewelryProduction.util.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findOrderById(String id) {
-        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        return orderRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Order not found"));
     }
 
     @Override
