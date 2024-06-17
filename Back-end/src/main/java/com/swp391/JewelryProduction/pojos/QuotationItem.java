@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class QuotationItem {
     private int quantity;
     @Column(name = "unit_price", columnDefinition = "decimal(15,2)")
     private double unitPrice;
-    @Column(name = "total_price")
+    @Formula("speed * distance")
     private double totalPrice;
 
     @ManyToOne

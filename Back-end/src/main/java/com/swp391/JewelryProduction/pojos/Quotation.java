@@ -1,5 +1,6 @@
 package com.swp391.JewelryProduction.pojos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.swp391.JewelryProduction.util.IdGenerator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,14 +35,24 @@ public class Quotation {
     @Column(length = 8, nullable = false, unique = true)
     private String id;
     private String title;
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "expired_date", nullable = false)
     private LocalDate expiredDate;
 
     @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<QuotationItem> quotationItems;
 
-    @OneToOne(mappedBy = "quotation")
+    @OneToOne(mappedBy = "quotation", fetch = FetchType.LAZY)
     private Order order;
+
+    public Double getTotalPrice () {
+        double total = 0.0;
+        for (var item: quotationItems) {
+            total += item.getTotalPrice();
+        }
+        return total;
+    }
 }

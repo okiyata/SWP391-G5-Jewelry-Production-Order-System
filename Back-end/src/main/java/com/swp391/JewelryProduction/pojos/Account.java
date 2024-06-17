@@ -53,7 +53,7 @@ public class Account{
     @PrimaryKeyJoinColumn
     private UserInfo userInfo;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<Order> pastOrder;
 
     @OneToMany(mappedBy = "sender", fetch = FetchType.LAZY)
@@ -71,7 +71,8 @@ public class Account{
     }
 
     public Order getCurrentOrder () {
-        currentOrder = pastOrder.getLast();
+        if (pastOrder != null && !pastOrder.isEmpty())
+            currentOrder = pastOrder.getLast();
         return currentOrder;
     }
 }

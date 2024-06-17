@@ -34,7 +34,7 @@ public class Product {
     private String name;
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ProductSpecification specification;
 
     @OneToOne(fetch = FetchType.LAZY)
