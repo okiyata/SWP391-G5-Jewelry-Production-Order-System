@@ -5,8 +5,9 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
 import { Button } from "react-bootstrap";
 import { Dropdown } from "antd";
+import { jwtDecode } from "jwt-decode";
 
-export default function Header({ role }) {
+export default function Header() {
   const items = [
     {
       key: "1",
@@ -33,6 +34,10 @@ export default function Header({ role }) {
       ),
     },
   ];
+
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
+  const role = decodedToken.role;
 
   return (
     <div
@@ -83,7 +88,10 @@ export default function Header({ role }) {
           <Link className="text-decoration-none text-dark" to="/blogs_page">
             Blogs
           </Link>
-          <Link className="text-decoration-none text-dark" to="/live_price">
+          <Link
+            className="text-decoration-none text-dark"
+            to="/live_price_page"
+          >
             Live Price
           </Link>
           <Link className="text-decoration-none text-dark" to="/about_page">
@@ -106,18 +114,21 @@ export default function Header({ role }) {
           </>
         )}
         {role === "guest" && (
-          <Link to="/login" className="text-decoration-none fw-bolder text-dark">
+          <Link
+            to="/login"
+            className="text-decoration-none fw-bolder text-dark"
+          >
             Sign in
           </Link>
         )}
         <Link to="/order_page">
-        <Button
-          style={{ borderRadius: 25, backgroundColor: "#4B4B4B" }}
-          variant="outline-light"
-          className="shadow px-4 py-2 fw-bolder"
-        >
-          Make jewelry
-        </Button>
+          <Button
+            style={{ borderRadius: 25, backgroundColor: "#4B4B4B" }}
+            variant="outline-light"
+            className="shadow px-4 py-2 fw-bolder"
+          >
+            Make jewelry
+          </Button>
         </Link>
       </div>
     </div>

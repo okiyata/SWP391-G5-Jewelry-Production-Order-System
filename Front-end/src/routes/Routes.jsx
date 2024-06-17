@@ -1,4 +1,4 @@
-import { Route, Router, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import Home from "../Home/Home";
 import LandingPageLayout from "../layout/LandingPageLayout";
@@ -20,7 +20,6 @@ import OrderManager from "../ordersManager/OrderManager";
 import BlogManager from "../blogManager/BlogManager";
 import EmployeeManager from "../employeeManager/EmployeeManager";
 import ProtectedRoute from "./ProtectedRoute";
-import AuthProvider from "../provider/AuthProvider";
 import LivePrice from "../Home/LivePrice";
 
 function RouteMap() {

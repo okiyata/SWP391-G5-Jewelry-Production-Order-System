@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function OrderPage1() {
   const [selectedStyle, setSelectedStyle] = useState("");
@@ -12,6 +14,7 @@ function OrderPage1() {
   const [selectedTexture, setSelectedTexture] = useState("");
   const [selectedChainType, setSelectedChainType] = useState("");
   const [selectedOccasion, setSelectedOccasion] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     switch (selectedType) {
@@ -38,8 +41,32 @@ function OrderPage1() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(selectedLength);
-
     //FetchData here
+
+    axios({
+      method: "POST",
+      url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/product/customize",
+      headers: { "Content-Type": "application/json" },
+      data: {
+        selectedType,
+        selectedStyle,
+        selectedOccasion,
+        selectedChainType,
+        selectedTexture,
+        selectedGem,
+        selectedGemShape,
+        selectedGemWeight,
+        selectedMetal,
+        selectedLength,
+      },
+    })
+      .then((response) => {
+        // Create a components for quotation
+        navigate("/quotaion");
+      })
+      .catch((error) => {
+        console.log("There is an error in this code" + error);
+      });
   };
 
   const handleDisable = () => {

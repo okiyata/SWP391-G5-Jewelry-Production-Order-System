@@ -3,13 +3,18 @@ import { RiArrowLeftLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import { FaGoogle, FaGithub } from "react-icons/fa";
+import axios from "axios";
 
 export default function SignUp() {
   const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const reqVal = { email, password };
+
+  console.log(reqVal);
 
   const handleSubmit = (e) => {
     const form = e.currentTarget;
@@ -22,9 +27,30 @@ export default function SignUp() {
         setError("");
       }
     } else {
-      setError("");
-      navigate("/info");
+      //Fetch Data in here
+      axios({
+        method: "POST",
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/register",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: { email, password },
+      })
+        .then((response) => {
+          if (response.status === "OK") {
+            localStorage.setItem("purpose", "register");
+            localStorage.setItem("email", email);
+            navigate("/otp");
+          } else if (response.status === "BAD REQUEST") {
+            throw new Error(response.message);
+          }
+        })
+        .catch((error) => {
+          alert(error);
+          console.log("There was an error: " + error);
+        });
     }
+
     setValidated(true);
   };
 
@@ -55,6 +81,8 @@ export default function SignUp() {
             <Form.Control
               required
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}

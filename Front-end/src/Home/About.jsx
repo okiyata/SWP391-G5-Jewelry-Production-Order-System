@@ -8,6 +8,7 @@ import ourMission from "../assets/ourMission.png";
 export default function About() {
   const scrollRef = useRef(null);
   const [scrollActivated, setScrollActivated] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > window.innerHeight) {
@@ -25,8 +26,8 @@ export default function About() {
 
   useScrollSnap({
     ref: scrollRef,
-    duration: 500,
-    delay: 10,
+    duration: 100, // Set the duration to 100ms for faster scrolling
+    delay: 0,      // Set the delay to 0 for no delay between scroll snaps
     enabled: scrollActivated,
   });
 

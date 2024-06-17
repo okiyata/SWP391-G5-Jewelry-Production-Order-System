@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { useAuth } from "../provider/AuthProvider";
+import axios from "axios";
 // import UseFetch from "../hooks/useFetch";
 
 export default function Login() {
   const [validated, setValidated] = useState(false);
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setToken } = useAuth();
-  const baseUrl = "https://66690c4a2e964a6dfed3aa1d.mockapi.io/user";
-  const method = "POST";
-  const body = { username, password };
+  const navigate = useNavigate();
 
   //Handle submit
   const handleSubmit = async (e) => {
@@ -22,19 +21,24 @@ export default function Login() {
       e.stopPropagation();
     } else {
       //Send user's input to backend
-      fetch(baseUrl, {
-        method: method,
+      axios({
+        method: "POST",
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/login",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        data: { email, password },
       })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === "OK") {
-            alert(data.message);
-            setToken(data.token);
-          } else if (data.status === "BAD REQUEST") {
-            alert(data.message);
+        .then((response) => {
+          if (response.status === "OK") {
+            alert(response.message);
+            setToken(response.token);
+            navigate("/");
+          } else if (response.status === "BAD REQUEST") {
+            throw new Error(response.message);
           }
+        })
+        .catch((error) => {
+          alert(error);
+          console.error("There was an error!", error);
         });
     }
     setValidated(true);
@@ -61,8 +65,8 @@ export default function Login() {
               required
               type="email"
               placeholder="Email"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="border-2"
               style={{ borderColor: "#000", borderRadius: 10 }}
             />
