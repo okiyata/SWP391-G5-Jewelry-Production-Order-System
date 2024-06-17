@@ -14,7 +14,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class PaypalService {
 
-    private APIContext apiContext;
+    private final APIContext apiContext;
 
     public Payment makePayment(
             Double total,
