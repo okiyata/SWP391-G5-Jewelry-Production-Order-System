@@ -15,7 +15,7 @@ public interface AccountService {
     Account saveUserInfo(UserInfo info, String email);
     Account findAccountById(String accountId);
     Account findAccountByEmailAndPassword(String email, String password);
-    void updateAccount(AccountDTO accountDTO);
+    Account updateAccount(AccountDTO accountDTO);
     Account findAccountByEmail(String email);
     Account updateAccountStatusActive (String email);
     UserInfo findInfoById(String id);
