@@ -109,7 +109,7 @@ public class AdminController {
                 .buildEntity();
     }
 
-    @PostMapping("/get/customer-list/{customerID}")
+    @PostMapping("/get/customer-list/{customerID}/delete")
     public ResponseEntity<Response> deleteCustomer(@PathVariable String customerID) {
         accountRepository.delete(modelMapper.map(accountService.findAccountById(customerID), Account.class));
         return Response.builder()
