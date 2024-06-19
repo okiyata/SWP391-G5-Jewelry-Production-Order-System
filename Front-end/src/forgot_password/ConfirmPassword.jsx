@@ -29,7 +29,7 @@ export default function ConfirmPassword() {
       e.preventDefault();
       axios({
         method: "POST",
-        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/...",
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/update-password",
         headers: {
           "Content-Type": "application/json",
           key: { email },
