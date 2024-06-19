@@ -16,5 +16,5 @@ body {
   animation: appear linear;
   -webkit-animation: appear linear;
   animation-timeline: view();
-  animation-range: entry 0% cover 10%;
+  animation-range: entry 0% cover 20%;
 }

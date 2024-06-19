@@ -15,7 +15,7 @@ function Collections() {
   //   ));
 
   return (
-    <Container style={{paddingTop: "100px"}}>
+    <Container style={{paddingTop: "10px"}}>
       <div className="view" style={styles.pin_container}>
         <Pin size={getImageSize()} />
         <Pin size={getImageSize()} />
@@ -60,9 +60,9 @@ const styles = {
     margin: 0,
     padding: 0,
     width: "80vw",
-    // position: "absolute",
+    position: "relative",
     left: "50%",
-    // transform: "translateX(-50%)",
+    transform: "translateX(-50%)",
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, 300px)",
     gridAutoRows: "10px",

@@ -22,9 +22,8 @@ export default function ResetPassword() {
       e.preventDefault();
       axios({
         method: "POST",
-        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/...",
-        headers: {"Content-Type": "application/json"},
-        data: { email },
+        url: "https://swp391-g5-jewelry-production-order-system.onrender.com/api/registration/forget-password",
+        headers: { "Content-Type": "application/json", key: { email } },
       })
         .then((response) => {
           if (response.status === "OK") {
