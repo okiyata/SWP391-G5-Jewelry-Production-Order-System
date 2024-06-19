@@ -5,6 +5,8 @@ import { FaUsers } from "react-icons/fa";
 import { IoMdCart } from "react-icons/io";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { LuUser2 } from "react-icons/lu";
+import { FiBox } from "react-icons/fi";
+import { useAuth } from "../provider/AuthProvider";
 
 export default function NavBar() {
   return (
@@ -100,6 +102,23 @@ export default function NavBar() {
         >
           <LuUser2 size={22} color="white" />
           <p style={{ color: "white", margin: 0, fontSize: 20 }}>Employees</p>
+        </NavLink>
+        <NavLink
+          style={({ isActive }) => ({
+            backgroundColor: isActive ? "#444444" : "transparent",
+            display: "flex",
+            flexDirection: "row",
+            gap: 10,
+            alignItems: "center",
+            textDecoration: "none",
+            paddingLeft: "10%",
+            paddingTop: "2%",
+            paddingBottom: "2%",
+          })}
+          to="/userManager/products_manager"
+        >
+          <FiBox size={22} color="white" />
+          <p style={{ color: "white", margin: 0, fontSize: 20 }}>Products</p>
         </NavLink>
       </div>
     </>
