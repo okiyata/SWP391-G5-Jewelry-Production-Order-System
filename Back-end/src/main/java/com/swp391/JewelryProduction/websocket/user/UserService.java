@@ -44,9 +44,12 @@ public class UserService {
             );
             userData.put("role", account.getRole().toString());
             Order currentOrder = account.getCurrentOrder();
-            if (currentOrder != null)
-                userData.put("saleStaff", currentOrder.getSaleStaff().getId());
-
+            if (currentOrder != null) {
+                Staff saleStaff = currentOrder.getSaleStaff();
+                if (saleStaff != null) {
+                    userData.put("saleStaff", saleStaff.getId());
+                }
+            }
             ApiFuture<WriteResult> result = docRef.set(userData);
             try {
                 result.get();
@@ -109,6 +112,18 @@ public class UserService {
             return document.toObject(User.class);
         } else {
             return null;
+        }
+    }
+
+    public String findSaleStaffById(String id) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<DocumentSnapshot> future = db.collection(USER_COLLECTION_NAME).document(id).get();
+        DocumentSnapshot document = future.get();
+
+        if (document.exists()) {
+            return document.getString("saleStaff");
+        } else {
+            throw new RuntimeException("User not found");
         }
     }
 
