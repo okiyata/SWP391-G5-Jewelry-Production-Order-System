@@ -8,6 +8,7 @@ import com.swp391.JewelryProduction.pojos.Staff;
 import com.swp391.JewelryProduction.pojos.UserInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountService {
     List<Account> findAllAccounts();
@@ -15,9 +16,9 @@ public interface AccountService {
     Account saveUserInfo(UserInfo info, String email);
     Account findAccountById(String accountId);
     Account findAccountByEmailAndPassword(String email, String password);
-    Account updateAccount(AccountDTO accountDTO);
+    Optional<Account> updateAccount(AccountDTO accountDTO);
     Account findAccountByEmail(String email);
-    Account updateAccountStatusActive (String email);
+    Optional<Account> updateAccountStatusActive (String email);
     UserInfo findInfoById(String id);
     UserInfo findInfoByEmail(String email);
     Account findAccountByRole(Role role);

@@ -4,7 +4,6 @@ import com.swp391.JewelryProduction.dto.AccountDTO;
 import com.swp391.JewelryProduction.dto.UserInfoDTO;
 import com.swp391.JewelryProduction.pojos.Account;
 import com.swp391.JewelryProduction.pojos.UserInfo;
-import com.swp391.JewelryProduction.repositories.AccountRepository;
 import com.swp391.JewelryProduction.security.services.AuthenticationService;
 import com.swp391.JewelryProduction.services.account.AccountService;
 import com.swp391.JewelryProduction.services.email.EmailService;
@@ -16,8 +15,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -75,7 +73,7 @@ public class RegistrationController {
             log.info(otp + ": " + isVerified);
             if (!isVerified)
                 throw new RuntimeException("The OTP is wrong, please try again");
-            Account registerAcc = accountService.updateAccountStatusActive(emailKey);
+            Optional<Account> registerAcc = accountService.updateAccountStatusActive(emailKey);
         } catch (Exception e) {
             return Response.builder().status(HttpStatus.BAD_REQUEST).message(e.getMessage()).buildEntity();
         }
@@ -150,13 +148,13 @@ public class RegistrationController {
     public ResponseEntity<Response> updatePassword (
             @RequestBody @NotEmpty @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "Password is invalid") String newPassword,
             @RequestHeader("key") String email) {
-        Account updatedAcc = accountService.updateAccount(
+        Optional<Account> updatedAcc = accountService.updateAccount(
                 AccountDTO.builder()
                         .email(email)
                         .password(newPassword)
                         .build()
         );
-        if (updatedAcc == null) throw new RuntimeException();
+        if (updatedAcc.isEmpty()) throw new RuntimeException();
         return Response.builder()
                 .message("Password updated successfully for account with email "+email+", please log in again.")
                 .buildEntity();

@@ -23,7 +23,7 @@ public class StaffServiceImpl implements StaffService{
 
     @Override
     public List<Staff> findAllStaff() {
-        return staffRepository.findStaffByRoleEndingWith("STAFF");
+        return staffRepository.findStaffByRoleEndingWith(Role.valueOf("STAFF"));
     }
 
     @Override

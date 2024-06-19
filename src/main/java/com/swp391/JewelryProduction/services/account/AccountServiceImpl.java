@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -91,7 +92,7 @@ public class AccountServiceImpl implements AccountService {
     //<editor-fold desc="UPDATE METHODS" defaultstate="collapsed">
     @Transactional
     @Override
-    public Account updateAccount(AccountDTO accountDTO) {
+    public Optional<Account> updateAccount(AccountDTO accountDTO) {
         Account updatedAcc = accountRepository.findByEmail(accountDTO.getEmail()).orElseThrow(() -> new ObjectNotFoundException("Account with email "+accountDTO.getEmail()+" does not exist"));
         updatedAcc.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
         return accountRepository.save(updatedAcc);
@@ -99,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public Account updateAccountStatusActive(String email) {
+    public Optional<Account> updateAccountStatusActive(String email) {
         Account acc = accountRepository.findByEmail(email).orElse(null);
         if (acc == null) return null;
         acc.setStatus(AccountStatus.ACTIVE);
