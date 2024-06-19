@@ -1,7 +1,7 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Snowfall from "../assets/snowfall.jpg";
-import { Container } from "react-bootstrap";
+import { CarouselCaption, Container } from "react-bootstrap";
 
 const responsive = {
   superLargeDesktop: {
@@ -15,7 +15,7 @@ const responsive = {
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
-    items: 2,
+    items: 3,
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
@@ -25,9 +25,9 @@ const responsive = {
 
 export default function ImageRotator() {
   return (
-    <Container className="p-4">
+    <Container style={{paddingBottom:"20px", paddingTop:"20px"}}>
       <Carousel
-        responsive={responsive}
+        responsive={responsive} 
         centerMode={false}
         draggable={false}
         swipeable={false}
@@ -35,28 +35,27 @@ export default function ImageRotator() {
         pauseOnHover
         autoPlaySpeed={3000}
         autoPlay={true}
-        arrows={false}
         containerClass=" carousel-container"
       >
-        <div className="card text-center" style={{margin: "0px 5px"}}>
+        <div className="card text-center" style={{ margin: "0px 5px" }}>
           <img className="product--image" src={Snowfall} alt="product " />
-          <h3>Placeholder</h3>
+          <h4>Placeholder</h4>
         </div>
-        <div className="card text-center " style={{margin: "0px 5px"}}>
+        <div className="card text-center " style={{ margin: "0px 5px" }}>
           <img className="product--image" src={Snowfall} alt="product " />
-          <h3>Placeholder</h3>
+          <h4>Placeholder</h4>
         </div>
-        <div className="card text-center " style={{margin: "0px 5px"}}>
+        <div className="card text-center " style={{ margin: "0px 5px" }}>
           <img className="product--image" src={Snowfall} alt="product " />
-          <h3>Placeholder</h3>
+          <h4>Placeholder</h4>
         </div>
-        <div className="card text-center " style={{margin: "0px 5px"}}>
+        <div className="card text-center " style={{ margin: "0px 5px" }}>
           <img className="product--image" src={Snowfall} alt="product " />
-          <h3>Placeholder</h3>
+          <h4>Placeholder</h4>
         </div>
-        <div className="card text-center " style={{margin: "0px 5px"}}>
+        <div className="card text-center " style={{ margin: "0px 5px" }}>
           <img className="product--image" src={Snowfall} alt="product " />
-          <h3>Placeholder</h3>
+          <h4>Placeholder</h4>
         </div>
       </Carousel>
     </Container>
